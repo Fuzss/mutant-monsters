@@ -10,7 +10,7 @@ import net.minecraft.util.Unit;
 public class CreeperMinionEggModel extends Model<Unit> {
 
     public CreeperMinionEggModel(ModelPart root) {
-        super(root, RenderTypes::entityCutoutNoCull);
+        super(root, RenderTypes::entityCutout);
     }
 
     public static LayerDefinition createBodyLayer(CubeDeformation cubeDeformation) {

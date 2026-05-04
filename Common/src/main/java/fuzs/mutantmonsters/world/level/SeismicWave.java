@@ -6,8 +6,8 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fuzs.mutantmonsters.init.ModRegistry;
 import fuzs.mutantmonsters.network.ClientboundSeismicWaveFluidParticlesMessage;
 import fuzs.mutantmonsters.services.CommonAbstractions;
-import fuzs.puzzleslib.api.network.v4.MessageSender;
-import fuzs.puzzleslib.api.network.v4.PlayerSet;
+import fuzs.puzzleslib.common.api.network.v4.MessageSender;
+import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
@@ -108,56 +108,62 @@ public class SeismicWave extends BlockPos {
     }
 
     @Nullable
-    public static SeismicWave addWave(Level world, List<SeismicWave> list, int x, int y, int z) {
-        y = ZombieResurrection.getSuitableGround(world, x, y, z, 3, false);
+    public static SeismicWave addWave(Level level, List<SeismicWave> list, int x, int y, int z) {
+        y = ZombieResurrection.getSuitableGround(level, x, y, z, 3, false);
         SeismicWave wave = null;
         if (y != -1) {
             list.add(wave = new SeismicWave(x, y, z, false, true));
         }
 
-        if (world.random.nextInt(2) == 0) {
+        if (level.getRandom().nextInt(2) == 0) {
             list.add(new SeismicWave(x, y + 1, z, false, false));
         }
 
         return wave;
     }
 
-    public void affectBlocks(ServerLevel level, Entity entity) {
+    public void affectBlocks(ServerLevel serverLevel, Entity entity) {
         if (this.affectsTerrain) {
             BlockPos posAbove = this.above();
-            BlockState blockstate = level.getBlockState(this);
+            BlockState blockstate = serverLevel.getBlockState(this);
             Block block = blockstate.getBlock();
             Player playerEntity = entity instanceof Player ? (Player) entity : null;
-            if (playerEntity != null && playerEntity.mayBuild() || level.getGameRules().get(GameRules.MOB_GRIEFING)) {
+            if (playerEntity != null && playerEntity.mayBuild() || serverLevel.getGameRules()
+                    .get(GameRules.MOB_GRIEFING)) {
                 if (blockstate.is(Blocks.GRASS_BLOCK) || blockstate.is(Blocks.DIRT_PATH)
                         || blockstate.is(Blocks.FARMLAND) || blockstate.is(Blocks.PODZOL)
                         || blockstate.is(Blocks.MYCELIUM)) {
-                    level.setBlockAndUpdate(this, Blocks.DIRT.defaultBlockState());
+                    serverLevel.setBlockAndUpdate(this, Blocks.DIRT.defaultBlockState());
                 }
 
-                BlockState blockstateAbove = level.getBlockState(posAbove);
-                float hardness = blockstateAbove.getDestroySpeed(level, posAbove);
-                if (blockstateAbove.getCollisionShape(level, posAbove).isEmpty() && hardness > -1.0F
+                BlockState blockAbove = serverLevel.getBlockState(posAbove);
+                float hardness = blockAbove.getDestroySpeed(serverLevel, posAbove);
+                if (blockAbove.getCollisionShape(serverLevel, posAbove).isEmpty() && hardness > -1.0F
                         && hardness <= 1.0F) {
-                    level.destroyBlock(posAbove, playerEntity != null);
+                    serverLevel.destroyBlock(posAbove, playerEntity != null);
                 }
 
                 if (block instanceof DoorBlock) {
                     if (DoorBlock.isWoodenDoor(blockstate)) {
-                        level.levelEvent(LevelEvent.SOUND_ZOMBIE_WOODEN_DOOR, this, 0);
+                        serverLevel.levelEvent(LevelEvent.SOUND_ZOMBIE_WOODEN_DOOR, this, 0);
                     } else {
-                        level.levelEvent(LevelEvent.SOUND_ZOMBIE_IRON_DOOR, this, 0);
+                        serverLevel.levelEvent(LevelEvent.SOUND_ZOMBIE_IRON_DOOR, this, 0);
                     }
                 }
 
                 if (block instanceof TntBlock) {
-                    CommonAbstractions.INSTANCE.onBlockCaughtFire(block, blockstate, level, this, null, playerEntity);
-                    level.removeBlock(this, false);
+                    CommonAbstractions.INSTANCE.onBlockCaughtFire(block,
+                            blockstate,
+                            serverLevel,
+                            this,
+                            null,
+                            playerEntity);
+                    serverLevel.removeBlock(this, false);
                 }
             }
 
             if (block instanceof BellBlock) {
-                ((BellBlock) block).onHit(level,
+                ((BellBlock) block).onHit(serverLevel,
                         blockstate,
                         new BlockHitResult(Vec3.atLowerCornerOf(this), entity.getDirection(), this, false),
                         playerEntity,
@@ -165,11 +171,11 @@ public class SeismicWave extends BlockPos {
             }
 
             if (blockstate.is(Blocks.REDSTONE_ORE)) {
-                block.stepOn(level, this, blockstate, entity);
+                block.stepOn(serverLevel, this, blockstate, entity);
             }
 
             if (blockstate.getFluidState().isEmpty()) {
-                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, posAbove, Block.getId(blockstate));
+                serverLevel.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, posAbove, Block.getId(blockstate));
             } else {
                 PlayerSet playerSet = PlayerSet.nearPosition(null,
                         this.getX() + 0.5,

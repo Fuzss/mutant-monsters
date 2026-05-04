@@ -4,8 +4,8 @@ import fuzs.mutantmonsters.MutantMonsters;
 import fuzs.mutantmonsters.network.client.ServerboundCreeperMinionNameMessage;
 import fuzs.mutantmonsters.network.client.ServerboundCreeperMinionTrackerMessage;
 import fuzs.mutantmonsters.world.entity.CreeperMinion;
-import fuzs.puzzleslib.api.network.v4.MessageSender;
-import net.minecraft.client.gui.GuiGraphics;
+import fuzs.puzzleslib.common.api.network.v4.MessageSender;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
@@ -59,42 +59,32 @@ public class CreeperMinionTrackerScreen extends Screen {
     }
 
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.drawString(this.font,
+    public void extractRenderState(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.text(this.font,
                 this.title,
                 this.leftPos + this.titleLabelX,
                 this.topPos + this.titleLabelY,
                 0xFF404040,
                 false);
-        this.name.render(guiGraphics, mouseX, mouseY, partialTick);
-        guiGraphics.drawString(this.font, HEALTH_COMPONENT, (this.leftPos + 13), (this.topPos + 31), 0xFF404040, false);
-        guiGraphics.drawString(this.font,
-                EXPLOSION_COMPONENT,
-                (this.leftPos + 13),
-                (this.topPos + 51),
-                0xFF404040,
-                false);
-        guiGraphics.drawString(this.font,
-                BLAST_RADIUS_COMPONENT,
-                (this.leftPos + 13),
-                (this.topPos + 71),
-                0xFF404040,
-                false);
-        guiGraphics.drawCenteredString(this.font,
+        this.name.extractRenderState(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.text(this.font, HEALTH_COMPONENT, (this.leftPos + 13), (this.topPos + 31), 0xFF404040, false);
+        guiGraphics.text(this.font, EXPLOSION_COMPONENT, (this.leftPos + 13), (this.topPos + 51), 0xFF404040, false);
+        guiGraphics.text(this.font, BLAST_RADIUS_COMPONENT, (this.leftPos + 13), (this.topPos + 71), 0xFF404040, false);
+        guiGraphics.centeredText(this.font,
                 String.format("%s / %s",
                         DECIMAL_FORMAT.format(this.creeperMinion.getHealth()),
                         DECIMAL_FORMAT.format(this.creeperMinion.getMaxHealth())),
                 this.leftPos + this.imageWidth / 2 + 38,
                 this.topPos + 31,
                 -1);
-        guiGraphics.drawCenteredString(this.font,
+        guiGraphics.centeredText(this.font,
                 this.creeperMinion.canExplodeContinuously() ? CONTINUOUS_EXPLOSION_COMPONENT :
                         ONE_TIME_EXPLOSION_COMPONENT,
                 this.leftPos + this.imageWidth / 2 + 38,
                 this.topPos + 51,
                 -1);
-        guiGraphics.drawCenteredString(this.font,
+        guiGraphics.centeredText(this.font,
                 DECIMAL_FORMAT.format(this.creeperMinion.getExplosionRadius()),
                 this.leftPos + this.imageWidth / 2 + 38,
                 this.topPos + 71,
@@ -168,8 +158,8 @@ public class CreeperMinionTrackerScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+    public void extractBackground(GuiGraphicsExtractor guiGraphics, int mouseX, int mouseY, float partialTick) {
+        super.extractBackground(guiGraphics, mouseX, mouseY, partialTick);
         guiGraphics.blit(RenderPipelines.GUI_TEXTURED,
                 TEXTURE_LOCATION,
                 this.leftPos,

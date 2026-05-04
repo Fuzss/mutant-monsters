@@ -1,6 +1,6 @@
 package fuzs.mutantmonsters.world.entity.mutant;
 
-import fuzs.puzzleslib.api.util.v1.EntityHelper;
+import fuzs.puzzleslib.common.api.util.v1.EntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -24,7 +24,7 @@ public abstract class MutantMonster extends Monster {
         super(entityType, level);
         this.getNavigation().setCanFloat(true);
         this.setPathfindingMalus(PathType.UNPASSABLE_RAIL, 0.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_OTHER, 8.0F);
+        this.setPathfindingMalus(PathType.DAMAGING, 8.0F);
         this.setPathfindingMalus(PathType.POWDER_SNOW, 8.0F);
     }
 

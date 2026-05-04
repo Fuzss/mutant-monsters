@@ -642,7 +642,7 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
         }
 
         public Spine(ModelPart modelPart, String index) {
-            super(modelPart.getChild("middle" + index), RenderTypes::entityCutoutNoCull);
+            super(modelPart.getChild("middle" + index), RenderTypes::entityCutout);
             this.middle = this.root;
             modelPart = this.root;
             for (int i = 0; i < 3; i++) {

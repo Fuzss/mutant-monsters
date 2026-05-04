@@ -2,8 +2,9 @@ package fuzs.mutantmonsters.init;
 
 import fuzs.mutantmonsters.MutantMonsters;
 import fuzs.mutantmonsters.world.item.*;
-import fuzs.puzzleslib.api.item.v2.ArmorMaterialBuilder;
+import fuzs.puzzleslib.common.api.item.v2.ArmorMaterialBuilder;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.item.Item;
@@ -48,7 +49,9 @@ public class ModItems {
                     .rarity(Rarity.UNCOMMON)
                     .attributes(CreeperShardItem.createAttributes())
                     .component(DataComponents.TOOL, CreeperShardItem.createToolProperties())
-                    .component(DataComponents.DAMAGE_RESISTANT, new DamageResistant(DamageTypeTags.IS_EXPLOSION)));
+                    .delayedComponent(DataComponents.DAMAGE_RESISTANT, (HolderLookup.Provider context) -> {
+                        return new DamageResistant(context.getOrThrow(DamageTypeTags.IS_EXPLOSION));
+                    }));
     public static final Holder.Reference<Item> ENDERSOUL_HAND_ITEM = ModRegistry.REGISTRIES.registerItem(
             "endersoul_hand",
             EndersoulHandItem::new,

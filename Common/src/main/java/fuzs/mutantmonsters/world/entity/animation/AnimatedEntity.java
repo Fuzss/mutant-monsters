@@ -1,8 +1,8 @@
 package fuzs.mutantmonsters.world.entity.animation;
 
 import fuzs.mutantmonsters.network.ClientboundAnimationMessage;
-import fuzs.puzzleslib.api.network.v4.MessageSender;
-import fuzs.puzzleslib.api.network.v4.PlayerSet;
+import fuzs.puzzleslib.common.api.network.v4.MessageSender;
+import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import org.apache.commons.lang3.ArrayUtils;

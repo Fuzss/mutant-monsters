@@ -1,6 +1,8 @@
 package fuzs.mutantmonsters.client.renderer.rendertype;
 
 import com.mojang.blaze3d.pipeline.BlendFunction;
+import com.mojang.blaze3d.pipeline.ColorTargetState;
+import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.platform.DestFactor;
 import com.mojang.blaze3d.platform.SourceFactor;
@@ -29,9 +31,10 @@ public final class ModRenderTypes {
             .withShaderDefine("NO_CARDINAL_LIGHTING")
             .withShaderDefine("APPLY_TEXTURE_MATRIX")
             .withSampler("Sampler0")
-            .withBlend(ALPHA_BLEND_FUNCTION)
+            .withColorTargetState(new ColorTargetState(ALPHA_BLEND_FUNCTION))
             .withCull(false)
-            .withVertexFormat(DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS)
+            .withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
+            .withDepthStencilState(DepthStencilState.DEFAULT)
             .build());
 
     private ModRenderTypes() {

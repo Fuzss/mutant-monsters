@@ -3,7 +3,6 @@ package fuzs.mutantmonsters.world.entity;
 import fuzs.mutantmonsters.init.ModEntityTypes;
 import fuzs.mutantmonsters.init.ModItems;
 import fuzs.mutantmonsters.init.ModRegistry;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
@@ -19,6 +18,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -155,7 +155,7 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand hand) {
+    public InteractionResult interact(Player player, InteractionHand hand, Vec3 location) {
         if (this.level() instanceof ServerLevel serverLevel && serverLevel.getGameRules().get(GameRules.ENTITY_DROPS)) {
             ResourceKey<LootTable> resourceKey = this.getItemPartLootTableId();
             LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(resourceKey);
@@ -164,13 +164,16 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
             List<ItemStack> list = lootTable.getRandomItems(lootParams);
             for (ItemStack item : list) {
                 if (!item.isEmpty()) {
-                    this.spawnAtLocation(serverLevel, item).setNoPickUpDelay();
+                    ItemEntity itemEntity = this.spawnAtLocation(serverLevel, item);
+                    if (itemEntity != null) {
+                        itemEntity.setNoPickUpDelay();
+                    }
                 }
             }
         }
 
         this.discard();
-        return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+        return InteractionResult.SUCCESS;
     }
 
     private boolean canHarm(Entity entity) {

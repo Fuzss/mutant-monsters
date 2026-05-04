@@ -31,9 +31,9 @@ public class EndersoulClone extends Monster {
     public EndersoulClone(EntityType<? extends EndersoulClone> entityType, Level level) {
         super(entityType, level);
         this.xpReward = Enemy.XP_REWARD_SMALL;
-        this.setPathfindingMalus(PathType.DAMAGE_FIRE, -1.0F);
-        this.setPathfindingMalus(PathType.DANGER_FIRE, -1.0F);
-        this.setPathfindingMalus(PathType.DAMAGE_OTHER, -1.0F);
+        this.setPathfindingMalus(PathType.FIRE, -1.0F);
+        this.setPathfindingMalus(PathType.FIRE_IN_NEIGHBOR, -1.0F);
+        this.setPathfindingMalus(PathType.DAMAGING, -1.0F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {

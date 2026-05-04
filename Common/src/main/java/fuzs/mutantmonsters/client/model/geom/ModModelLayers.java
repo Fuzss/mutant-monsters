@@ -1,7 +1,7 @@
 package fuzs.mutantmonsters.client.model.geom;
 
 import fuzs.mutantmonsters.MutantMonsters;
-import fuzs.puzzleslib.api.client.init.v1.ModelLayerFactory;
+import fuzs.puzzleslib.common.api.client.init.v1.ModelLayerFactory;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;

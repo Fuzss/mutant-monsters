@@ -2,8 +2,8 @@ package fuzs.mutantmonsters.network;
 
 import fuzs.mutantmonsters.MutantMonsters;
 import fuzs.mutantmonsters.world.entity.animation.AdditionalSpawnDataEntity;
-import fuzs.puzzleslib.api.network.v4.message.MessageListener;
-import fuzs.puzzleslib.api.network.v4.message.play.ClientboundPlayMessage;
+import fuzs.puzzleslib.common.api.network.v4.message.MessageListener;
+import fuzs.puzzleslib.common.api.network.v4.message.play.ClientboundPlayMessage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;

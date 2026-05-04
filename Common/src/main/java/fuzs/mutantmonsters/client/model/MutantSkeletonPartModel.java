@@ -16,7 +16,7 @@ public class MutantSkeletonPartModel extends Model<Unit> {
     private final Map<MutantSkeletonBodyPart.BodyPart, ModelPart> bodyParts;
 
     public MutantSkeletonPartModel(ModelPart modelPart, ModelPart spineModelPart) {
-        super(modelPart, RenderTypes::entityCutoutNoCull);
+        super(modelPart, RenderTypes::entityCutout);
         ImmutableMap.Builder<MutantSkeletonBodyPart.BodyPart, ModelPart> builder = ImmutableMap.builder();
         builder.put(MutantSkeletonBodyPart.BodyPart.PELVIS, modelPart.getChild("pelvis"));
         MutantSkeletonModel.Spine spine = new MutantSkeletonModel.Spine(spineModelPart);

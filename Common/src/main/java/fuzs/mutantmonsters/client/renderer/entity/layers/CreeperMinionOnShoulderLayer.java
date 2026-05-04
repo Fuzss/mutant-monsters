@@ -8,7 +8,7 @@ import fuzs.mutantmonsters.client.renderer.entity.CreeperMinionRenderer;
 import fuzs.mutantmonsters.client.renderer.entity.state.CreeperMinionRenderState;
 import fuzs.mutantmonsters.client.renderer.rendertype.ModRenderTypes;
 import fuzs.mutantmonsters.init.ModRegistry;
-import fuzs.puzzleslib.api.client.renderer.v1.RenderStateExtraData;
+import fuzs.puzzleslib.common.api.client.renderer.v1.RenderStateExtraData;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -57,7 +57,7 @@ public class CreeperMinionOnShoulderLayer extends RenderLayer<AvatarRenderState,
         }
     }
 
-    public static void onExtractRenderState(Entity entity, EntityRenderState renderState, float partialTick) {
+    public static void onExtractEntityRenderState(Entity entity, EntityRenderState renderState, float partialTick) {
         if (entity instanceof Avatar && renderState instanceof AvatarRenderState avatarRenderState) {
             RenderStateExtraData.set(renderState,
                     LEFT_SHOULDER_CREEPER_MINION_KEY,

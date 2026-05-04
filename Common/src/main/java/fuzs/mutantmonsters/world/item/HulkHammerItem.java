@@ -1,9 +1,9 @@
 package fuzs.mutantmonsters.world.item;
 
 import fuzs.mutantmonsters.world.level.SeismicWave;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
 import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -51,7 +51,7 @@ public class HulkHammerItem extends Item {
         if (context.getClickedFace() != Direction.UP) {
             return InteractionResult.PASS;
         } else {
-            if (!level.isClientSide()) {
+            if (level instanceof ServerLevel serverLevel) {
                 List<SeismicWave> seismicWaves = new ArrayList<>();
                 Vec3 vec = Vec3.directionFromRotation(0.0F, player.getYRot());
                 int x = Mth.floor(player.getX() + vec.x * 1.5);
@@ -59,7 +59,7 @@ public class HulkHammerItem extends Item {
                 int z = Mth.floor(player.getZ() + vec.z * 1.5);
                 int x1 = Mth.floor(player.getX() + vec.x * 8.0);
                 int z1 = Mth.floor(player.getZ() + vec.z * 8.0);
-                SeismicWave.createWaves(level, seismicWaves, x, z, x1, z1, y);
+                SeismicWave.createWaves(serverLevel, seismicWaves, x, z, x1, z1, y);
                 SeismicWave.addAll(player, seismicWaves);
             }
 
@@ -72,7 +72,7 @@ public class HulkHammerItem extends Item {
             player.getCooldowns().addCooldown(context.getItemInHand(), 25);
             player.awardStat(Stats.ITEM_USED.get(this));
             ItemHelper.hurtAndBreak(context.getItemInHand(), 1, player, context.getHand());
-            return InteractionResultHelper.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
     }
 }

@@ -6,8 +6,7 @@ import fuzs.mutantmonsters.world.entity.ai.goal.AvoidDamageGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.FleeRainGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.HurtByNearestTargetGoal;
 import fuzs.mutantmonsters.world.entity.projectile.ThrowableBlock;
-import fuzs.puzzleslib.api.util.v1.EntityHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.util.v1.EntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -156,8 +155,8 @@ public class MutantSnowGolem extends AbstractGolem implements RangedAttackMob, S
     public void tick() {
         super.tick();
         if (this.level().isClientSide() && this.getSwimJump()) {
-            this.level().broadcastEntityEvent(this, (byte) 36);
-            this.level().broadcastEntityEvent(this, (byte) 37);
+            this.handleEntityEvent((byte) 36);
+            this.handleEntityEvent((byte) 37);
         }
 
         if (this.isThrowing) {
@@ -398,12 +397,12 @@ public class MutantSnowGolem extends AbstractGolem implements RangedAttackMob, S
         } else if (itemInHand.getItem() == Items.SNOWBALL) {
             return InteractionResult.PASS;
         } else if (itemInHand.isEmpty() && this.getOwnerReference() == null) {
-            if (!this.level().isClientSide()) {
+            if (this.level() instanceof ServerLevel serverLevel) {
                 this.setOwner(player);
-                this.level().broadcastEntityEvent(this, (byte) 18);
+                serverLevel.broadcastEntityEvent(this, EntityEvent.IN_LOVE_HEARTS);
             }
 
-            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }

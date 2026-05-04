@@ -114,18 +114,18 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
     }
 
     @Override
-    public void setupAnim(MutantEndermanRenderState renderState) {
-        super.setupAnim(renderState);
+    public void setupAnim(MutantEndermanRenderState state) {
+        super.setupAnim(state);
         // TODO remove setting initial angles like so
         this.setupInitialAngles();
-        float limbSwing = renderState.walkAnimationPos;
-        float limbSwingAmount = renderState.walkAnimationSpeed;
-        float ageInTicks = renderState.ageInTicks;
-        float netHeadYaw = renderState.yRot;
-        float headPitch = renderState.xRot;
-        this.animate(renderState, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        Animator.setScale(this.lowerRightArm.arm, renderState.armScale);
-        Animator.setScale(this.lowerLeftArm.arm, renderState.armScale);
+        float limbSwing = state.walkAnimationPos;
+        float limbSwingAmount = state.walkAnimationSpeed;
+        float ageInTicks = state.ageInTicks;
+        float netHeadYaw = state.yRot;
+        float headPitch = state.xRot;
+        this.animate(state, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        Animator.setScale(this.lowerRightArm.arm, state.armScale);
+        Animator.setScale(this.lowerLeftArm.arm, state.armScale);
     }
 
     private void setupInitialAngles() {
@@ -162,7 +162,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         this.foreLeg2.zRot = 0.1308997F;
     }
 
-    private void animate(MutantEndermanRenderState renderState, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    private void animate(MutantEndermanRenderState state, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         float walkSpeed = 0.3F;
         float walkAnim1 = (Mth.sin((limbSwing - 0.8F) * walkSpeed) + 0.8F) * limbSwingAmount;
         float walkAnim2 = -(Mth.sin((limbSwing + 0.8F) * walkSpeed) - 0.8F) * limbSwingAmount;
@@ -173,26 +173,26 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         float breatheAnim = Mth.sin(ageInTicks * 0.15F);
         float faceYaw = netHeadYaw * 3.1415927F / 180.0F;
         float facePitch = headPitch * 3.1415927F / 180.0F;
-        for (int i = 0; i < 4; ++i) {
-            if (renderState.heldBlocks[i] != null) {
-                this.animateHoldBlock(renderState, i);
+        for (int i = 0; i < state.heldBlocks.length; ++i) {
+            if (!state.heldBlocks[i].isEmpty()) {
+                this.animateHoldBlock(state, i);
                 walkAnim[i] *= 0.4F;
             }
         }
 
-        if (renderState.animation == MutantEnderman.MELEE_ANIMATION) {
-            this.animateMelee(renderState, renderState.activeArm);
-            walkAnim[renderState.activeArm] = 0.0F;
+        if (state.animation == MutantEnderman.MELEE_ANIMATION) {
+            this.animateMelee(state, state.activeArm);
+            walkAnim[state.activeArm] = 0.0F;
         }
 
-        if (renderState.animation == MutantEnderman.THROW_ANIMATION) {
-            this.animateThrowBlock(renderState, renderState.activeArm);
+        if (state.animation == MutantEnderman.THROW_ANIMATION) {
+            this.animateThrowBlock(state, state.activeArm);
         }
 
         float scale;
-        if (renderState.animation == MutantEnderman.SCREAM_ANIMATION) {
-            this.animateScream(renderState);
-            scale = 1.0F - Mth.clamp(renderState.animationTime / 6.0F, 0.0F, 1.0F);
+        if (state.animation == MutantEnderman.SCREAM_ANIMATION) {
+            this.animateScream(state);
+            scale = 1.0F - Mth.clamp(state.animationTime / 6.0F, 0.0F, 1.0F);
             faceYaw *= scale;
             facePitch *= scale;
             walkAnim1 *= scale;
@@ -202,13 +202,13 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             Arrays.fill(walkAnim, 0.0F);
         }
 
-        if (renderState.animation == MutantEnderman.TELESMASH_ANIMATION) {
-            this.animateTeleSmash(renderState);
+        if (state.animation == MutantEnderman.TELESMASH_ANIMATION) {
+            this.animateTeleSmash(state);
         }
 
-        if (renderState.animation == MutantEnderman.DEATH_ANIMATION) {
-            this.animateDeath(renderState);
-            scale = 1.0F - Mth.clamp(renderState.deathTime / 6.0F, 0.0F, 1.0F);
+        if (state.animation == MutantEnderman.DEATH_ANIMATION) {
+            this.animateDeath(state);
+            scale = 1.0F - Mth.clamp(state.deathTime / 6.0F, 0.0F, 1.0F);
             faceYaw *= scale;
             facePitch *= scale;
             walkAnim1 *= scale;
@@ -265,8 +265,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         this.foreLeg2.xRot += walkAnim4 * 0.3F;
     }
 
-    private void animateHoldBlock(MutantEndermanRenderState renderState, int armId) {
-        float animationProgress = renderState.heldBlockTicks[armId] / 10.0F;
+    private void animateHoldBlock(MutantEndermanRenderState state, int armId) {
+        float animationProgress = state.heldBlockTicks[armId] / 10.0F;
         float rotationAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
         if (armId == 0) {
             this.rightArm.arm.zRot += rotationAmount * 0.8F;
@@ -315,11 +315,11 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         }
     }
 
-    private void animateMelee(MutantEndermanRenderState renderState, int armId) {
+    private void animateMelee(MutantEndermanRenderState state, int armId) {
         float isRightArm = (armId & 1) == 0 ? 1.0F : -1.0F;
         Arm arm = this.getArmFromId(armId);
-        if (renderState.animationTime < 2.0F) {
-            float animationProgress = renderState.animationTime / 2.0F;
+        if (state.animationTime < 2.0F) {
+            float animationProgress = state.animationTime / 2.0F;
             float rotationAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             arm.arm.xRot += rotationAmount * 0.2F;
             arm.finger[0].zRot += rotationAmount * 0.3F * isRightArm;
@@ -328,8 +328,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             arm.foreFinger[0].zRot += -rotationAmount * 0.5F * isRightArm;
             arm.foreFinger[1].zRot += -rotationAmount * 0.5F * isRightArm;
             arm.foreFinger[2].zRot += -rotationAmount * 0.5F * isRightArm;
-        } else if (renderState.animationTime < 5.0F) {
-            float animationProgress = (renderState.animationTime - 2.0F) / 3.0F;
+        } else if (state.animationTime < 5.0F) {
+            float animationProgress = (state.animationTime - 2.0F) / 3.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             float f1 = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.chest.yRot += -f1 * 0.1F * isRightArm;
@@ -341,7 +341,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             arm.foreFinger[0].zRot += -0.5F * isRightArm;
             arm.foreFinger[1].zRot += -0.5F * isRightArm;
             arm.foreFinger[2].zRot += -0.5F * isRightArm;
-        } else if (renderState.animationTime < 6.0F) {
+        } else if (state.animationTime < 6.0F) {
             this.chest.yRot += -0.1F * isRightArm;
             arm.arm.xRot += -1.1F;
             arm.foreArm.xRot += -0.4F;
@@ -351,8 +351,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             arm.foreFinger[0].zRot += -0.5F * isRightArm;
             arm.foreFinger[1].zRot += -0.5F * isRightArm;
             arm.foreFinger[2].zRot += -0.5F * isRightArm;
-        } else if (renderState.animationTime < 10.0F) {
-            float animationProgress = (renderState.animationTime - 6.0F) / 4.0F;
+        } else if (state.animationTime < 10.0F) {
+            float animationProgress = (state.animationTime - 6.0F) / 4.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             this.chest.yRot += -rotationAmount * 0.1F * isRightArm;
             arm.arm.xRot += -rotationAmount * 1.1F;
@@ -366,11 +366,11 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         }
     }
 
-    private void animateThrowBlock(MutantEndermanRenderState renderState, int armId) {
+    private void animateThrowBlock(MutantEndermanRenderState state, int armId) {
         switch (armId) {
             case 0 -> {
-                if (renderState.animationTime < 4.0F) {
-                    float animationProgress = renderState.animationTime / 4.0F;
+                if (state.animationTime < 4.0F) {
+                    float animationProgress = state.animationTime / 4.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     float sinSwingAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
                     this.rightArm.arm.xRot += -sinSwingAmount * 1.5F;
@@ -385,17 +385,17 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
                     }
 
                     this.rightArm.thumb.zRot += -cosSwingAmount * 0.4F;
-                } else if (renderState.animationTime < 7.0F) {
+                } else if (state.animationTime < 7.0F) {
                     this.rightArm.arm.xRot += -1.5F;
-                } else if (renderState.animationTime < 14.0F) {
-                    float animationProgress = (renderState.animationTime - 7.0F) / 7.0F;
+                } else if (state.animationTime < 14.0F) {
+                    float animationProgress = (state.animationTime - 7.0F) / 7.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     this.rightArm.arm.xRot += -cosSwingAmount * 1.5F;
                 }
             }
             case 1 -> {
-                if (renderState.animationTime < 4.0F) {
-                    float animationProgress = renderState.animationTime / 4.0F;
+                if (state.animationTime < 4.0F) {
+                    float animationProgress = state.animationTime / 4.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     float sinSwingAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
                     this.leftArm.arm.xRot += -sinSwingAmount * 1.5F;
@@ -410,17 +410,17 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
                     }
 
                     this.leftArm.thumb.zRot += cosSwingAmount * 0.4F;
-                } else if (renderState.animationTime < 7.0F) {
+                } else if (state.animationTime < 7.0F) {
                     this.leftArm.arm.xRot += -1.5F;
-                } else if (renderState.animationTime < 14.0F) {
-                    float animationProgress = (renderState.animationTime - 7.0F) / 7.0F;
+                } else if (state.animationTime < 14.0F) {
+                    float animationProgress = (state.animationTime - 7.0F) / 7.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     this.leftArm.arm.xRot += -cosSwingAmount * 1.5F;
                 }
             }
             case 2 -> {
-                if (renderState.animationTime < 4.0F) {
-                    float animationProgress = renderState.animationTime / 4.0F;
+                if (state.animationTime < 4.0F) {
+                    float animationProgress = state.animationTime / 4.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     float sinSwingAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
                     this.lowerRightArm.arm.xRot += -sinSwingAmount * 1.5F;
@@ -435,17 +435,17 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
                     }
 
                     this.lowerRightArm.thumb.zRot += -cosSwingAmount * 0.4F;
-                } else if (renderState.animationTime < 7.0F) {
+                } else if (state.animationTime < 7.0F) {
                     this.lowerRightArm.arm.xRot += -1.5F;
-                } else if (renderState.animationTime < 14.0F) {
-                    float animationProgress = (renderState.animationTime - 7.0F) / 7.0F;
+                } else if (state.animationTime < 14.0F) {
+                    float animationProgress = (state.animationTime - 7.0F) / 7.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     this.lowerRightArm.arm.xRot += -cosSwingAmount * 1.5F;
                 }
             }
             case 3 -> {
-                if (renderState.animationTime < 4.0F) {
-                    float animationProgress = renderState.animationTime / 4.0F;
+                if (state.animationTime < 4.0F) {
+                    float animationProgress = state.animationTime / 4.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     float sinSwingAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
                     this.lowerLeftArm.arm.xRot += -sinSwingAmount * 1.5F;
@@ -460,10 +460,10 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
                     }
 
                     this.lowerLeftArm.thumb.zRot += cosSwingAmount * 0.4F;
-                } else if (renderState.animationTime < 7.0F) {
+                } else if (state.animationTime < 7.0F) {
                     this.lowerLeftArm.arm.xRot += -1.5F;
-                } else if (renderState.animationTime < 14.0F) {
-                    float animationProgress = (renderState.animationTime - 7.0F) / 7.0F;
+                } else if (state.animationTime < 14.0F) {
+                    float animationProgress = (state.animationTime - 7.0F) / 7.0F;
                     float cosSwingAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
                     this.lowerLeftArm.arm.xRot += -cosSwingAmount * 1.5F;
                 }
@@ -471,9 +471,9 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         }
     }
 
-    private void animateScream(MutantEndermanRenderState renderState) {
-        if (renderState.animationTime < 35.0F) {
-            float animationProgress = renderState.animationTime / 35.0F;
+    private void animateScream(MutantEndermanRenderState state) {
+        if (state.animationTime < 35.0F) {
+            float animationProgress = state.animationTime / 35.0F;
             float rotationAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.abdomen.xRot += rotationAmount * 0.3F;
             this.chest.xRot += rotationAmount * 0.4F;
@@ -518,7 +518,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
                 this.lowerLeftArm.finger[i].zRot += -rotationAmount * 0.3F;
                 this.lowerLeftArm.foreFinger[i].zRot += rotationAmount * 0.5F;
             }
-        } else if (renderState.animationTime < 40.0F) {
+        } else if (state.animationTime < 40.0F) {
             this.abdomen.xRot += 0.3F;
             this.chest.xRot += 0.4F;
             this.neck.xRot += 0.2F;
@@ -562,8 +562,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
                 this.lowerLeftArm.finger[i].zRot += -0.3F;
                 this.lowerLeftArm.foreFinger[i].zRot += 0.5F;
             }
-        } else if (renderState.animationTime < 44.0F) {
-            float animationProgress = (renderState.animationTime - 40.0F) / 4.0F;
+        } else if (state.animationTime < 44.0F) {
+            float animationProgress = (state.animationTime - 40.0F) / 4.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             float f1 = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.abdomen.xRot += -rotationAmount * 0.1F + 0.4F;
@@ -616,8 +616,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
 
             this.leg1.zRot += f1 * 0.1F;
             this.leg2.zRot += -f1 * 0.1F;
-        } else if (renderState.animationTime < 155.0F) {
-            float animationProgress = (renderState.animationTime - 44.0F) / 111.0F;
+        } else if (state.animationTime < 155.0F) {
+            float animationProgress = (state.animationTime - 44.0F) / 111.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             this.abdomen.xRot += 0.4F;
             this.chest.xRot += 0.3F;
@@ -632,8 +632,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.lowerLeftArm.arm.yRot += -0.3F;
             this.leg1.zRot += 0.1F;
             this.leg2.zRot += -0.1F;
-        } else if (renderState.animationTime < 160.0F) {
-            float animationProgress = (renderState.animationTime - 155.0F) / 5.0F;
+        } else if (state.animationTime < 160.0F) {
+            float animationProgress = (state.animationTime - 155.0F) / 5.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             this.abdomen.xRot += rotationAmount * 0.4F;
             this.chest.xRot += rotationAmount * 0.3F;
@@ -651,9 +651,9 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         }
     }
 
-    private void animateTeleSmash(MutantEndermanRenderState renderState) {
-        if (renderState.animationTime < 18.0F) {
-            float animationProgress = renderState.animationTime / 18.0F;
+    private void animateTeleSmash(MutantEndermanRenderState state) {
+        if (state.animationTime < 18.0F) {
+            float animationProgress = state.animationTime / 18.0F;
             float rotationAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.chest.xRot += -rotationAmount * 0.3F;
             this.rightArm.arm.yRot += rotationAmount * 0.2F;
@@ -668,8 +668,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.lowerLeftArm.arm.yRot += -rotationAmount * 0.2F;
             this.lowerLeftArm.arm.zRot += -rotationAmount * 0.6F;
             this.lowerLeftArm.hand.yRot += -rotationAmount * 1.7F;
-        } else if (renderState.animationTime < 20.0F) {
-            float animationProgress = (renderState.animationTime - 18.0F) / 2.0F;
+        } else if (state.animationTime < 20.0F) {
+            float animationProgress = (state.animationTime - 18.0F) / 2.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             float f1 = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.chest.xRot += -rotationAmount * 0.3F;
@@ -689,7 +689,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.lowerLeftArm.arm.yRot += -0.2F;
             this.lowerLeftArm.arm.zRot += -0.6F;
             this.lowerLeftArm.hand.yRot += -1.7F;
-        } else if (renderState.animationTime < 24.0F) {
+        } else if (state.animationTime < 24.0F) {
             this.rightArm.arm.xRot += -0.8F;
             this.rightArm.arm.yRot += 0.2F;
             this.rightArm.arm.zRot += 0.8F;
@@ -706,8 +706,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.lowerLeftArm.arm.yRot += -0.2F;
             this.lowerLeftArm.arm.zRot += -0.6F;
             this.lowerLeftArm.hand.yRot += -1.7F;
-        } else if (renderState.animationTime < 30.0F) {
-            float animationProgress = (renderState.animationTime - 24.0F) / 6.0F;
+        } else if (state.animationTime < 30.0F) {
+            float animationProgress = (state.animationTime - 24.0F) / 6.0F;
             float rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             this.rightArm.arm.xRot += -rotationAmount * 0.8F;
             this.rightArm.arm.yRot += rotationAmount * 0.2F;
@@ -728,11 +728,11 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         }
     }
 
-    private void animateDeath(MutantEndermanRenderState renderState) {
+    private void animateDeath(MutantEndermanRenderState state) {
         float animationProgress;
         float rotationAmount;
-        if (renderState.deathTime < 80.0F) {
-            animationProgress = renderState.deathTime / 80.0F;
+        if (state.deathTime < 80.0F) {
+            animationProgress = state.deathTime / 80.0F;
             rotationAmount = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.head.xRot += rotationAmount * 0.4F;
             this.neck.xRot += rotationAmount * 0.3F;
@@ -759,8 +759,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.leg2.yRot += -rotationAmount * 0.3F;
             this.foreLeg1.xRot += rotationAmount * 1.6F;
             this.foreLeg2.xRot += rotationAmount * 1.6F;
-        } else if (renderState.deathTime < 84.0F) {
-            animationProgress = (renderState.deathTime - 80.0F) / 4.0F;
+        } else if (state.deathTime < 84.0F) {
+            animationProgress = (state.deathTime - 80.0F) / 4.0F;
             rotationAmount = Mth.cos(animationProgress * 3.1415927F / 2.0F);
             float f1 = Mth.sin(animationProgress * 3.1415927F / 2.0F);
             this.head.xRot += rotationAmount * 0.4F;
@@ -833,7 +833,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         private final boolean right;
 
         public Arm(ModelPart modelPart, String prefix, boolean right) {
-            super(modelPart.getChild(prefix + "arm"), RenderTypes::entityCutoutNoCull);
+            super(modelPart.getChild(prefix + "arm"), RenderTypes::entityCutout);
             this.right = right;
             this.arm = this.root;
             this.foreArm = this.root.getChild("fore_arm");
@@ -905,8 +905,8 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
         }
 
         @Override
-        public void setupAnim(Unit renderState) {
-            super.setupAnim(renderState);
+        public void setupAnim(Unit state) {
+            super.setupAnim(state);
             if (this.right) {
                 this.root.xRot = -0.5235988F;
                 this.root.zRot = 0.5235988F;

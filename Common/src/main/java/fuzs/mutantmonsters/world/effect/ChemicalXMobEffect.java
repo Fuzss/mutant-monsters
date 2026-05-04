@@ -19,11 +19,10 @@ import org.jspecify.annotations.Nullable;
 
 public class ChemicalXMobEffect extends InstantenousMobEffect {
     public static final TargetingConditions.Selector IS_APPLICABLE = (LivingEntity livingEntity, ServerLevel serverLevel) -> {
-        EntityType<?> entityType = livingEntity.getType();
-        return !entityType.is(ModTags.BOSSES_ENTITY_TYPE_TAG) &&
-                !MutantMonsters.CONFIG.get(ServerConfig.class).mutantXConversions.containsValue(entityType) &&
-                entityType != ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value() &&
-                entityType != ModEntityTypes.ENDERSOUL_CLONE_ENTITY_TYPE.value();
+        return !livingEntity.is(ModTags.BOSSES_ENTITY_TYPE_TAG)
+                && !MutantMonsters.CONFIG.get(ServerConfig.class).mutantXConversions.containsValue(livingEntity.getType())
+                && livingEntity.getType() != ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value()
+                && livingEntity.getType() != ModEntityTypes.ENDERSOUL_CLONE_ENTITY_TYPE.value();
     };
     public static final TargetingConditions TARGET_PREDICATE = TargetingConditions.forNonCombat()
             .selector(IS_APPLICABLE);

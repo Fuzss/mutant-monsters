@@ -185,7 +185,7 @@ public class MutantSnowGolemModel extends EntityModel<MutantSnowGolemRenderState
         float breatheAnim = Mth.sin(renderState.ageInTicks * 0.11F);
         float faceYaw = renderState.yRot * 3.1415927F / 180.0F;
         float facePitch = renderState.xRot * 3.1415927F / 180.0F;
-        if (renderState.isThrowing) {
+        if (renderState.isThrowing()) {
             this.animateThrow(renderState);
             float scale = 1.0F - Mth.clamp(renderState.throwingTime / 4.0F, 0.0F, 1.0F);
             walkAnim *= scale;

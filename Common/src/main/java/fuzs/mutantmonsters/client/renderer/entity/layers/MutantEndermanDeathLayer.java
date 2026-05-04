@@ -17,37 +17,28 @@ import net.minecraft.util.ARGB;
 public class MutantEndermanDeathLayer extends RenderLayer<MutantEndermanRenderState, MutantEndermanModel> {
     private static final Identifier DEATH_TEXTURE_LOCATION = MutantMonsters.id(
             "textures/entity/mutant_enderman/death.png");
-    private static final RenderType DEATH_RENDER_TYPE = RenderTypes.entityDecal(MutantEndermanRenderer.TEXTURE_LOCATION);
+    private static final RenderType DYING_RENDER_TYPE = RenderTypes.entityCutoutDissolve(MutantEndermanRenderer.TEXTURE_LOCATION,
+            DEATH_TEXTURE_LOCATION);
 
     public MutantEndermanDeathLayer(RenderLayerParent<MutantEndermanRenderState, MutantEndermanModel> renderer) {
         super(renderer);
     }
 
     @Override
-    public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, MutantEndermanRenderState renderState, float yRot, float xRot) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector submitNodeCollector, int lightCoords, MutantEndermanRenderState state, float yRot, float xRot) {
         // parent model is not rendered at the same time
-        if (renderState.deathTime > 80.0F) {
-            int color = ARGB.colorFromFloat(MutantEndermanRenderer.getDeathProgress(renderState), 1.0F, 1.0F, 1.0F);
-            nodeCollector.order(0)
-                    .submitModel(this.getParentModel(),
-                            renderState,
-                            poseStack,
-                            RenderTypes.dragonExplosionAlpha(DEATH_TEXTURE_LOCATION),
-                            renderState.lightCoords,
-                            OverlayTexture.NO_OVERLAY,
-                            color,
-                            null,
-                            renderState.outlineColor,
-                            null);
-            nodeCollector.order(1)
-                    .submitModel(this.getParentModel(),
-                            renderState,
-                            poseStack,
-                            DEATH_RENDER_TYPE,
-                            renderState.lightCoords,
-                            OverlayTexture.NO_OVERLAY,
-                            renderState.outlineColor,
-                            null);
+        if (state.deathTime > 80.0F) {
+            int color = ARGB.colorFromFloat(MutantEndermanRenderer.getDeathProgress(state), 1.0F, 1.0F, 1.0F);
+            submitNodeCollector.submitModel(this.getParentModel(),
+                    state,
+                    poseStack,
+                    DYING_RENDER_TYPE,
+                    state.lightCoords,
+                    OverlayTexture.NO_OVERLAY,
+                    color,
+                    null,
+                    state.outlineColor,
+                    null);
         }
     }
 }

@@ -7,7 +7,6 @@ import fuzs.mutantmonsters.services.CommonAbstractions;
 import fuzs.mutantmonsters.util.EntityUtil;
 import fuzs.mutantmonsters.world.entity.mutant.MutantCreeper;
 import fuzs.mutantmonsters.world.level.MutatedExplosionHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -27,6 +26,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gamerules.GameRules;
 import net.minecraft.world.level.storage.ValueInput;
 import net.minecraft.world.level.storage.ValueOutput;
+import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -193,22 +193,21 @@ public class CreeperMinionEgg extends Entity implements OwnableEntity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand interactionHand) {
+    public InteractionResult interact(Player player, InteractionHand interactionHand, Vec3 location) {
         if (!player.isSecondaryUseActive() && player.hasPose(Pose.STANDING) && !player.hasPassenger(this)) {
             if (this.startRiding(this.getTopPassenger(player))) {
-                if (!this.level().isClientSide()) {
+                if (this.level() instanceof ServerLevel) {
                     this.setOwner(player);
                     this.playMountingSound(true);
                 } else {
-                    player.displayClientMessage(Component.translatable("mount.onboard", Component.keybind("key.sneak")),
-                            true);
+                    player.sendOverlayMessage(Component.translatable("mount.onboard", Component.keybind("key.sneak")));
                 }
 
-                return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                return InteractionResult.SUCCESS;
             }
         }
 
-        return super.interact(player, interactionHand);
+        return super.interact(player, interactionHand, location);
     }
 
     private Entity getTopPassenger(Entity entity) {

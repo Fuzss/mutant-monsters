@@ -8,25 +8,34 @@ import fuzs.mutantmonsters.client.renderer.entity.layers.*;
 import fuzs.mutantmonsters.client.renderer.entity.state.MutantEndermanRenderState;
 import fuzs.mutantmonsters.world.entity.mutant.MutantEnderman;
 import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.block.BlockModelRenderState;
+import net.minecraft.client.renderer.block.BlockModelResolver;
+import net.minecraft.client.renderer.block.model.BlockDisplayContext;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.client.renderer.rendertype.RenderType;
-import net.minecraft.client.renderer.state.CameraRenderState;
+import net.minecraft.client.renderer.state.level.CameraRenderState;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Optional;
+
 public class MutantEndermanRenderer extends MobRenderer<MutantEnderman, MutantEndermanRenderState, MutantEndermanModel> {
     public static final Identifier TEXTURE_LOCATION = MutantMonsters.id(
             "textures/entity/mutant_enderman/mutant_enderman.png");
+    public static final BlockDisplayContext BLOCK_DISPLAY_CONTEXT = BlockDisplayContext.create();
 
+    private final BlockModelResolver blockModelResolver;
     private final MutantEndermanTeleportLayer teleportLayer;
 
     public MutantEndermanRenderer(EntityRendererProvider.Context context) {
         super(context, new MutantEndermanModel(context.bakeLayer(ModModelLayers.MUTANT_ENDERMAN)), 0.8F);
+        this.blockModelResolver = context.getBlockModelResolver();
         // order is important here, death layer must come first, will break eyes rendering if not
         this.addLayer(new MutantEndermanDeathLayer(this));
         this.addLayer(new MutantEndermanEyesLayer(this));
@@ -34,7 +43,7 @@ public class MutantEndermanRenderer extends MobRenderer<MutantEnderman, MutantEn
         this.teleportLayer = new MutantEndermanTeleportLayer(this);
         this.addLayer(this.teleportLayer);
         this.addLayer(new MutantEndermanScreamLayer(this));
-        this.addLayer(new MutantEndermanHeldBlocksLayer(this, context.getBlockRenderDispatcher()));
+        this.addLayer(new MutantEndermanHeldBlocksLayer(this));
     }
 
     @Override
@@ -88,27 +97,34 @@ public class MutantEndermanRenderer extends MobRenderer<MutantEnderman, MutantEn
     }
 
     @Override
-    public void extractRenderState(MutantEnderman mutantEnderman, MutantEndermanRenderState reusedState, float partialTick) {
-        super.extractRenderState(mutantEnderman, reusedState, partialTick);
-        reusedState.hasRedOverlay = mutantEnderman.hurtTime > 0;
-        reusedState.isCreepy = mutantEnderman.isAggressive();
-        reusedState.animationTime =
-                mutantEnderman.getAnimationTick() > 0 ? mutantEnderman.getAnimationTick() + partialTick :
-                        mutantEnderman.getAnimationTick();
-        reusedState.animation = mutantEnderman.getAnimation();
-        reusedState.armScale = mutantEnderman.getArmScale(partialTick);
-        reusedState.isClone = mutantEnderman.isClone();
-        for (int i = 0; i < reusedState.heldBlocks.length; i++) {
-            reusedState.heldBlocks[i] = mutantEnderman.getHeldBlock(i).orElse(null);
+    public void extractRenderState(MutantEnderman mutantEnderman, MutantEndermanRenderState state, float partialTick) {
+        super.extractRenderState(mutantEnderman, state, partialTick);
+        state.hasRedOverlay = mutantEnderman.hurtTime > 0;
+        state.isCreepy = mutantEnderman.isAggressive();
+        state.animationTime = mutantEnderman.getAnimationTick() > 0 ? mutantEnderman.getAnimationTick() + partialTick :
+                mutantEnderman.getAnimationTick();
+        state.animation = mutantEnderman.getAnimation();
+        state.armScale = mutantEnderman.getArmScale(partialTick);
+        state.isClone = mutantEnderman.isClone();
+        for (int i = 0; i < state.heldBlocks.length; i++) {
+            BlockModelRenderState blockModel = state.heldBlocks[i];
+            Optional<BlockState> optional = mutantEnderman.getHeldBlock(i);
+            if (optional.isPresent()) {
+                this.blockModelResolver.update(blockModel, optional.get(), BLOCK_DISPLAY_CONTEXT);
+            } else {
+                blockModel.clear();
+            }
         }
-        reusedState.activeArm = mutantEnderman.getActiveArm();
+
+        state.activeArm = mutantEnderman.getActiveArm();
         boolean hasTarget = mutantEnderman.hasTargetTicks > 0;
         for (int i = 0; i < mutantEnderman.heldBlockTicks.length; i++) {
-            reusedState.heldBlockTicks[i] = mutantEnderman.heldBlockTicks[i] + (mutantEnderman.heldBlockTicks[i] > 0 ?
+            state.heldBlockTicks[i] = mutantEnderman.heldBlockTicks[i] + (mutantEnderman.heldBlockTicks[i] > 0 ?
                     (hasTarget ? partialTick : -partialTick) : 0.0F);
         }
-        reusedState.teleportPosition = mutantEnderman.getTeleportPosition().orElse(null);
-        reusedState.renderOffset = this.getRenderOffset(mutantEnderman);
+
+        state.teleportPosition = mutantEnderman.getTeleportPosition().orElse(null);
+        state.renderOffset = this.getRenderOffset(mutantEnderman);
     }
 
     @Nullable

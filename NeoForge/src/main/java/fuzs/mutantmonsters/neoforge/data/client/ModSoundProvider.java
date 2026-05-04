@@ -2,9 +2,10 @@ package fuzs.mutantmonsters.neoforge.data.client;
 
 import fuzs.mutantmonsters.MutantMonsters;
 import fuzs.mutantmonsters.init.ModSoundEvents;
-import fuzs.puzzleslib.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import fuzs.puzzleslib.neoforge.api.client.data.v2.AbstractSoundProvider;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.entity.animal.pig.PigSoundVariants;
 
 public class ModSoundProvider extends AbstractSoundProvider {
 
@@ -92,8 +93,11 @@ public class ModSoundProvider extends AbstractSoundProvider {
                 sound(MutantMonsters.id("entity/mutant_zombie/roar2")).attenuationDistance(32).weight(2),
                 sound(MutantMonsters.id("entity/mutant_zombie/roarslow1")).attenuationDistance(32),
                 sound(MutantMonsters.id("entity/mutant_zombie/roarslow2")).attenuationDistance(32));
-        this.add(ModSoundEvents.ENTITY_SPIDER_PIG_AMBIENT_SOUND_EVENT.value(), SoundEvents.PIG_AMBIENT);
-        this.add(ModSoundEvents.ENTITY_SPIDER_PIG_DEATH_SOUND_EVENT.value(), SoundEvents.PIG_DEATH);
-        this.add(ModSoundEvents.ENTITY_SPIDER_PIG_HURT_SOUND_EVENT.value(), SoundEvents.PIG_HURT);
+        this.add(ModSoundEvents.ENTITY_SPIDER_PIG_AMBIENT_SOUND_EVENT.value(),
+                SoundEvents.PIG_SOUNDS.get(PigSoundVariants.SoundSet.CLASSIC).adultSounds().ambientSound().value());
+        this.add(ModSoundEvents.ENTITY_SPIDER_PIG_DEATH_SOUND_EVENT.value(),
+                SoundEvents.PIG_SOUNDS.get(PigSoundVariants.SoundSet.CLASSIC).adultSounds().deathSound().value());
+        this.add(ModSoundEvents.ENTITY_SPIDER_PIG_HURT_SOUND_EVENT.value(),
+                SoundEvents.PIG_SOUNDS.get(PigSoundVariants.SoundSet.CLASSIC).adultSounds().hurtSound().value());
     }
 }

@@ -32,7 +32,7 @@ public class ZombieResurrection extends BlockPos {
 
     public ZombieResurrection(Level level, int x, int y, int z) {
         super(x, y, z);
-        this.tick = 100 + level.random.nextInt(40);
+        this.tick = 100 + level.getRandom().nextInt(40);
     }
 
     public ZombieResurrection(BlockPos pos, int tick) {
@@ -44,7 +44,7 @@ public class ZombieResurrection extends BlockPos {
         return getSuitableGround(world, x, y, z, 4, true);
     }
 
-    public static int getSuitableGround(Level world, int x, int y, int z, int range, boolean checkDay) {
+    public static int getSuitableGround(Level level, int x, int y, int z, int range, boolean checkDay) {
         int i = y;
 
         while (true) {
@@ -54,27 +54,27 @@ public class ZombieResurrection extends BlockPos {
 
             BlockPos startPos = new BlockPos(x, i, z);
             BlockPos posUp = startPos.above();
-            BlockState blockState = world.getBlockState(startPos);
+            BlockState blockState = level.getBlockState(startPos);
             if (blockState.is(BlockTags.FIRE)) {
                 return -1;
             }
 
-            if ((!checkDay || world.getFluidState(startPos).is(FluidTags.LAVA)) && !world.getFluidState(startPos)
+            if ((!checkDay || level.getFluidState(startPos).is(FluidTags.LAVA)) && !level.getFluidState(startPos)
                     .isEmpty()) {
                 break;
             }
 
-            if (world.isEmptyBlock(startPos)) {
+            if (level.isEmptyBlock(startPos)) {
                 --i;
             } else {
-                if (!world.isEmptyBlock(startPos) && world.isEmptyBlock(posUp) && blockState.getCollisionShape(world,
+                if (!level.isEmptyBlock(startPos) && level.isEmptyBlock(posUp) && blockState.getCollisionShape(level,
                         startPos).isEmpty()) {
                     --i;
                     break;
                 }
 
-                if (world.isEmptyBlock(startPos) || world.isEmptyBlock(posUp) || world.getBlockState(posUp)
-                        .getCollisionShape(world, posUp)
+                if (level.isEmptyBlock(startPos) || level.isEmptyBlock(posUp) || level.getBlockState(posUp)
+                        .getCollisionShape(level, posUp)
                         .isEmpty()) {
                     break;
                 }
@@ -83,10 +83,10 @@ public class ZombieResurrection extends BlockPos {
             }
         }
 
-        if (checkDay && world.isBrightOutside()) {
+        if (checkDay && level.isBrightOutside()) {
             BlockPos lightPos = new BlockPos(x, y + 1, z);
-            float f = world.getPathfindingCostFromLightLevels(lightPos);
-            if (f > 0.0F && world.canSeeSkyFromBelowWater(lightPos) && world.random.nextInt(3) != 0) {
+            float f = level.getPathfindingCostFromLightLevels(lightPos);
+            if (f > 0.0F && level.canSeeSkyFromBelowWater(lightPos) && level.getRandom().nextInt(3) != 0) {
                 return -1;
             }
         }
@@ -101,7 +101,7 @@ public class ZombieResurrection extends BlockPos {
         } else if (level.isBrightOutside() && level.canSeeSky(pos)) {
             return EntityType.HUSK;
         } else {
-            return level.random.nextFloat() < 0.05F ? EntityType.ZOMBIE_VILLAGER : EntityType.ZOMBIE;
+            return level.getRandom().nextFloat() < 0.05F ? EntityType.ZOMBIE_VILLAGER : EntityType.ZOMBIE;
         }
     }
 

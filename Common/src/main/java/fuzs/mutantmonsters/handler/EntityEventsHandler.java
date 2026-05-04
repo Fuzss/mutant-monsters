@@ -6,11 +6,10 @@ import fuzs.mutantmonsters.world.entity.mutant.MutantCreeper;
 import fuzs.mutantmonsters.world.entity.mutant.MutantZombie;
 import fuzs.mutantmonsters.world.entity.mutant.SpiderPig;
 import fuzs.mutantmonsters.world.item.ArmorBlockItem;
-import fuzs.puzzleslib.api.event.v1.core.EventResult;
-import fuzs.puzzleslib.api.event.v1.core.EventResultHolder;
-import fuzs.puzzleslib.api.event.v1.data.MutableFloat;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.event.v1.core.EventResult;
+import fuzs.puzzleslib.common.api.event.v1.core.EventResultHolder;
+import fuzs.puzzleslib.common.api.event.v1.data.MutableFloat;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionHand;
@@ -27,6 +26,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.Collection;
 
@@ -61,7 +61,7 @@ public class EntityEventsHandler {
         return EventResult.PASS;
     }
 
-    public static EventResultHolder<InteractionResult> onEntityInteract(Player player, Level level, InteractionHand hand, Entity entity) {
+    public static EventResultHolder<InteractionResult> onUseEntity(Player player, Level level, InteractionHand hand, Entity entity, Vec3 hitVector) {
         if (entity instanceof Pig pig && !pig.hasEffect(MobEffects.UNLUCK)) {
             ItemStack stackInHand = player.getItemInHand(hand);
             if (PIG_POISON_INGREDIENT.test(stackInHand)) {
@@ -70,7 +70,7 @@ public class EntityEventsHandler {
                 }
 
                 pig.addEffect(new MobEffectInstance(MobEffects.UNLUCK, 600));
-                return EventResultHolder.interrupt(InteractionResultHelper.sidedSuccess(level.isClientSide()));
+                return EventResultHolder.interrupt(InteractionResult.SUCCESS);
             }
         }
 
@@ -98,8 +98,7 @@ public class EntityEventsHandler {
     }
 
     public static EventResult onLivingDrops(LivingEntity entity, DamageSource damageSource, Collection<ItemEntity> itemDrops, boolean recentlyHit) {
-        if (damageSource.getEntity() instanceof SpiderPig && entity.getType()
-                .is(ModTags.SPIDER_PIG_TARGETS_ENTITY_TYPE_TAG)) {
+        if (damageSource.getEntity() instanceof SpiderPig && entity.is(ModTags.SPIDER_PIG_TARGETS_ENTITY_TYPE_TAG)) {
             return EventResult.INTERRUPT;
         } else {
             return EventResult.PASS;

@@ -10,12 +10,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.rendertype.RenderType;
 import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
-import net.minecraft.client.renderer.special.SpecialModelRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.ARGB;
 import net.minecraft.util.Unit;
-import net.minecraft.world.item.ItemDisplayContext;
 import org.joml.Vector3fc;
 
 import java.util.function.Consumer;
@@ -32,7 +30,7 @@ public class EndersoulHandSpecialRenderer implements NoDataSpecialModelRenderer 
     }
 
     @Override
-    public void submit(ItemDisplayContext displayContext, PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+    public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
         float partialTick = this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
         float ageInTicks = this.minecraft.player.tickCount + partialTick;
         RenderType renderType = ModRenderTypes.energySwirl(ENDERSOUL_HAND_TEXTURE_LOCATION,
@@ -59,18 +57,18 @@ public class EndersoulHandSpecialRenderer implements NoDataSpecialModelRenderer 
         this.model.root().getExtentsForGui(poseStack, output);
     }
 
-    public record Unbaked() implements SpecialModelRenderer.Unbaked {
+    public record Unbaked() implements NoDataSpecialModelRenderer.Unbaked {
         public static final MapCodec<EndersoulHandSpecialRenderer.Unbaked> MAP_CODEC = MapCodec.unit(new EndersoulHandSpecialRenderer.Unbaked());
 
         @Override
-        public SpecialModelRenderer<?> bake(BakingContext context) {
-            return new EndersoulHandSpecialRenderer(new EndersoulHandModel(context.entityModelSet()
-                    .bakeLayer(ModModelLayers.ENDERSOUL_HAND_RIGHT), true));
+        public MapCodec<? extends Unbaked> type() {
+            return MAP_CODEC;
         }
 
         @Override
-        public MapCodec<? extends SpecialModelRenderer.Unbaked> type() {
-            return MAP_CODEC;
+        public EndersoulHandSpecialRenderer bake(BakingContext context) {
+            return new EndersoulHandSpecialRenderer(new EndersoulHandModel(context.entityModelSet()
+                    .bakeLayer(ModModelLayers.ENDERSOUL_HAND_RIGHT), true));
         }
     }
 }

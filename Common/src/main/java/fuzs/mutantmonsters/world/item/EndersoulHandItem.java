@@ -7,8 +7,7 @@ import fuzs.mutantmonsters.init.ModTags;
 import fuzs.mutantmonsters.util.EntityUtil;
 import fuzs.mutantmonsters.world.entity.mutant.MutantEnderman;
 import fuzs.mutantmonsters.world.entity.projectile.ThrowableBlock;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -72,12 +71,12 @@ public class EndersoulHandItem extends Item {
         } else if (!player.mayUseItemAt(pos, context.getClickedFace(), itemStack)) {
             return InteractionResult.PASS;
         } else {
-            if (!level.isClientSide()) {
-                level.addFreshEntity(new ThrowableBlock(player, blockState, pos));
-                level.removeBlock(pos, false);
+            if (level instanceof ServerLevel serverLevel) {
+                serverLevel.addFreshEntity(new ThrowableBlock(player, blockState, pos));
+                serverLevel.removeBlock(pos, false);
             }
 
-            return InteractionResultHelper.sidedSuccess(level.isClientSide());
+            return InteractionResult.SUCCESS;
         }
     }
 
@@ -85,30 +84,30 @@ public class EndersoulHandItem extends Item {
     public InteractionResult use(Level level, Player player, InteractionHand interactionHand) {
         ItemStack itemInHand = player.getItemInHand(interactionHand);
         if (!player.isSecondaryUseActive()) {
-            return InteractionResultHelper.pass(itemInHand);
+            return InteractionResult.PASS;
         } else {
             HitResult result = player.pick(MutantMonsters.CONFIG.get(ServerConfig.class).endersoulHandTeleportDistance,
                     1.0F,
                     false);
             if (result.getType() != HitResult.Type.BLOCK) {
-                player.displayClientMessage(Component.translatable(this.getDescriptionId() + ".teleport_failed"), true);
-                return InteractionResultHelper.fail(itemInHand);
+                player.sendOverlayMessage(Component.translatable(this.getDescriptionId() + ".teleport_failed"));
+                return InteractionResult.FAIL;
             } else {
                 if (level instanceof ServerLevel serverLevel) {
                     BlockPos startPos = ((BlockHitResult) result).getBlockPos();
                     BlockPos endPos = startPos.relative(((BlockHitResult) result).getDirection());
                     BlockPos posDown = startPos.below();
-                    if (!level.isEmptyBlock(posDown) || !level.getBlockState(posDown).blocksMotion()) {
+                    if (!serverLevel.isEmptyBlock(posDown) || !serverLevel.getBlockState(posDown).blocksMotion()) {
                         for (int i = 0; i < 3; ++i) {
                             BlockPos checkPos = startPos.above(i + 1);
-                            if (level.isEmptyBlock(checkPos)) {
+                            if (serverLevel.isEmptyBlock(checkPos)) {
                                 endPos = checkPos;
                                 break;
                             }
                         }
                     }
 
-                    level.playSound(null,
+                    serverLevel.playSound(null,
                             player.xo,
                             player.yo,
                             player.zo,
@@ -117,7 +116,7 @@ public class EndersoulHandItem extends Item {
                             1.0F,
                             1.0F);
                     player.teleportTo((double) endPos.getX() + 0.5, endPos.getY(), (double) endPos.getZ() + 0.5);
-                    level.playSound(null,
+                    serverLevel.playSound(null,
                             endPos,
                             SoundEvents.CHORUS_FRUIT_TELEPORT,
                             player.getSoundSource(),
@@ -132,7 +131,7 @@ public class EndersoulHandItem extends Item {
                 player.fallDistance = 0.0F;
                 player.swing(interactionHand);
                 player.awardStat(Stats.ITEM_USED.get(this));
-                return InteractionResultHelper.sidedSuccess(itemInHand, level.isClientSide());
+                return InteractionResult.SUCCESS;
             }
         }
     }

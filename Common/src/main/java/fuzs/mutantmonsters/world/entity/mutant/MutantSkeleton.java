@@ -11,7 +11,7 @@ import fuzs.mutantmonsters.world.entity.ai.goal.MutantMeleeAttackGoal;
 import fuzs.mutantmonsters.world.entity.animation.AnimatedEntity;
 import fuzs.mutantmonsters.world.entity.animation.EntityAnimation;
 import fuzs.mutantmonsters.world.entity.projectile.MutantArrow;
-import fuzs.puzzleslib.api.util.v1.DamageHelper;
+import fuzs.puzzleslib.common.api.util.v1.DamageHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;

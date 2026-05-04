@@ -275,18 +275,17 @@ public class MutantCreeper extends MutantMonster {
     }
 
     @Override
-    public void die(DamageSource cause) {
-        if (!this.level().isClientSide()) {
-            this.deathCause = cause;
+    public void die(DamageSource source) {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            this.deathCause = source;
             this.setCharging(false);
-            this.level().broadcastEntityEvent(this, (byte) 3);
-            this.level()
-                    .playSound(null,
-                            this,
-                            ModSoundEvents.ENTITY_MUTANT_CREEPER_DEATH_SOUND_EVENT.value(),
-                            this.getSoundSource(),
-                            2.0F,
-                            1.0F);
+            serverLevel.broadcastEntityEvent(this, EntityEvent.DEATH);
+            serverLevel.playSound(null,
+                    this,
+                    ModSoundEvents.ENTITY_MUTANT_CREEPER_DEATH_SOUND_EVENT.value(),
+                    this.getSoundSource(),
+                    2.0F,
+                    1.0F);
             if (this.lastHurtByPlayerMemoryTime > 0) {
                 this.lastHurtByPlayerMemoryTime += 100;
             }
@@ -472,7 +471,7 @@ public class MutantCreeper extends MutantMonster {
                 MutantCreeper.this.level().addFreshEntity(lightningBoltEntity);
             } else if (MutantCreeper.this.chargeTime >= MAX_CHARGE_TIME) {
                 MutantCreeper.this.heal(30.0F);
-                MutantCreeper.this.level().broadcastEntityEvent(MutantCreeper.this, (byte) 6);
+                MutantCreeper.this.level().broadcastEntityEvent(MutantCreeper.this, EntityEvent.TAMING_FAILED);
             }
 
             MutantCreeper.this.chargeTime = 0;

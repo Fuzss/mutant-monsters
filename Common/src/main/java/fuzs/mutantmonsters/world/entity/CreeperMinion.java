@@ -11,8 +11,7 @@ import fuzs.mutantmonsters.world.entity.ai.goal.HurtByNearestTargetGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.MutantMeleeAttackGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.OwnerTargetGoal;
 import fuzs.mutantmonsters.world.level.MutatedExplosionHelper;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -307,7 +306,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
                     Proxy.INSTANCE.displayCreeperMinionTrackerGUI(this);
                 }
 
-                return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                return InteractionResult.SUCCESS;
             } else {
                 if (this.isOwnedBy(player)) {
                     if (itemInHand.is(Items.GUNPOWDER)) {
@@ -331,7 +330,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
                                                 speedZ);
                             }
 
-                            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                            return InteractionResult.SUCCESS;
                         }
                     } else if (itemInHand.is(Items.TNT)) {
                         float explosionRadius = this.getExplosionRadius();
@@ -343,7 +342,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
                                 itemInHand.consume(1, player);
                             }
 
-                            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                            return InteractionResult.SUCCESS;
                         }
                     } else {
                         if (!this.level().isClientSide()) {
@@ -352,7 +351,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
                             this.setTarget(null);
                         }
 
-                        return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                        return InteractionResult.SUCCESS;
                     }
                 }
 
@@ -378,7 +377,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
                 }
             }
 
-            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+            return InteractionResult.SUCCESS;
         } else if (player.isCreative() && itemInHand.is(ModItems.CREEPER_MINION_TRACKER_ITEM.value())
                 && this.getOwner() == null) {
             if (!this.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
@@ -390,7 +389,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
                         player.getDisplayName()));
             }
 
-            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+            return InteractionResult.SUCCESS;
         } else {
             return InteractionResult.PASS;
         }
@@ -437,8 +436,8 @@ public class CreeperMinion extends ShoulderRidingEntity {
     }
 
     @Override
-    public boolean canAttackType(EntityType<?> entityType) {
-        return super.canAttackType(entityType) && entityType != ModEntityTypes.MUTANT_CREEPER_ENTITY_TYPE.value();
+    public boolean canAttack(LivingEntity target) {
+        return super.canAttack(target) && target.is(ModEntityTypes.MUTANT_CREEPER_ENTITY_TYPE.value());
     }
 
     @Override

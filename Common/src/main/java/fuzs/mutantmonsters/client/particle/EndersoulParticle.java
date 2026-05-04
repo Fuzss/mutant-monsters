@@ -7,6 +7,7 @@ import net.minecraft.client.particle.SingleQuadParticle;
 import net.minecraft.client.particle.SpriteSet;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.util.LightCoordsUtil;
 import net.minecraft.util.RandomSource;
 
 public class EndersoulParticle extends SingleQuadParticle {
@@ -37,8 +38,8 @@ public class EndersoulParticle extends SingleQuadParticle {
     }
 
     @Override
-    protected int getLightColor(float partialTick) {
-        return 15728880;
+    protected int getLightCoords(float partialTicks) {
+        return LightCoordsUtil.FULL_BRIGHT;
     }
 
     @Override

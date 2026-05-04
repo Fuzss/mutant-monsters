@@ -13,8 +13,7 @@ import fuzs.mutantmonsters.world.entity.ai.goal.AvoidDamageGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.HurtByNearestTargetGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.MutantMeleeAttackGoal;
 import fuzs.mutantmonsters.world.entity.ai.goal.OwnerTargetGoal;
-import fuzs.puzzleslib.api.util.v1.EntityHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.util.v1.EntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Holder;
@@ -120,8 +119,7 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
                 new NonTameRandomTargetGoal<>(this,
                         Mob.class,
                         true,
-                        (LivingEntity livingEntity, ServerLevel serverLevel) -> livingEntity.getType()
-                                .is(ModTags.SPIDER_PIG_TARGETS_ENTITY_TYPE_TAG)));
+                        (LivingEntity livingEntity, ServerLevel serverLevel) -> livingEntity.is(ModTags.SPIDER_PIG_TARGETS_ENTITY_TYPE_TAG)));
         this.targetSelector.addGoal(4, new ResetUniversalAngerTargetGoal<>(this, true));
     }
 
@@ -239,16 +237,16 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
                     && this.getHealth() < this.getMaxHealth()) {
                 this.usePlayerItem(player, interactionHand, itemInHand);
                 this.heal((float) itemInHand.get(DataComponents.FOOD).nutrition());
-                return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                return InteractionResult.SUCCESS;
             } else {
                 InteractionResult interactionResult = super.mobInteract(player, interactionHand);
                 if (!interactionResult.consumesAction()) {
                     if (this.isSaddled() && !player.isSecondaryUseActive() && this.isOwnedBy(player)) {
-                        if (!this.level().isClientSide()) {
+                        if (this.level() instanceof ServerLevel) {
                             player.startRiding(this);
                         }
 
-                        return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                        return InteractionResult.SUCCESS;
                     } else if (this.isEquippableInSlot(itemInHand, EquipmentSlot.SADDLE)) {
                         return itemInHand.interactLivingEntity(player, this, interactionHand);
                     }
@@ -286,15 +284,14 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
         }
 
         float damageAmount = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        if (target.getType() != this.getType() && !target.getType().is(ModTags.SPIDER_PIG_FRIENDS_ENTITY_TYPE_TAG)) {
-            if (this.level()
-                    .getBlockStates(target.getBoundingBox())
+        if (target.getType() != this.getType() && !target.is(ModTags.SPIDER_PIG_FRIENDS_ENTITY_TYPE_TAG)) {
+            if (serverLevel.getBlockStates(target.getBoundingBox())
                     .anyMatch(Blocks.COBWEB.defaultBlockState()::equals)) {
                 damageAmount += 4.0F;
             }
         }
 
-        DamageSource damageSource = this.level().damageSources().mobAttack(this);
+        DamageSource damageSource = serverLevel.damageSources().mobAttack(this);
         if (target.hurtServer(serverLevel, damageSource, damageAmount)) {
             EnchantmentHelper.doPostAttackEffects(serverLevel, target, damageSource);
             return true;
@@ -464,7 +461,7 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
             }
         }
 
-        if (livingEntity.getType().is(ModTags.SPIDER_PIG_TARGETS_ENTITY_TYPE_TAG) && livingEntity instanceof Mob mob) {
+        if (livingEntity.is(ModTags.SPIDER_PIG_TARGETS_ENTITY_TYPE_TAG) && livingEntity instanceof Mob mob) {
             return mob.convertTo(ModEntityTypes.SPIDER_PIG_ENTITY_TYPE.value(),
                     ConversionParams.single(this, false, false),
                     Function.identity()::apply) == null;

@@ -1,9 +1,10 @@
 {
+    "minecraft": "26.1.2",
     "mod": {
         "id": "mutantmonsters",
         "group": "fuzs.mutantmonsters",
         "name": "Mutant Monsters",
-        "version": "21.11.2",
+        "version": "26.1.0",
         "authors": [
             "shcott21",
             "Chumbanotz",
@@ -39,13 +40,13 @@
     ],
     "links": [
         {
-            "name": "github",
-            "slug": "mutantmonsters"
-        },
-        {
             "name": "curseforge",
             "slug": "mutant-monsters",
             "id": "852665"
+        },
+        {
+            "name": "github",
+            "slug": "mutant-monsters"
         },
         {
             "name": "modrinth",

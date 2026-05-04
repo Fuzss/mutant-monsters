@@ -1,7 +1,7 @@
 package fuzs.mutantmonsters.init;
 
 import fuzs.mutantmonsters.MutantMonsters;
-import fuzs.puzzleslib.api.init.v3.tags.TagFactory;
+import fuzs.puzzleslib.common.api.init.v3.tags.TagFactory;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.EntityType;

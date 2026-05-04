@@ -5,9 +5,8 @@ import fuzs.mutantmonsters.init.ModItems;
 import fuzs.mutantmonsters.util.EntityUtil;
 import fuzs.mutantmonsters.world.entity.mutant.MutantEnderman;
 import fuzs.mutantmonsters.world.entity.mutant.MutantSnowGolem;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.util.v1.EntityHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
+import fuzs.puzzleslib.common.api.util.v1.EntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
@@ -247,7 +246,7 @@ public class ThrowableBlock extends ThrowableProjectile {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand interactionHand) {
+    public InteractionResult interact(Player player, InteractionHand interactionHand, Vec3 location) {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         if (player.isSecondaryUseActive()) {
             return InteractionResult.PASS;
@@ -255,23 +254,23 @@ public class ThrowableBlock extends ThrowableProjectile {
             return InteractionResult.PASS;
         } else if (this.isHeld()) {
             if (this.getOwner() == player) {
-                if (!this.level().isClientSide()) {
+                if (this.level() instanceof ServerLevel) {
                     this.setHeld(false);
                     this.throwBlock(player);
                 }
 
                 ItemHelper.hurtAndBreak(itemStack, 1, player, interactionHand);
-                return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+                return InteractionResult.SUCCESS;
             } else {
                 return InteractionResult.PASS;
             }
         } else {
-            if (!this.level().isClientSide()) {
+            if (this.level() instanceof ServerLevel) {
                 this.setHeld(true);
                 this.setOwner(player);
             }
 
-            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+            return InteractionResult.SUCCESS;
         }
     }
 

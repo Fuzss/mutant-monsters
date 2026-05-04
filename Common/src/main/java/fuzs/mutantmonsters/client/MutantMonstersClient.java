@@ -13,11 +13,11 @@ import fuzs.mutantmonsters.init.ModEntityTypes;
 import fuzs.mutantmonsters.init.ModRegistry;
 import fuzs.mutantmonsters.world.item.ArmorBlockItem;
 import fuzs.mutantmonsters.world.item.SkeletonArmorItem;
-import fuzs.puzzleslib.api.client.core.v1.ClientModConstructor;
-import fuzs.puzzleslib.api.client.core.v1.context.*;
-import fuzs.puzzleslib.api.client.event.v1.renderer.AddLivingEntityRenderLayersCallback;
-import fuzs.puzzleslib.api.client.event.v1.renderer.ExtractRenderStateCallback;
-import fuzs.puzzleslib.api.client.gui.v2.tooltip.ItemTooltipRegistry;
+import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
+import fuzs.puzzleslib.common.api.client.core.v1.context.*;
+import fuzs.puzzleslib.common.api.client.event.v1.renderer.AddLivingEntityRenderLayersCallback;
+import fuzs.puzzleslib.common.api.client.event.v1.renderer.ExtractEntityRenderStateCallback;
+import fuzs.puzzleslib.common.api.client.gui.v2.tooltip.ItemTooltipRegistry;
 import net.minecraft.client.model.geom.EntityModelSet;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.monster.creeper.CreeperModel;
@@ -35,7 +35,7 @@ public class MutantMonstersClient implements ClientModConstructor {
 
     private static void registerEventHandlers() {
         AddLivingEntityRenderLayersCallback.EVENT.register(CreeperMinionOnShoulderLayer::addLivingEntityRenderLayers);
-        ExtractRenderStateCallback.EVENT.register(CreeperMinionOnShoulderLayer::onExtractRenderState);
+        ExtractEntityRenderStateCallback.EVENT.register(CreeperMinionOnShoulderLayer::onExtractEntityRenderState);
     }
 
     @Override

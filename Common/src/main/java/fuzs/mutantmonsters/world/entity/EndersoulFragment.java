@@ -6,8 +6,7 @@ import fuzs.mutantmonsters.init.ModRegistry;
 import fuzs.mutantmonsters.init.ModSoundEvents;
 import fuzs.mutantmonsters.util.EntityUtil;
 import fuzs.mutantmonsters.world.entity.mutant.MutantEnderman;
-import fuzs.puzzleslib.api.util.v1.DamageHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import fuzs.puzzleslib.common.api.util.v1.DamageHelper;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -144,17 +143,17 @@ public class EndersoulFragment extends Entity implements TraceableEntity {
     }
 
     @Override
-    public InteractionResult interact(Player player, InteractionHand interactionHand) {
+    public InteractionResult interact(Player player, InteractionHand interactionHand, Vec3 location) {
         if (!player.isSecondaryUseActive()) {
-            if (this.level() instanceof ServerLevel && !this.ownedBy(player)) {
+            if (this.level() instanceof ServerLevel serverLevel && !this.ownedBy(player)) {
                 this.setOwner(player);
                 this.explodeTick += 600;
-                this.playSound(SoundEvents.ENDER_EYE_DEATH, 1.0F, 0.8F + this.level().random.nextFloat() * 0.4F);
+                this.playSound(SoundEvents.ENDER_EYE_DEATH, 1.0F, 0.8F + serverLevel.getRandom().nextFloat() * 0.4F);
             }
 
-            return InteractionResultHelper.sidedSuccess(this.level().isClientSide());
+            return InteractionResult.SUCCESS;
         } else {
-            return super.interact(player, interactionHand);
+            return super.interact(player, interactionHand, location);
         }
     }
 
@@ -175,7 +174,7 @@ public class EndersoulFragment extends Entity implements TraceableEntity {
         this.playSound(ModSoundEvents.ENTITY_ENDERSOUL_FRAGMENT_EXPLODE_SOUND_EVENT.value(),
                 1.0F,
                 (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
-        serverLevel.broadcastEntityEvent(this, (byte) 3);
+        serverLevel.broadcastEntityEvent(this, EntityEvent.DEATH);
         for (Entity entity : serverLevel.getEntities(this,
                 this.getBoundingBox().inflate(5.0),
                 MutantEnderman.ENDER_TARGETS)) {

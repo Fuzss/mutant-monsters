@@ -1,7 +1,7 @@
 package fuzs.mutantmonsters.world.item;
 
 import fuzs.mutantmonsters.world.level.MutatedExplosionHelper;
-import fuzs.puzzleslib.api.util.v1.InteractionResultHelper;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
@@ -71,14 +71,14 @@ public class CreeperShardItem extends Item {
         int maxDamage = itemInHand.getMaxDamage();
         int damageValue = itemInHand.getDamageValue();
         if (damageValue < maxDamage) {
-            if (!level.isClientSide()) {
+            if (level instanceof ServerLevel serverLevel) {
                 float radius = 5.0F * (maxDamage - damageValue) / 16.0F;
                 if (damageValue == 0) {
                     radius += 2.0F;
                 }
 
-                level.explode(player,
-                        Explosion.getDefaultDamageSource(level, player),
+                serverLevel.explode(player,
+                        Explosion.getDefaultDamageSource(serverLevel, player),
                         new MutatedExplosionHelper.MutatedExplosionDamageCalculator(),
                         player.getX(),
                         player.getY() + 1.0,
@@ -91,7 +91,7 @@ public class CreeperShardItem extends Item {
             itemInHand.hurtAndBreak(1, player, interactionHand.asEquipmentSlot());
             player.getCooldowns().addCooldown(itemInHand, (maxDamage - damageValue) * 2);
             player.awardStat(Stats.ITEM_USED.get(this));
-            return InteractionResultHelper.success(itemInHand);
+            return InteractionResult.SUCCESS.heldItemTransformedTo(itemInHand);
         } else {
             return super.use(level, player, interactionHand);
         }

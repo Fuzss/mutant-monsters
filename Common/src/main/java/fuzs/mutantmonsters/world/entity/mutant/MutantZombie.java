@@ -12,8 +12,8 @@ import fuzs.mutantmonsters.world.entity.animation.AnimatedEntity;
 import fuzs.mutantmonsters.world.entity.animation.EntityAnimation;
 import fuzs.mutantmonsters.world.level.SeismicWave;
 import fuzs.mutantmonsters.world.level.ZombieResurrection;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
-import fuzs.puzzleslib.api.util.v1.DamageHelper;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
+import fuzs.puzzleslib.common.api.util.v1.DamageHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
@@ -194,7 +194,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
     }
 
     @Override
-    public InteractionResult interactAt(Player player, Vec3 vec, InteractionHand interactionHand) {
+    public InteractionResult interact(Player player, InteractionHand interactionHand, Vec3 location) {
         // we cannot use #mobInteract as it does not trigger for dead mobs
         if (player.isSpectator()) {
             return InteractionResult.PASS;
@@ -216,7 +216,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
             this.gameEvent(GameEvent.ENTITY_INTERACT);
             return interactionResult;
         } else {
-            return super.interactAt(player, vec, interactionHand);
+            return super.interact(player, interactionHand, location);
         }
     }
 
@@ -415,7 +415,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
             if (this.getRemainingLives() > 0) {
                 this.stopAllGoals();
                 this.getNavigation().stop();
-                serverLevel.broadcastEntityEvent(this, (byte) 3);
+                serverLevel.broadcastEntityEvent(this, EntityEvent.DEATH);
                 if (this.lastHurtByPlayerMemoryTime > 0) {
                     this.lastHurtByPlayerMemoryTime += REVIVE_AFTER_DEATH_TIME;
                 }
@@ -499,7 +499,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
     }
 
     public boolean canHarm(Entity entity) {
-        return !entity.getType().is(EntityTypeTags.ZOMBIES);
+        return !entity.is(EntityTypeTags.ZOMBIES);
     }
 
     @Override

@@ -4,7 +4,7 @@ import fuzs.mutantmonsters.util.EntityUtil;
 import fuzs.mutantmonsters.world.effect.ChemicalXMobEffect;
 import fuzs.mutantmonsters.world.entity.SkullSpirit;
 import fuzs.mutantmonsters.world.entity.mutant.MutantCreeper;
-import fuzs.puzzleslib.api.item.v2.ItemHelper;
+import fuzs.puzzleslib.common.api.item.v2.ItemHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

@@ -20,7 +20,7 @@ public class MutantCrossbowModel extends Model<MutantSkeletonRenderState> {
     private final ModelPart rope2;
 
     public MutantCrossbowModel(ModelPart modelPart) {
-        super(modelPart, RenderTypes::entityCutoutNoCull);
+        super(modelPart, RenderTypes::entityCutout);
         ModelPart armWear = modelPart.getChild("arm_wear");
         ModelPart middle = armWear.getChild("middle");
         this.middle1 = middle.getChild("middle1");

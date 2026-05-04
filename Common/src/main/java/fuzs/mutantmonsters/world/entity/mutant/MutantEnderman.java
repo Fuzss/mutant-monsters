@@ -19,8 +19,8 @@ import fuzs.mutantmonsters.world.entity.animation.AdditionalSpawnDataEntity;
 import fuzs.mutantmonsters.world.entity.animation.AnimatedEntity;
 import fuzs.mutantmonsters.world.entity.animation.EntityAnimation;
 import fuzs.mutantmonsters.world.entity.projectile.ThrowableBlock;
-import fuzs.puzzleslib.api.util.v1.DamageHelper;
-import fuzs.puzzleslib.api.util.v1.EntityHelper;
+import fuzs.puzzleslib.common.api.util.v1.DamageHelper;
+import fuzs.puzzleslib.common.api.util.v1.EntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -86,9 +86,7 @@ import java.util.stream.IntStream;
 
 public class MutantEnderman extends MutantMonster implements NeutralMob, AnimatedEntity {
     public static final Predicate<Entity> ENDER_TARGETS = EntitySelector.LIVING_ENTITY_STILL_ALIVE.and(EntitySelector.NO_CREATIVE_OR_SPECTATOR)
-            .and((Entity entity) -> {
-                return !entity.getType().is(ModTags.ENDER_FRIENDS_ENTITY_TYPE_TAG);
-            });
+            .and((Entity entity) -> !entity.is(ModTags.ENDER_FRIENDS_ENTITY_TYPE_TAG));
     private static final Identifier STEP_HEIGHT_MODIFIER_CLONING_ID = MutantMonsters.id("cloning");
     private static final AttributeModifier STEP_HEIGHT_MODIFIER_CLONING = new AttributeModifier(
             STEP_HEIGHT_MODIFIER_CLONING_ID,
@@ -1255,47 +1253,49 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
             this.mob.getNavigation().stop();
             if (this.mob.animationTick == 40) {
                 this.mob.ambientSoundTime = -this.mob.getAmbientSoundInterval();
-                this.mob.level().getLevelData().setRaining(false);
-                this.mob.level().broadcastEntityEvent(this.mob, (byte) 0);
+                ServerLevel serverLevel = getServerLevel(this.mob);
+                serverLevel.getWeatherData().setRaining(false);
+                serverLevel.broadcastEntityEvent(this.mob, (byte) 0);
+                RandomSource random = this.mob.random;
                 this.mob.playSound(ModSoundEvents.ENTITY_MUTANT_ENDERMAN_SCREAM_SOUND_EVENT.value(),
                         5.0F,
-                        0.7F + this.mob.random.nextFloat() * 0.2F);
+                        0.7F + random.nextFloat() * 0.2F);
 
-                for (Entity entity : this.mob.level()
-                        .getEntities(this.mob, this.mob.getBoundingBox().inflate(20.0, 12.0, 20.0), ENDER_TARGETS)) {
+                for (Entity entity : serverLevel.getEntities(this.mob,
+                        this.mob.getBoundingBox().inflate(20.0, 12.0, 20.0),
+                        ENDER_TARGETS)) {
                     if (this.mob.distanceToSqr(entity) < 400.0) {
-                        entity.hurt(DamageHelper.damageSource(this.mob.level(),
+                        entity.hurt(DamageHelper.damageSource(serverLevel,
                                 ModRegistry.PIERCING_MOB_ATTACK_DAMAGE_TYPE,
                                 this.mob), 4.0F);
                         if (entity instanceof Mob mobEntity) {
                             mobEntity.addEffect(new MobEffectInstance(MobEffects.SLOWNESS, 120, 3));
-                            if (this.mob.random.nextInt(2) != 0) {
+                            if (random.nextInt(2) != 0) {
                                 mobEntity.addEffect(new MobEffectInstance(MobEffects.POISON,
-                                        120 + this.mob.random.nextInt(180),
-                                        this.mob.random.nextInt(2)));
+                                        120 + random.nextInt(180),
+                                        random.nextInt(2)));
                             }
 
-                            if (this.mob.random.nextInt(4) != 0) {
+                            if (random.nextInt(4) != 0) {
                                 mobEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS,
-                                        300 + this.mob.random.nextInt(300),
-                                        this.mob.random.nextInt(2)));
+                                        300 + random.nextInt(300),
+                                        random.nextInt(2)));
                             }
 
-                            if (this.mob.random.nextInt(3) != 0) {
+                            if (random.nextInt(3) != 0) {
                                 mobEntity.addEffect(new MobEffectInstance(MobEffects.HUNGER,
-                                        120 + this.mob.random.nextInt(60),
-                                        10 + this.mob.random.nextInt(2)));
+                                        120 + random.nextInt(60),
+                                        10 + random.nextInt(2)));
                             }
 
-                            if (this.mob.random.nextInt(4) != 0) {
+                            if (random.nextInt(4) != 0) {
                                 mobEntity.addEffect(new MobEffectInstance(MobEffects.NAUSEA,
-                                        120 + this.mob.random.nextInt(400)));
+                                        120 + random.nextInt(400)));
                             }
                         }
                     }
                 }
             }
-
         }
 
         @Override
