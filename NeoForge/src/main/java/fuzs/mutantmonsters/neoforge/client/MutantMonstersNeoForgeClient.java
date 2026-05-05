@@ -1,11 +1,11 @@
 package fuzs.mutantmonsters.neoforge.client;
 
-import fuzs.mutantmonsters.MutantMonsters;
-import fuzs.mutantmonsters.client.MutantMonstersClient;
-import fuzs.mutantmonsters.data.client.ModLanguageProvider;
-import fuzs.mutantmonsters.data.client.ModModelProvider;
-import fuzs.mutantmonsters.data.client.ModEquipmentProvider;
-import fuzs.mutantmonsters.data.client.ModParticleProvider;
+import fuzs.mutantmonsters.common.MutantMonsters;
+import fuzs.mutantmonsters.common.client.MutantMonstersClient;
+import fuzs.mutantmonsters.common.data.client.ModLanguageProvider;
+import fuzs.mutantmonsters.common.data.client.ModModelProvider;
+import fuzs.mutantmonsters.common.data.client.ModEquipmentProvider;
+import fuzs.mutantmonsters.common.data.client.ModParticleProvider;
 import fuzs.mutantmonsters.neoforge.data.client.ModSoundProvider;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;

@@ -1,7 +1,7 @@
 package fuzs.mutantmonsters.fabric.client;
 
-import fuzs.mutantmonsters.MutantMonsters;
-import fuzs.mutantmonsters.client.MutantMonstersClient;
+import fuzs.mutantmonsters.common.MutantMonsters;
+import fuzs.mutantmonsters.common.client.MutantMonstersClient;
 import fuzs.puzzleslib.common.api.client.core.v1.ClientModConstructor;
 import net.fabricmc.api.ClientModInitializer;
 

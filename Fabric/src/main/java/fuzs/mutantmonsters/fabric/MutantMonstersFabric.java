@@ -1,6 +1,6 @@
 package fuzs.mutantmonsters.fabric;
 
-import fuzs.mutantmonsters.MutantMonsters;
+import fuzs.mutantmonsters.common.MutantMonsters;
 import fuzs.mutantmonsters.fabric.init.FabricModRegistry;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import net.fabricmc.api.ModInitializer;

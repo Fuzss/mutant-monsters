@@ -1,6 +1,6 @@
 package fuzs.mutantmonsters.fabric.services;
 
-import fuzs.mutantmonsters.services.CommonAbstractions;
+import fuzs.mutantmonsters.common.services.CommonAbstractions;
 import fuzs.puzzleslib.fabric.api.event.v1.FabricLivingEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

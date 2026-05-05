@@ -1,8 +1,8 @@
 package fuzs.mutantmonsters.fabric.init;
 
-import fuzs.mutantmonsters.MutantMonsters;
-import fuzs.mutantmonsters.world.entity.SkullSpirit;
-import fuzs.mutantmonsters.world.entity.projectile.MutantArrow;
+import fuzs.mutantmonsters.common.MutantMonsters;
+import fuzs.mutantmonsters.common.world.entity.SkullSpirit;
+import fuzs.mutantmonsters.common.world.entity.projectile.MutantArrow;
 import fuzs.puzzleslib.common.api.init.v3.registry.RegistryManager;
 import net.minecraft.core.Holder;
 import net.minecraft.world.entity.EntityType;

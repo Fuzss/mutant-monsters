@@ -5,6 +5,11 @@
         "texture": "mutantmonsters:mutant_skeleton"
       }
     ],
+    "humanoid_baby": [
+      {
+        "texture": "mutantmonsters:mutant_skeleton"
+      }
+    ],
     "humanoid_leggings": [
       {
         "texture": "mutantmonsters:mutant_skeleton"

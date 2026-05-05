@@ -1,6 +1,6 @@
 package fuzs.mutantmonsters.neoforge.services;
 
-import fuzs.mutantmonsters.services.CommonAbstractions;
+import fuzs.mutantmonsters.common.services.CommonAbstractions;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;

@@ -1,0 +1,74 @@
+package fuzs.mutantmonsters.common.client.renderer.special;
+
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.serialization.MapCodec;
+import fuzs.mutantmonsters.common.MutantMonsters;
+import fuzs.mutantmonsters.common.client.model.EndersoulHandModel;
+import fuzs.mutantmonsters.common.client.model.geom.ModModelLayers;
+import fuzs.mutantmonsters.common.client.renderer.rendertype.ModRenderTypes;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.SubmitNodeCollector;
+import net.minecraft.client.renderer.rendertype.RenderType;
+import net.minecraft.client.renderer.special.NoDataSpecialModelRenderer;
+import net.minecraft.client.renderer.texture.OverlayTexture;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.ARGB;
+import net.minecraft.util.Unit;
+import org.joml.Vector3fc;
+
+import java.util.function.Consumer;
+
+public class EndersoulHandSpecialRenderer implements NoDataSpecialModelRenderer {
+    private static final Identifier ENDERSOUL_HAND_TEXTURE_LOCATION = MutantMonsters.id(
+            "textures/item/endersoul_hand_model.png");
+
+    private final Minecraft minecraft = Minecraft.getInstance();
+    private final EndersoulHandModel model;
+
+    public EndersoulHandSpecialRenderer(EndersoulHandModel model) {
+        this.model = model;
+    }
+
+    @Override
+    public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int packedLight, int packedOverlay, boolean hasFoil, int outlineColor) {
+        float partialTick = this.minecraft.getDeltaTracker().getGameTimeDeltaPartialTick(false);
+        float ageInTicks = this.minecraft.player.tickCount + partialTick;
+        RenderType renderType = ModRenderTypes.energySwirl(ENDERSOUL_HAND_TEXTURE_LOCATION,
+                ageInTicks * 0.008F,
+                ageInTicks * 0.008F);
+        // ignore enchanting glint, it looks bad
+        int color = ARGB.colorFromFloat(1.0F, 0.9F, 0.3F, 1.0F);
+        nodeCollector.submitModel(this.model,
+                Unit.INSTANCE,
+                poseStack,
+                renderType,
+                0XF000F0,
+                OverlayTexture.NO_OVERLAY,
+                color,
+                null,
+                outlineColor,
+                null);
+    }
+
+    @Override
+    public void getExtents(Consumer<Vector3fc> output) {
+        PoseStack poseStack = new PoseStack();
+        this.model.setupAnim(Unit.INSTANCE);
+        this.model.root().getExtentsForGui(poseStack, output);
+    }
+
+    public record Unbaked() implements NoDataSpecialModelRenderer.Unbaked {
+        public static final MapCodec<EndersoulHandSpecialRenderer.Unbaked> MAP_CODEC = MapCodec.unit(new EndersoulHandSpecialRenderer.Unbaked());
+
+        @Override
+        public MapCodec<? extends Unbaked> type() {
+            return MAP_CODEC;
+        }
+
+        @Override
+        public EndersoulHandSpecialRenderer bake(BakingContext context) {
+            return new EndersoulHandSpecialRenderer(new EndersoulHandModel(context.entityModelSet()
+                    .bakeLayer(ModModelLayers.ENDERSOUL_HAND_RIGHT), true));
+        }
+    }
+}

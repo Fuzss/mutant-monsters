@@ -1,7 +1,7 @@
 package fuzs.mutantmonsters.neoforge.data.client;
 
-import fuzs.mutantmonsters.MutantMonsters;
-import fuzs.mutantmonsters.init.ModSoundEvents;
+import fuzs.mutantmonsters.common.MutantMonsters;
+import fuzs.mutantmonsters.common.init.ModSoundEvents;
 import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import fuzs.puzzleslib.neoforge.api.client.data.v2.AbstractSoundProvider;
 import net.minecraft.sounds.SoundEvents;
