@@ -27,13 +27,14 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
 public class EntityEventsHandler {
     private static final Ingredient PIG_POISON_INGREDIENT = Ingredient.of(Items.FERMENTED_SPIDER_EYE);
 
-    public static EventResult onEntityLoad(Entity entity, ServerLevel serverLevel, boolean isNewlySpawned) {
+    public static EventResult onEntityJoin(Entity entity, ServerLevel serverLevel, boolean isLoadedFromDisk, @Nullable EntitySpawnReason entitySpawnReason) {
         if (entity instanceof PathfinderMob creature) {
             if (EntityUtil.isFeline(creature)) {
                 creature.goalSelector.addGoal(2,

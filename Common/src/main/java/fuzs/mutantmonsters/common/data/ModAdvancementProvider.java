@@ -53,7 +53,7 @@ public class ModAdvancementProvider extends AbstractAdvancementProvider {
         Advancement.Builder.advancement()
                 .display(display(new ItemStackTemplate(ModItems.ENDERSOUL_HAND_ITEM.value()),
                         ROOT_ADVANCEMENT.id(),
-                        Identifier.withDefaultNamespace("textures/gui/advancements/backgrounds/stone.png"),
+                        Identifier.withDefaultNamespace("gui/advancements/backgrounds/stone"),
                         AdvancementType.TASK,
                         false))
                 .addCriterion("killed_something",

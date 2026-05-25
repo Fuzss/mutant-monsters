@@ -25,6 +25,7 @@ import fuzs.puzzleslib.common.api.core.v1.context.BiomeModificationsContext;
 import fuzs.puzzleslib.common.api.core.v1.context.EntityAttributesContext;
 import fuzs.puzzleslib.common.api.core.v1.context.PayloadTypesContext;
 import fuzs.puzzleslib.common.api.core.v1.context.SpawnPlacementsContext;
+import fuzs.puzzleslib.common.api.event.v1.entity.ServerEntityEvents;
 import fuzs.puzzleslib.common.api.event.v1.entity.ServerEntityLevelEvents;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.LivingDropsCallback;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.LivingHurtCallback;
@@ -65,10 +66,10 @@ public class MutantMonsters implements ModConstructor {
         ArrowLooseCallback.EVENT.register(PlayerEventsHandler::onArrowLoose);
         PlayerInteractEvents.USE_ENTITY.register(EntityEventsHandler::onUseEntity);
         PlayerTickEvents.END.register(PlayerEventsHandler::onEndPlayerTick);
-        ServerEntityLevelEvents.LOAD.register(EntityEventsHandler::onEntityLoad);
+        ServerEntityEvents.JOIN.register(EntityEventsHandler::onEntityJoin);
         LivingDropsCallback.EVENT.register(EntityEventsHandler::onLivingDrops);
         ItemEntityEvents.TOSS.register(PlayerEventsHandler::onItemToss);
-        ServerEntityLevelEvents.LOAD.register(SpawningPreventionHandler::onEntitySpawn);
+        ServerEntityEvents.JOIN.register(SpawningPreventionHandler::onEntityJoin);
         ExplosionEvents.DETONATE.register(MutatedExplosionHelper::onExplosionDetonate);
     }
 
