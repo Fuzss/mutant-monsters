@@ -23,8 +23,14 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.monster.creeper.CreeperModel;
 import net.minecraft.client.model.monster.enderman.EndermanModel;
 import net.minecraft.client.model.object.skull.SkullModel;
+import net.minecraft.client.renderer.block.BuiltInBlockModels;
 import net.minecraft.client.renderer.blockentity.SkullBlockRenderer;
+import net.minecraft.client.renderer.special.SkullSpecialRenderer;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.Identifier;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SkullBlock;
+import net.minecraft.world.level.block.WallSkullBlock;
 
 public class MutantMonstersClient implements ClientModConstructor {
 
@@ -154,5 +160,41 @@ public class MutantMonstersClient implements ClientModConstructor {
     @Override
     public void onRegisterRenderPipelines(RenderPipelinesContext context) {
         context.registerRenderPipeline(ModRenderTypes.ENERGY_SWIRL_RENDER_PIPELINE);
+    }
+
+    @Override
+    public void onRegisterBuiltInBlockModels(BuiltInBlockModelsContext context) {
+        createMobHeads(context,
+                ModRegistry.MUTANT_SKELETON_SKULL_TYPE,
+                ModRegistry.MUTANT_SKELETON_SKULL_BLOCK.value(),
+                ModRegistry.MUTANT_SKELETON_WALL_SKULL_BLOCK.value());
+    }
+
+    /**
+     * @see BuiltInBlockModels#createMobHeads(BuiltInBlockModels.Builder, SkullBlock.Types, Block, Block)
+     */
+    public static void createMobHeads(BuiltInBlockModelsContext context, SkullBlock.Type type, Block ground, Block wall) {
+        context.registerModelFactory(ground, createMobHead(type));
+        context.registerModelFactory(wall, createMobWallHead(type));
+    }
+
+    /**
+     * @see BuiltInBlockModels#createMobHead(SkullBlock.Types)
+     */
+    public static BuiltInBlockModels.SpecialModelFactory createMobHead(SkullBlock.Type type) {
+        return BuiltInBlockModels.specialModelWithPropertyDispatch(SkullBlock.ROTATION, (Integer rotation) -> {
+            return BuiltInBlockModels.special(new SkullSpecialRenderer.Unbaked(type),
+                    SkullBlockRenderer.TRANSFORMATIONS.freeTransformations(rotation));
+        });
+    }
+
+    /**
+     * @see BuiltInBlockModels#createMobWallHead(SkullBlock.Types)
+     */
+    public static BuiltInBlockModels.SpecialModelFactory createMobWallHead(SkullBlock.Type type) {
+        return BuiltInBlockModels.specialModelWithPropertyDispatch(WallSkullBlock.FACING, (Direction facing) -> {
+            return BuiltInBlockModels.special(new SkullSpecialRenderer.Unbaked(type),
+                    SkullBlockRenderer.TRANSFORMATIONS.wallTransformation(facing));
+        });
     }
 }
