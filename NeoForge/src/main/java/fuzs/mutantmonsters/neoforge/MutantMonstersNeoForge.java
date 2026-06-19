@@ -34,11 +34,11 @@ public class MutantMonstersNeoForge {
                 ModBodyPartLootProvider::new,
                 ModEntityLootProvider::new,
                 ModEntityTypeLootProvider::new,
-                ModBiomeTagProvider::new,
-                ModBlockTagProvider::new,
-                ModDamageTypeTagProvider::new,
-                ModEntityTypeTagProvider::new,
-                ModItemTagProvider::new,
+                ModBiomeTagsProvider::new,
+                ModBlockTagsProvider::new,
+                ModDamageTypeTagsProvider::new,
+                ModEntityTypeTagsProvider::new,
+                ModItemTagsProvider::new,
                 ModRecipeProvider::new,
                 ModAdvancementProvider::new);
     }

@@ -26,7 +26,7 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SkullBlock;
@@ -82,7 +82,7 @@ public class ModRegistry {
             () -> EntityDataSerializer.forValueType(MutantSkeletonBodyPart.BodyPart.STREAM_CODEC));
 
     public static final DataAttachmentType<Entity, List<SeismicWave>> SEISMIC_WAVE_ATTACHMENT_TYPE = DataAttachmentRegistry.<List<SeismicWave>>entityBuilder()
-            .defaultValue(EntityType.PLAYER, Collections.emptyList())
+            .defaultValue(EntityTypes.PLAYER, Collections.emptyList())
             .build(MutantMonsters.id("seismic_waves"));
 
     public static final ResourceKey<DamageType> PLAYER_SEISMIC_WAVE_DAMAGE_TYPE = REGISTRIES.registerDamageType(
@@ -119,14 +119,14 @@ public class ModRegistry {
             });
 
     public static final DataAttachmentType<Entity, Optional<Boolean>> LEFT_SHOULDER_CREEPER_MINION_ATTACHMENT_TYPE = DataAttachmentRegistry.<Optional<Boolean>>entityBuilder()
-            .defaultValue(EntityType.PLAYER, Optional.empty())
+            .defaultValue(EntityTypes.PLAYER, Optional.empty())
             .networkSynchronized(ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional),
                     // Do not sync to players to bypass this bug in Fabric: https://github.com/FabricMC/fabric-api/issues/4943
                     ModLoaderEnvironment.INSTANCE.getModLoader().isFabric() ?
                             (Entity entity) -> Function.identity()::apply : PlayerSet::nearEntity)
             .build(MutantMonsters.id("left_shoulder_creeper_minion"));
     public static final DataAttachmentType<Entity, Optional<Boolean>> RIGHT_SHOULDER_CREEPER_MINION_ATTACHMENT_TYPE = DataAttachmentRegistry.<Optional<Boolean>>entityBuilder()
-            .defaultValue(EntityType.PLAYER, Optional.empty())
+            .defaultValue(EntityTypes.PLAYER, Optional.empty())
             .networkSynchronized(ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional),
                     // Do not sync to players to bypass this bug in Fabric: https://github.com/FabricMC/fabric-api/issues/4943
                     ModLoaderEnvironment.INSTANCE.getModLoader().isFabric() ?

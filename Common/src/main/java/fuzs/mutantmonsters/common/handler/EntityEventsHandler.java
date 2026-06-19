@@ -41,7 +41,7 @@ public class EntityEventsHandler {
                         new AvoidEntityGoal<>(creature, MutantCreeper.class, 16.0F, 1.33, 1.33));
             }
 
-            if (creature.getType() == EntityType.PIG) {
+            if (creature.is(EntityTypeIds.PIG)) {
                 creature.goalSelector.addGoal(2,
                         new AvoidEntityGoal<>(creature, Player.class, 10.0F, 1.25, 1.25, livingEntity -> {
                             return livingEntity instanceof Player player && (
@@ -50,11 +50,11 @@ public class EntityEventsHandler {
                         }));
             }
 
-            if (creature.getType() == EntityType.VILLAGER) {
+            if (creature.is(EntityTypeIds.VILLAGER)) {
                 creature.goalSelector.addGoal(0, new AvoidEntityGoal<>(creature, MutantZombie.class, 12.0F, 0.8, 0.8));
             }
 
-            if (creature.getType() == EntityType.WANDERING_TRADER) {
+            if (creature.is(EntityTypeIds.WANDERING_TRADER)) {
                 creature.goalSelector.addGoal(1, new AvoidEntityGoal<>(creature, MutantZombie.class, 12.0F, 0.5, 0.5));
             }
         }

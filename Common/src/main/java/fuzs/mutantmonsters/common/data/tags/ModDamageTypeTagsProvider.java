@@ -10,23 +10,23 @@ import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 
-public class ModDamageTypeTagProvider extends AbstractTagProvider<DamageType> {
+public class ModDamageTypeTagsProvider extends AbstractTagProvider<DamageType> {
 
-    public ModDamageTypeTagProvider(DataProviderContext context) {
+    public ModDamageTypeTagsProvider(DataProviderContext context) {
         super(Registries.DAMAGE_TYPE, context);
     }
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
         this.tag(DamageTypeTags.BYPASSES_ARMOR)
-                .addKey(ModRegistry.MUTANT_SKELETON_SHATTER_DAMAGE_TYPE,
+                .add(ModRegistry.MUTANT_SKELETON_SHATTER_DAMAGE_TYPE,
                         ModRegistry.PIERCING_MOB_ATTACK_DAMAGE_TYPE,
                         ModRegistry.PLAYER_SEISMIC_WAVE_DAMAGE_TYPE,
                         ModRegistry.MUTANT_ZOMBIE_SEISMIC_WAVE_DAMAGE_TYPE,
                         ModRegistry.ENDERSOUL_FRAGMENT_EXPLOSION_DAMAGE_TYPE);
-        this.tag(DamageTypeTags.IS_EXPLOSION).addKey(ModRegistry.ENDERSOUL_FRAGMENT_EXPLOSION_DAMAGE_TYPE);
+        this.tag(DamageTypeTags.IS_EXPLOSION).add(ModRegistry.ENDERSOUL_FRAGMENT_EXPLOSION_DAMAGE_TYPE);
         this.tag(ModTags.MUTANT_ENDERMAN_DODGE_DAMAGE_TYPE_TAG)
-                .addKey(DamageTypes.FALL)
+                .add(DamageTypes.FALL)
                 .addTag(DamageTypeTags.IS_PROJECTILE, DamageTypeTags.IS_EXPLOSION);
     }
 }

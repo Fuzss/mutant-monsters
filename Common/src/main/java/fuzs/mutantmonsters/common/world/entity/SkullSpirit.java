@@ -4,7 +4,7 @@ import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModRegistry;
 import fuzs.mutantmonsters.common.world.effect.ChemicalXMobEffect;
 import fuzs.mutantmonsters.common.world.level.MutatedExplosionHelper;
-import net.minecraft.advancements.CriteriaTriggers;
+import net.minecraft.advancements.triggers.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.UUIDUtil;
 import net.minecraft.network.syncher.EntityDataAccessor;

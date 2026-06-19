@@ -13,6 +13,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
@@ -139,10 +140,10 @@ public class ThrowableBlock extends ThrowableProjectile {
 
     @Override
     protected double getDefaultGravity() {
-        EntityType<?> entityType = this.getOwner() != null ? this.getOwner().getType() : null;
-        if (entityType == EntityType.PLAYER) {
+        if (this.getOwner() != null && this.getOwner().is(EntityTypeIds.PLAYER)) {
             return 0.04;
-        } else if (entityType == ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value()) {
+        } else if (this.getOwner() != null && this.getOwner()
+                .is((ResourceKey<EntityType<?>>) (ResourceKey<?>) ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.key())) {
             return 0.06;
         } else {
             return 0.01;

@@ -4,6 +4,7 @@ import fuzs.puzzleslib.common.api.util.v1.EntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -91,12 +92,12 @@ public abstract class MutantMonster extends Monster {
     }
 
     @Override
-    protected void blockedByItem(LivingEntity livingEntity) {
-        livingEntity.hurtMarked = true;
+    protected void blockedByItem(LivingEntity defender, DamageSource source, float damage) {
+        defender.hurtMarked = true;
     }
 
-    protected void knockbackBlockedAttacker(LivingEntity livingEntity) {
-        super.blockedByItem(livingEntity);
+    protected void knockbackBlockedAttacker(LivingEntity defender, DamageSource source, float damage) {
+        super.blockedByItem(defender, source, damage);
     }
 
     @Override

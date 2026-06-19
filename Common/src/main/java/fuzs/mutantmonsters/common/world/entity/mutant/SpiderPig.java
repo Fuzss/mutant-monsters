@@ -490,7 +490,7 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
     @Override
     public @Nullable AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableEntity) {
         if (this.random.nextInt(20) == 0) {
-            return EntityType.PIG.create(serverLevel, EntitySpawnReason.BREEDING);
+            return EntityTypes.PIG.create(serverLevel, EntitySpawnReason.BREEDING);
         } else {
             SpiderPig spiderPig = ModEntityTypes.SPIDER_PIG_ENTITY_TYPE.value()
                     .create(serverLevel, EntitySpawnReason.BREEDING);

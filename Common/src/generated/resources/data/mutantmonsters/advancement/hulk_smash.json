@@ -8,13 +8,13 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "mutantmonsters:mutant_zombie"
+              "minecraft:entity_type": "mutantmonsters:mutant_zombie"
             }
           }
         ],
         "killing_blow": {
           "direct_entity": {
-            "equipment": {
+            "minecraft:equipment": {
               "mainhand": {
                 "items": "mutantmonsters:hulk_hammer"
               }

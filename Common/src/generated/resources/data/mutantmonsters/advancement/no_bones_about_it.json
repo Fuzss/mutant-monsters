@@ -8,17 +8,17 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "mutantmonsters:mutant_skeleton"
+              "minecraft:entity_type": "mutantmonsters:mutant_skeleton"
             }
           }
         ],
         "killing_blow": {
           "direct_entity": {
-            "type": "#minecraft:arrows",
-            "nbt": "{ShotFromCrossbow:1b}"
+            "minecraft:entity_type": "#minecraft:arrows",
+            "minecraft:nbt": "{ShotFromCrossbow:1b}"
           },
           "source_entity": {
-            "equipment": {
+            "minecraft:equipment": {
               "chest": {
                 "items": "mutantmonsters:mutant_skeleton_chestplate"
               },

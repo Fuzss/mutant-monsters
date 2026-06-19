@@ -463,12 +463,14 @@ public class MutantCreeper extends MutantMonster {
             if (MutantCreeper.this.summonLightning && MutantCreeper.this.getTarget() != null
                     && MutantCreeper.this.distanceToSqr(MutantCreeper.this.getTarget()) < 25.0
                     && MutantCreeper.this.level().canSeeSky(MutantCreeper.this.blockPosition())) {
-                LightningBolt lightningBoltEntity = EntityType.LIGHTNING_BOLT.create(MutantCreeper.this.level(),
+                LightningBolt lightningBolt = EntityTypes.LIGHTNING_BOLT.create(MutantCreeper.this.level(),
                         EntitySpawnReason.EVENT);
-                lightningBoltEntity.snapTo(MutantCreeper.this.getX(),
-                        MutantCreeper.this.getY(),
-                        MutantCreeper.this.getZ());
-                MutantCreeper.this.level().addFreshEntity(lightningBoltEntity);
+                if (lightningBolt != null) {
+                    lightningBolt.snapTo(MutantCreeper.this.getX(),
+                            MutantCreeper.this.getY(),
+                            MutantCreeper.this.getZ());
+                    MutantCreeper.this.level().addFreshEntity(lightningBolt);
+                }
             } else if (MutantCreeper.this.chargeTime >= MAX_CHARGE_TIME) {
                 MutantCreeper.this.heal(30.0F);
                 MutantCreeper.this.level().broadcastEntityEvent(MutantCreeper.this, EntityEvent.TAMING_FAILED);

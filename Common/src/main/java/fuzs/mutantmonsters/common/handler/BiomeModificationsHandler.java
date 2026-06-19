@@ -12,6 +12,7 @@ import fuzs.puzzleslib.common.api.core.v1.context.BiomeModificationsContext;
 import net.minecraft.core.Holder;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.level.biome.Biome;
 import org.apache.commons.lang3.math.Fraction;
 
@@ -27,22 +28,22 @@ public final class BiomeModificationsHandler {
         registerMutantSpawn(context,
                 ModTags.WITHOUT_MUTANT_CREEPER_SPAWNS_BIOME_TAG,
                 () -> MutantMonsters.CONFIG.get(CommonConfig.class).mutantCreeperSpawnWeight,
-                EntityType.CREEPER.builtInRegistryHolder(),
+                EntityTypes.CREEPER.builtInRegistryHolder(),
                 ModEntityTypes.MUTANT_CREEPER_ENTITY_TYPE);
         registerMutantSpawn(context,
                 ModTags.WITHOUT_MUTANT_ENDERMAN_SPAWNS_BIOME_TAG,
                 () -> MutantMonsters.CONFIG.get(CommonConfig.class).mutantEndermanSpawnWeight,
-                EntityType.ENDERMAN.builtInRegistryHolder(),
+                EntityTypes.ENDERMAN.builtInRegistryHolder(),
                 ModEntityTypes.MUTANT_ENDERMAN_ENTITY_TYPE);
         registerMutantSpawn(context,
                 ModTags.WITHOUT_MUTANT_SKELETON_SPAWNS_BIOME_TAG,
                 () -> MutantMonsters.CONFIG.get(CommonConfig.class).mutantSkeletonSpawnWeight,
-                EntityType.SKELETON.builtInRegistryHolder(),
+                EntityTypes.SKELETON.builtInRegistryHolder(),
                 ModEntityTypes.MUTANT_SKELETON_ENTITY_TYPE);
         registerMutantSpawn(context,
                 ModTags.WITHOUT_MUTANT_ZOMBIE_SPAWNS_BIOME_TAG,
                 () -> MutantMonsters.CONFIG.get(CommonConfig.class).mutantZombieSpawnWeight,
-                EntityType.ZOMBIE.builtInRegistryHolder(),
+                EntityTypes.ZOMBIE.builtInRegistryHolder(),
                 ModEntityTypes.MUTANT_ZOMBIE_ENTITY_TYPE);
     }
 

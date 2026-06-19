@@ -7,7 +7,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "#mutantmonsters:mutants"
+              "minecraft:entity_type": "#mutantmonsters:mutants"
             }
           }
         ]
@@ -21,7 +21,7 @@
             "condition": "minecraft:entity_properties",
             "entity": "this",
             "predicate": {
-              "type": "#mutantmonsters:mutants"
+              "minecraft:entity_type": "#mutantmonsters:mutants"
             }
           }
         ]

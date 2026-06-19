@@ -6,18 +6,15 @@ import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModTags;
 import fuzs.mutantmonsters.common.world.entity.SkullSpirit;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.InstantenousMobEffect;
+import net.minecraft.world.effect.InstantaneousMobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.targeting.TargetingConditions;
 import net.minecraft.world.entity.player.Player;
 import org.jspecify.annotations.Nullable;
 
-public class ChemicalXMobEffect extends InstantenousMobEffect {
+public class ChemicalXMobEffect extends InstantaneousMobEffect {
     public static final TargetingConditions.Selector IS_APPLICABLE = (LivingEntity livingEntity, ServerLevel serverLevel) -> {
         return !livingEntity.is(ModTags.BOSSES_ENTITY_TYPE_TAG)
                 && !MutantMonsters.CONFIG.get(ServerConfig.class).mutantXConversions.containsValue(livingEntity.getType())
@@ -32,7 +29,7 @@ public class ChemicalXMobEffect extends InstantenousMobEffect {
     }
 
     @Override
-    public void applyInstantenousEffect(ServerLevel serverLevel, @Nullable Entity source, @Nullable Entity indirectSource, LivingEntity livingEntity, int amplifier, double health) {
+    public void applyInstantaneousEffect(ServerLevel serverLevel, @Nullable Entity source, @Nullable Entity indirectSource, LivingEntity livingEntity, int amplifier, double health) {
         Player player = indirectSource instanceof Player ? (Player) indirectSource : null;
         if (livingEntity instanceof Mob mob && TARGET_PREDICATE.test(serverLevel, player, livingEntity)) {
             SkullSpirit skullSpirit = new SkullSpirit(serverLevel, mob, player != null ? player.getUUID() : null);
@@ -43,11 +40,10 @@ public class ChemicalXMobEffect extends InstantenousMobEffect {
 
     @Nullable
     public static EntityType<?> getMutantOf(Mob target) {
-        EntityType<?> targetType = target.getType();
-        if (target.isBaby() || targetType == EntityType.PIG && !target.hasEffect(MobEffects.UNLUCK)) {
+        if (target.isBaby() || target.is(EntityTypeIds.PIG) && !target.hasEffect(MobEffects.UNLUCK)) {
             return null;
         } else {
-            return MutantMonsters.CONFIG.get(ServerConfig.class).mutantXConversions.get(targetType);
+            return MutantMonsters.CONFIG.get(ServerConfig.class).mutantXConversions.get(target.getType());
         }
     }
 }

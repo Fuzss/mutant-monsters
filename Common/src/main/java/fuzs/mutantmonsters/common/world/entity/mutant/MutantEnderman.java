@@ -594,7 +594,7 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
             if (!this.teleportByChance(6, entity)) {
                 if (arm != -1) {
                     boolean allHandsFree = this.allHandsFree();
-                    if (allHandsFree && entity.getType() != EntityType.WITHER && this.random.nextInt(10) == 0) {
+                    if (allHandsFree && !entity.is(EntityTypeIds.WITHER) && this.random.nextInt(10) == 0) {
                         this.animation = CLONE_ANIMATION;
                     } else if (allHandsFree && this.random.nextInt(7) == 0) {
                         this.animation = TELESMASH_ANIMATION;
@@ -830,11 +830,11 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
     }
 
     @Override
-    protected void blockedByItem(LivingEntity livingEntity) {
+    protected void blockedByItem(LivingEntity defender, DamageSource source, float damage) {
         if (this.isClone()) {
-            this.knockbackBlockedAttacker(livingEntity);
+            this.knockbackBlockedAttacker(defender, source, damage);
         } else {
-            super.blockedByItem(livingEntity);
+            super.blockedByItem(defender, source, damage);
         }
     }
 
@@ -1323,7 +1323,7 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
             this.attackTarget = this.mob.getTarget();
             if (this.attackTarget == null) {
                 return false;
-            } else if (this.attackTarget.getType() != EntityType.WITHER && this.mob.allHandsFree()) {
+            } else if (!this.attackTarget.is(EntityTypeIds.WITHER) && this.mob.allHandsFree()) {
                 return this.mob.hurtTime == 0 && (super.canUse()
                         || !this.mob.isAnimationPlaying() && this.mob.tickCount % 3 == 0
                         && this.mob.random.nextInt(300) == 0);

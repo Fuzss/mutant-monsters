@@ -7,6 +7,6 @@ import net.minecraft.client.Minecraft;
 public class ClientProxy extends ServerProxy {
     @Override
     public void displayCreeperMinionTrackerGUI(CreeperMinion creeperMinion) {
-        Minecraft.getInstance().setScreen(new CreeperMinionTrackerScreen(creeperMinion));
+        Minecraft.getInstance().gui.setScreen(new CreeperMinionTrackerScreen(creeperMinion));
     }
 }

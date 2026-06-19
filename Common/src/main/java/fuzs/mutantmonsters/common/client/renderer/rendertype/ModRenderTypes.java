@@ -1,14 +1,14 @@
 package fuzs.mutantmonsters.common.client.renderer.rendertype;
 
+import com.mojang.blaze3d.PrimitiveTopology;
 import com.mojang.blaze3d.pipeline.BlendFunction;
 import com.mojang.blaze3d.pipeline.ColorTargetState;
 import com.mojang.blaze3d.pipeline.DepthStencilState;
 import com.mojang.blaze3d.pipeline.RenderPipeline;
-import com.mojang.blaze3d.platform.DestFactor;
-import com.mojang.blaze3d.platform.SourceFactor;
+import com.mojang.blaze3d.platform.BlendFactor;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
-import com.mojang.blaze3d.vertex.VertexFormat;
 import fuzs.mutantmonsters.common.MutantMonsters;
+import net.minecraft.client.renderer.BindGroupLayouts;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.renderer.rendertype.RenderSetup;
 import net.minecraft.client.renderer.rendertype.RenderType;
@@ -16,8 +16,8 @@ import net.minecraft.client.renderer.rendertype.TextureTransform;
 import net.minecraft.resources.Identifier;
 
 public final class ModRenderTypes {
-    public static final BlendFunction ALPHA_BLEND_FUNCTION = new BlendFunction(SourceFactor.SRC_ALPHA,
-            DestFactor.ONE_MINUS_SRC_ALPHA);
+    public static final BlendFunction ALPHA_BLEND_FUNCTION = new BlendFunction(BlendFactor.SRC_ALPHA,
+            BlendFactor.ONE_MINUS_SRC_ALPHA);
     /**
      * @see RenderPipelines#ENERGY_SWIRL
      */
@@ -30,10 +30,11 @@ public final class ModRenderTypes {
             .withShaderDefine("NO_OVERLAY")
             .withShaderDefine("NO_CARDINAL_LIGHTING")
             .withShaderDefine("APPLY_TEXTURE_MATRIX")
-            .withSampler("Sampler0")
+            .withBindGroupLayout(BindGroupLayouts.SAMPLER0)
             .withColorTargetState(new ColorTargetState(ALPHA_BLEND_FUNCTION))
             .withCull(false)
-            .withVertexFormat(DefaultVertexFormat.ENTITY, VertexFormat.Mode.QUADS)
+            .withVertexBinding(0, DefaultVertexFormat.ENTITY)
+            .withPrimitiveTopology(PrimitiveTopology.QUADS)
             .withDepthStencilState(DepthStencilState.DEFAULT)
             .build());
 

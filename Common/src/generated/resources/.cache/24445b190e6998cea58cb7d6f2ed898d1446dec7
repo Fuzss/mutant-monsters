@@ -1,4 +1,4 @@
-// 26.1.2	2026-05-05T01:20:02.281653	Mod Entity Loot Provider
-ba5f835dcc91b48fb3f48c42616a43fde9438f1f data/mutantmonsters/loot_table/charged_creeper_minion/root.json
-58a55b5a5e198dec36b19ebade5031aa6d68b20f data/mutantmonsters/loot_table/charged_mutant_creeper/root.json
-18767d5e122a063a43f841ca3bbe3176860e5cce data/mutantmonsters/loot_table/entities/mutant_enderman_continuous.json
+// 26.2	2026-06-19T22:02:56.090359	Mod Entity Loot Provider
+e49f2383e0712a74438dccb70fd7fb5c31dafabd data/mutantmonsters/loot_table/charged_creeper_minion/root.json
+2024f17df7c674fb601e01b7fa80f0254aa2fc5b data/mutantmonsters/loot_table/charged_mutant_creeper/root.json
+1da73696b485f0ffabd476785514212be2df3fae data/mutantmonsters/loot_table/entities/mutant_enderman_continuous.json

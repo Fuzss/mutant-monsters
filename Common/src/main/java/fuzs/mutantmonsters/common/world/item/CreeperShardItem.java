@@ -55,7 +55,11 @@ public class CreeperShardItem extends Item {
             }
         }
 
-        target.knockback(0.9F, attacker.getX() - target.getX(), attacker.getZ() - target.getZ());
+        target.knockback(0.9F,
+                attacker.getX() - target.getX(),
+                attacker.getZ() - target.getZ(),
+                attacker.createDamageSource(),
+                0.0F);
         attacker.level()
                 .playSound(null,
                         target.blockPosition(),

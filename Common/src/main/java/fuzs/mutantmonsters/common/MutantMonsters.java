@@ -26,7 +26,6 @@ import fuzs.puzzleslib.common.api.core.v1.context.EntityAttributesContext;
 import fuzs.puzzleslib.common.api.core.v1.context.PayloadTypesContext;
 import fuzs.puzzleslib.common.api.core.v1.context.SpawnPlacementsContext;
 import fuzs.puzzleslib.common.api.event.v1.entity.ServerEntityEvents;
-import fuzs.puzzleslib.common.api.event.v1.entity.ServerEntityLevelEvents;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.LivingDropsCallback;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.LivingHurtCallback;
 import fuzs.puzzleslib.common.api.event.v1.entity.living.UseItemEvents;

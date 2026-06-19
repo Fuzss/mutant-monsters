@@ -185,7 +185,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
     }
 
     @Override
-    public boolean isBaby() {
+    protected boolean canBeABaby() {
         return false;
     }
 

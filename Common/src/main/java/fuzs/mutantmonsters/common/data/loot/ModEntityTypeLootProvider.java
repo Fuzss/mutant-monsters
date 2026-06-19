@@ -5,6 +5,7 @@ import fuzs.mutantmonsters.common.init.ModItems;
 import fuzs.puzzleslib.common.api.data.v2.AbstractLootProvider;
 import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
 import net.minecraft.world.level.storage.loot.LootTable;
@@ -46,15 +47,16 @@ public class ModEntityTypeLootProvider extends AbstractLootProvider.EntityTypes 
         this.add(ModEntityTypes.SPIDER_PIG_ENTITY_TYPE.value(),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
-                                .add(NestedLootTable.lootTableReference(EntityType.PIG.getDefaultLootTable()
+                                .add(NestedLootTable.lootTableReference(EntityTypes.PIG.getDefaultLootTable()
                                         .orElseThrow()))
-                                .add(NestedLootTable.lootTableReference(EntityType.SPIDER.getDefaultLootTable()
+                                .add(NestedLootTable.lootTableReference(EntityTypes.SPIDER.getDefaultLootTable()
                                         .orElseThrow()))));
     }
 
     @Override
     protected boolean canHaveLootTable(EntityType<?> entityType) {
-        return entityType == ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value() ||
-                entityType == ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value() || super.canHaveLootTable(entityType);
+        return entityType == ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value()
+                || entityType == ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value()
+                || super.canHaveLootTable(entityType);
     }
 }

@@ -1,10 +1,10 @@
 {
-    "minecraft": "26.1.2",
+    "minecraft": "26.2",
     "mod": {
         "id": "mutantmonsters",
         "group": "fuzs.mutantmonsters",
         "name": "Mutant Monsters",
-        "version": "26.1.1",
+        "version": "26.2.0",
         "authors": [
             "shcott21",
             "Chumbanotz",

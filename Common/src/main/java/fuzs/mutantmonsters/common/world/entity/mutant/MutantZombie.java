@@ -311,9 +311,9 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
         }
 
         for (int i = this.resurrectionList.size() - 1; i >= 0; --i) {
-            ZombieResurrection zr = this.resurrectionList.get(i);
-            if (!zr.update(this)) {
-                this.resurrectionList.remove(zr);
+            ZombieResurrection zombieResurrection = this.resurrectionList.get(i);
+            if (!zombieResurrection.update(this)) {
+                this.resurrectionList.remove(zombieResurrection);
             }
         }
     }
@@ -520,7 +520,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
     }
 
     private boolean convertVillagerToZombieVillager(ServerLevel serverLevel, Villager villager) {
-        ZombieVillager zombieVillager = villager.convertTo(EntityType.ZOMBIE_VILLAGER,
+        ZombieVillager zombieVillager = villager.convertTo(EntityTypes.ZOMBIE_VILLAGER,
                 ConversionParams.single(villager, true, true),
                 zombieVillagerx -> {
                     zombieVillagerx.finalizeSpawn(serverLevel,

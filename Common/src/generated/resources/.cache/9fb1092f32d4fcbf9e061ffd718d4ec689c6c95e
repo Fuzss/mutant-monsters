@@ -1,4 +1,4 @@
-// 26.1.2	2026-05-05T01:20:02.282989	Recipes
+// 26.2	2026-06-19T22:02:56.0921	Recipes
 b4b394baf6659d13c79306e349a04b45d8a7fa23 data/mutantmonsters/advancement/recipes/brewing/chemical_x.json
 018255582ac51620c4428c9ba1edb27540d39e54 data/mutantmonsters/advancement/recipes/combat/mutant_skeleton_arms.json
 cc7c5de912c2a47c4cc3a5c114937a1207a9e1e7 data/mutantmonsters/advancement/recipes/combat/mutant_skeleton_boots.json
@@ -6,7 +6,7 @@ b4e7747a81c92e357a4f3c9b44ce81618d3a0895 data/mutantmonsters/advancement/recipes
 87484ffb85ea3fbe05a07c2abd4b87687eeed7d6 data/mutantmonsters/advancement/recipes/combat/mutant_skeleton_leggings.json
 f7a35f5f3337ebd98225358cd0ff01a0d08ec441 data/mutantmonsters/advancement/recipes/combat/mutant_skeleton_rib_cage.json
 29d13b97e0f1ce45e1f630b0cbf5e91e5fbc7d0b data/mutantmonsters/advancement/recipes/tools/creeper_minion_tracker.json
-f69071fde0fa1f711bd227dd3eeb2e48cde464c9 data/mutantmonsters/recipe/chemical_x.json
+37cc2e64602868c4efc850531ca46cc116b39fa7 data/mutantmonsters/recipe/chemical_x.json
 5c55cda57f6efe9989b825643fb9069d310527cb data/mutantmonsters/recipe/creeper_minion_tracker.json
 b428ce448e708ecfdd3d1b0893495a6ee1960474 data/mutantmonsters/recipe/mutant_skeleton_arms.json
 da3ef276685d7babca84351831647b1b199657e1 data/mutantmonsters/recipe/mutant_skeleton_boots.json

@@ -5,17 +5,18 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fuzs.mutantmonsters.common.world.entity.ai.goal.TrackSummonerGoal;
 import fuzs.mutantmonsters.common.world.entity.mutant.MutantZombie;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.BiomeTags;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.entity.EntitySpawnReason;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.entity.ai.goal.MoveTowardsRestrictionGoal;
 import net.minecraft.world.entity.monster.zombie.Zombie;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.LevelEvent;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.scores.Scoreboard;
 
@@ -97,11 +98,11 @@ public class ZombieResurrection extends BlockPos {
     public static EntityType<? extends Zombie> getZombieByLocation(Level level, BlockPos pos) {
         if ((level.getBiome(pos).is(BiomeTags.IS_OCEAN) || level.getBiome(pos).is(BiomeTags.IS_RIVER))
                 && level.isWaterAt(pos)) {
-            return EntityType.DROWNED;
+            return EntityTypes.DROWNED;
         } else if (level.isBrightOutside() && level.canSeeSky(pos)) {
-            return EntityType.HUSK;
+            return EntityTypes.HUSK;
         } else {
-            return level.getRandom().nextFloat() < 0.05F ? EntityType.ZOMBIE_VILLAGER : EntityType.ZOMBIE;
+            return level.getRandom().nextFloat() < 0.05F ? EntityTypes.ZOMBIE_VILLAGER : EntityTypes.ZOMBIE;
         }
     }
 
@@ -122,32 +123,28 @@ public class ZombieResurrection extends BlockPos {
             }
 
             if (--this.tick <= 0) {
-                Zombie zombieEntity = getZombieByLocation(level, abovePos).create(level,
-                        EntitySpawnReason.MOB_SUMMONED);
-                if (level instanceof ServerLevelAccessor serverLevel) {
-                    SpawnGroupData spawnGroupData = zombieEntity.finalizeSpawn(serverLevel,
+                Zombie zombie = getZombieByLocation(level, abovePos).create(level, EntitySpawnReason.MOB_SUMMONED);
+                if (zombie == null) {
+                    return false;
+                }
+
+                if (level instanceof ServerLevel serverLevel) {
+                    zombie.goalSelector.addGoal(0, new TrackSummonerGoal(zombie, mutantZombie));
+                    zombie.goalSelector.addGoal(3, new MoveTowardsRestrictionGoal(zombie, 1.0));
+                    zombie.setHealth(zombie.getMaxHealth() * (0.6F + 0.4F * zombie.getRandom().nextFloat()));
+                    zombie.snapTo(abovePos, mutantZombie.getYRot(), 0.0F);
+                    zombie.finalizeSpawn(serverLevel,
                             serverLevel.getCurrentDifficultyAt(this),
                             EntitySpawnReason.MOB_SUMMONED,
                             null);
-                    if (spawnGroupData instanceof Zombie.ZombieGroupData) {
-                        new Zombie.ZombieGroupData(((Zombie.ZombieGroupData) spawnGroupData).isBaby, false);
-                    }
+                    zombie.playAmbientSound();
+                    serverLevel.addFreshEntity(zombie);
                 }
 
-                zombieEntity.setHealth(
-                        zombieEntity.getMaxHealth() * (0.6F + 0.4F * zombieEntity.getRandom().nextFloat()));
-                zombieEntity.playAmbientSound();
-                level.levelEvent(2001, abovePos, Block.getId(level.getBlockState(this)));
-                if (!level.isClientSide()) {
-                    zombieEntity.snapTo(abovePos, mutantZombie.getYRot(), 0.0F);
-                    zombieEntity.goalSelector.addGoal(0, new TrackSummonerGoal(zombieEntity, mutantZombie));
-                    zombieEntity.goalSelector.addGoal(3, new MoveTowardsRestrictionGoal(zombieEntity, 1.0));
-                    level.addFreshEntity(zombieEntity);
-                }
-
+                level.levelEvent(LevelEvent.PARTICLES_DESTROY_BLOCK, abovePos, Block.getId(level.getBlockState(this)));
                 if (mutantZombie.getTeam() != null) {
                     Scoreboard scoreboard = level.getScoreboard();
-                    scoreboard.addPlayerToTeam(zombieEntity.getScoreboardName(),
+                    scoreboard.addPlayerToTeam(zombie.getScoreboardName(),
                             scoreboard.getPlayerTeam(mutantZombie.getTeam().getName()));
                 }
 
