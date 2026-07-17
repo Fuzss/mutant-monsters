@@ -34,6 +34,7 @@ import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class PlayerEventsHandler {
+    private static final ThreadLocal<Boolean> IS_USING_BOW = ThreadLocal.withInitial(() -> Boolean.FALSE);
 
     public static EventResult onUseItemTick(LivingEntity livingEntity, ItemStack itemStack, InteractionHand interactionHand, MutableInt remainingUseDuration) {
         // quick charge for bows
@@ -49,19 +50,25 @@ public class PlayerEventsHandler {
     }
 
     public static EventResult onArrowLoose(Player player, ItemStack weapon, Level level, MutableInt charge, boolean hasAmmo) {
-        if (player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.MUTANT_SKELETON_SKULL_ITEM)
+        if (IS_USING_BOW.get()) {
+            return EventResult.PASS;
+        } else if (player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.MUTANT_SKELETON_SKULL_ITEM)
                 && weapon.getItem() instanceof BowItem) {
-            Holder<Enchantment> enchantment = EnchantingHelper.lookup(level, Enchantments.MULTISHOT);
-            if (weapon.getEnchantments().getLevel(enchantment) == 0) {
+            IS_USING_BOW.set(Boolean.TRUE);
+            try {
                 // multi-shot for bows
+                Holder<Enchantment> multishot = EnchantingHelper.lookup(level, Enchantments.MULTISHOT);
+                int multishotLevel = weapon.getEnchantments().getLevel(multishot);
                 ItemStack itemStack = weapon.copy();
-                itemStack.enchant(enchantment, 1);
+                itemStack.enchant(multishot, multishotLevel + 1);
                 itemStack.releaseUsing(level, player, player.getUseItemRemainingTicks());
                 return EventResult.INTERRUPT;
+            } finally {
+                IS_USING_BOW.remove();
             }
+        } else {
+            return EventResult.PASS;
         }
-
-        return EventResult.PASS;
     }
 
     public static void onEndPlayerTick(Player player) {
