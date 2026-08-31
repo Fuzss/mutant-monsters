@@ -437,7 +437,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
 
     @Override
     public boolean canAttack(LivingEntity target) {
-        return super.canAttack(target) && target.is(ModEntityTypes.MUTANT_CREEPER_ENTITY_TYPE.value());
+        return super.canAttack(target) && !target.is(ModEntityTypes.MUTANT_CREEPER_ENTITY_TYPE.value());
     }
 
     @Override
