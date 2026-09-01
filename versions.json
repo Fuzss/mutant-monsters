@@ -6,11 +6,17 @@
     "26.1.x": "maintained",
     "26.2.x": "primary"
   },
-  "properties": {
-    "distributions.curseforge.id": "852665",
-    "distributions.curseforge.slug": "mutant-monsters",
-    "distributions.github.slug": "mutant-monsters",
-    "distributions.modrinth.id": "derP0ten",
-    "distributions.modrinth.slug": "mutant-monsters"
+  "distributions": {
+    "curseforge": {
+      "id": "852665",
+      "slug": "mutant-monsters"
+    },
+    "github": {
+      "slug": "mutant-monsters"
+    },
+    "modrinth": {
+      "id": "derP0ten",
+      "slug": "mutant-monsters"
+    }
   }
 }
