@@ -131,6 +131,9 @@ public class PlayerEventsHandler {
     }
 
     private static void playShoulderEntitySound(Player player, @Nullable CompoundTag compoundNBT) {
+        if (compoundNBT != null && !compoundNBT.contains("id")) {
+            return;
+        }
         if (compoundNBT != null && !compoundNBT.contains("Silent") || !compoundNBT.getBoolean("Silent")) {
             EntityType.byString(compoundNBT.getString("id")).filter(ModRegistry.CREEPER_MINION_ENTITY_TYPE.get()::equals).ifPresent((entityType) -> {
                 if (player.level().random.nextInt(500) == 0) {
