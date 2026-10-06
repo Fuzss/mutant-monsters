@@ -3,14 +3,16 @@ package fuzs.mutantmonsters.common.client.model;
 import fuzs.mutantmonsters.common.client.renderer.entity.state.CreeperMinionRenderState;
 import net.minecraft.client.model.BabyModelTransform;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.builders.MeshTransformer;
 import net.minecraft.client.model.monster.creeper.CreeperModel;
 import net.minecraft.client.renderer.entity.state.CreeperRenderState;
+import net.minecraft.util.Mth;
 
 import java.util.Set;
 
 public class CreeperMinionModel extends CreeperModel {
-    public static final MeshTransformer BABY_TRANSFORMER = new BabyModelTransform(false, 9.0F, 0.0F, Set.of("head"));
+    public static final MeshTransformer BABY_TRANSFORMER = new BabyModelTransform(false, 9.0F, 0.0F, Set.of(PartNames.HEAD));
 
     private final ModelPart head;
     private final ModelPart body;
@@ -21,18 +23,18 @@ public class CreeperMinionModel extends CreeperModel {
 
     public CreeperMinionModel(ModelPart root) {
         super(root);
-        this.head = root.getChild("head");
-        this.body = root.getChild("body");
-        this.rightHindLeg = root.getChild("right_hind_leg");
-        this.leftHindLeg = root.getChild("left_hind_leg");
-        this.rightFrontLeg = root.getChild("right_front_leg");
-        this.leftFrontLeg = root.getChild("left_front_leg");
+        this.head = root.getChild(PartNames.HEAD);
+        this.body = root.getChild(PartNames.BODY);
+        this.rightHindLeg = root.getChild(PartNames.RIGHT_HIND_LEG);
+        this.leftHindLeg = root.getChild(PartNames.LEFT_HIND_LEG);
+        this.rightFrontLeg = root.getChild(PartNames.RIGHT_FRONT_LEG);
+        this.leftFrontLeg = root.getChild(PartNames.LEFT_FRONT_LEG);
     }
 
     @Override
-    public void setupAnim(CreeperRenderState renderState) {
-        super.setupAnim(renderState);
-        if (((CreeperMinionRenderState) renderState).inSittingPose) {
+    public void setupAnim(CreeperRenderState state) {
+        super.setupAnim(state);
+        if (((CreeperMinionRenderState) state).inSittingPose) {
             this.head.y += 3.0F;
             this.body.y += 3.0F;
             this.rightHindLeg.y += 2.0F;
@@ -43,10 +45,10 @@ public class CreeperMinionModel extends CreeperModel {
             this.rightFrontLeg.z += 1.0F;
             this.leftFrontLeg.y += 2.0F;
             this.leftFrontLeg.z += 1.0F;
-            this.rightHindLeg.xRot = 1.5707964F;
-            this.leftHindLeg.xRot = 1.5707964F;
-            this.rightFrontLeg.xRot = -1.5707964F;
-            this.leftFrontLeg.xRot = -1.5707964F;
+            this.rightHindLeg.xRot = Mth.HALF_PI;
+            this.leftHindLeg.xRot = Mth.HALF_PI;
+            this.rightFrontLeg.xRot = -Mth.HALF_PI;
+            this.leftFrontLeg.xRot = -Mth.HALF_PI;
         }
     }
 }

@@ -5,141 +5,147 @@ import fuzs.mutantmonsters.common.client.renderer.entity.state.MutantZombieRende
 import fuzs.mutantmonsters.common.world.entity.mutant.MutantZombie;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
 public class MutantZombieModel extends EntityModel<MutantZombieRenderState> {
+    private static final String PELVIS = "pelvis";
+    private static final String CHEST = "chest";
+    private static final String RIGHT_ARM_LOWER = "right_arm_lower";
+    private static final String LEFT_ARM_LOWER = "left_arm_lower";
+    private static final String RIGHT_LEG_LOWER = "right_leg_lower";
+    private static final String LEFT_LEG_LOWER = "left_leg_lower";
+
     private final ModelPart pelvis;
     private final ModelPart waist;
     private final ModelPart chest;
     private final ModelPart head;
-    private final ModelPart arm1;
-    private final ModelPart arm2;
-    private final ModelPart forearm1;
-    private final ModelPart forearm2;
-    private final ModelPart leg1;
-    private final ModelPart leg2;
+    private final ModelPart rightArm;
+    private final ModelPart leftArm;
+    private final ModelPart rightArmLower;
+    private final ModelPart leftArmLower;
+    private final ModelPart rightLeg;
+    private final ModelPart leftLeg;
 
-    public MutantZombieModel(ModelPart modelPart) {
-        super(modelPart);
-        this.pelvis = modelPart.getChild("pelvis");
-        this.waist = this.pelvis.getChild("waist");
-        this.chest = this.waist.getChild("chest");
-        this.head = this.chest.getChild("head");
-        this.arm1 = this.chest.getChild("arm1");
-        this.arm2 = this.chest.getChild("arm2");
-        this.forearm1 = this.arm1.getChild("fore_arm1");
-        this.forearm2 = this.arm2.getChild("fore_arm2");
-        this.leg1 = this.pelvis.getChild("leg1");
-        this.leg2 = this.pelvis.getChild("leg2");
+    public MutantZombieModel(ModelPart root) {
+        super(root);
+        this.pelvis = root.getChild(PELVIS);
+        this.waist = this.pelvis.getChild(PartNames.WAIST);
+        this.chest = this.waist.getChild(CHEST);
+        this.head = this.chest.getChild(PartNames.HEAD);
+        this.rightArm = this.chest.getChild(PartNames.RIGHT_ARM);
+        this.leftArm = this.chest.getChild(PartNames.LEFT_ARM);
+        this.rightArmLower = this.rightArm.getChild(RIGHT_ARM_LOWER);
+        this.leftArmLower = this.leftArm.getChild(LEFT_ARM_LOWER);
+        this.rightLeg = this.pelvis.getChild(PartNames.RIGHT_LEG);
+        this.leftLeg = this.pelvis.getChild(PartNames.LEFT_LEG);
     }
 
     public static LayerDefinition createBodyLayer() {
-
         MeshDefinition mesh = new MeshDefinition();
-        PartDefinition partDefinition = mesh.getRoot();
+        PartDefinition root = mesh.getRoot();
 
-        PartDefinition pelvis = partDefinition.addOrReplaceChild("pelvis",
+        PartDefinition pelvis = root.addOrReplaceChild(PELVIS,
                 CubeListBuilder.create(),
                 PartPose.offset(0.0F, 10.0F, 6.0F));
 
-        PartDefinition waist = pelvis.addOrReplaceChild("waist",
+        PartDefinition waist = pelvis.addOrReplaceChild(PartNames.WAIST,
                 CubeListBuilder.create().texOffs(0, 44).addBox(-7.0F, -16.0F, -6.0F, 14.0F, 16.0F, 12.0F),
-                PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, 0.19634955F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, 0.0F, 0.0F, Mth.PI / 16.0F, 0.0F, 0.0F));
 
-        PartDefinition chest = waist.addOrReplaceChild("chest",
+        PartDefinition chest = waist.addOrReplaceChild(CHEST,
                 CubeListBuilder.create().texOffs(0, 16).addBox(-12.0F, -12.0F, -8.0F, 24.0F, 12.0F, 16.0F),
-                PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.5235988F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, Mth.PI / 6.0F, 0.0F, 0.0F));
 
-        chest.addOrReplaceChild("head",
+        chest.addOrReplaceChild(PartNames.HEAD,
                 CubeListBuilder.create().texOffs(0, 0).addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F),
-                PartPose.offsetAndRotation(0.0F, -11.0F, -4.0F, -0.71994835F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, -11.0F, -4.0F, -11.0F * Mth.PI / 48.0F, 0.0F, 0.0F));
 
-        PartDefinition arm1 = chest.addOrReplaceChild("arm1",
+        PartDefinition rightArm = chest.addOrReplaceChild(PartNames.RIGHT_ARM,
                 CubeListBuilder.create().texOffs(104, 0).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 16.0F, 6.0F),
-                PartPose.offsetAndRotation(-11.0F, -8.0F, 2.0F, -0.32724923F, 0.0F, 0.3926991F));
+                PartPose.offsetAndRotation(-11.0F, -8.0F, 2.0F, -5.0F * Mth.PI / 48.0F, 0.0F, Mth.PI / 8.0F));
 
-        PartDefinition arm2 = chest.addOrReplaceChild("arm2",
+        PartDefinition leftArm = chest.addOrReplaceChild(PartNames.LEFT_ARM,
                 CubeListBuilder.create().texOffs(104, 0).mirror().addBox(-3.0F, 0.0F, -3.0F, 6.0F, 16.0F, 6.0F),
-                PartPose.offsetAndRotation(11.0F, -8.0F, 2.0F, -0.32724923F, 0.0F, -0.3926991F));
+                PartPose.offsetAndRotation(11.0F, -8.0F, 2.0F, -5.0F * Mth.PI / 48.0F, 0.0F, -Mth.PI / 8.0F));
 
-        arm1.addOrReplaceChild("fore_arm1",
+        rightArm.addOrReplaceChild(RIGHT_ARM_LOWER,
                 CubeListBuilder.create()
                         .texOffs(104, 22)
                         .addBox(-3.0F, 0.0F, -3.0F, 6.0F, 16.0F, 6.0F, new CubeDeformation(0.1F)),
-                PartPose.offsetAndRotation(0.0F, 14.0F, 0.0F, -1.0471976F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, 14.0F, 0.0F, -Mth.PI / 3.0F, 0.0F, 0.0F));
 
-        arm2.addOrReplaceChild("fore_arm2",
+        leftArm.addOrReplaceChild(LEFT_ARM_LOWER,
                 CubeListBuilder.create()
                         .texOffs(104, 22)
                         .mirror()
                         .addBox(-3.0F, 0.0F, -3.0F, 6.0F, 16.0F, 6.0F, new CubeDeformation(0.1F)),
-                PartPose.offsetAndRotation(0.0F, 14.0F, 0.0F, -1.0471976F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, 14.0F, 0.0F, -Mth.PI / 3.0F, 0.0F, 0.0F));
 
-        PartDefinition leg1 = pelvis.addOrReplaceChild("leg1",
+        PartDefinition rightLeg = pelvis.addOrReplaceChild(PartNames.RIGHT_LEG,
                 CubeListBuilder.create().texOffs(80, 0).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 11.0F, 6.0F),
-                PartPose.offsetAndRotation(-5.0F, -2.0F, 0.0F, -0.7853982F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(-5.0F, -2.0F, 0.0F, -Mth.PI / 4.0F, 0.0F, 0.0F));
 
-        PartDefinition leg2 = pelvis.addOrReplaceChild("leg2",
+        PartDefinition leftLeg = pelvis.addOrReplaceChild(PartNames.LEFT_LEG,
                 CubeListBuilder.create().texOffs(80, 0).mirror().addBox(-3.0F, 0.0F, -3.0F, 6.0F, 11.0F, 6.0F),
-                PartPose.offsetAndRotation(5.0F, -2.0F, 0.0F, -0.7853982F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(5.0F, -2.0F, 0.0F, -Mth.PI / 4.0F, 0.0F, 0.0F));
 
-        leg1.addOrReplaceChild("fore_leg1",
+        rightLeg.addOrReplaceChild(RIGHT_LEG_LOWER,
                 CubeListBuilder.create()
                         .texOffs(80, 17)
                         .addBox(-3.0F, 0.0F, -3.0F, 6.0F, 8.0F, 6.0F, new CubeDeformation(0.1F)),
-                PartPose.offsetAndRotation(0.0F, 9.5F, 0.0F, 0.7853982F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, 9.5F, 0.0F, Mth.PI / 4.0F, 0.0F, 0.0F));
 
-        leg2.addOrReplaceChild("fore_leg2",
+        leftLeg.addOrReplaceChild(LEFT_LEG_LOWER,
                 CubeListBuilder.create()
                         .texOffs(80, 17)
                         .mirror()
                         .addBox(-3.0F, 0.0F, -3.0F, 6.0F, 8.0F, 6.0F, new CubeDeformation(0.1F)),
-                PartPose.offsetAndRotation(0.0F, 9.5F, 0.0F, 0.7853982F, 0.0F, 0.0F));
+                PartPose.offsetAndRotation(0.0F, 9.5F, 0.0F, Mth.PI / 4.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(mesh, 128, 128);
     }
 
     @Override
-    public void setupAnim(MutantZombieRenderState renderState) {
-        super.setupAnim(renderState);
-        float walkAnim1 = (Mth.sin((renderState.walkAnimationPos - 0.7F) * 0.4F) + 0.7F) *
-                renderState.walkAnimationSpeed;
-        float walkAnim2 = -(Mth.sin((renderState.walkAnimationPos + 0.7F) * 0.4F) - 0.7F) *
-                renderState.walkAnimationSpeed;
-        float walkAnim = Mth.sin(renderState.walkAnimationPos * 0.4F) * renderState.walkAnimationSpeed;
-        float breatheAnim = Mth.sin(renderState.ageInTicks * 0.1F);
-        float faceYaw = renderState.yRot * 3.1415927F / 180.0F;
-        float facePitch = renderState.xRot * 3.1415927F / 180.0F;
-        float scale;
-        if (renderState.deathTime <= 0) {
-            if (renderState.animation == MutantZombie.SLAM_GROUND_ANIMATION) {
-                this.animateMelee(renderState);
+    public void setupAnim(MutantZombieRenderState state) {
+        super.setupAnim(state);
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        float rightLegWalk = (Mth.sin((animationPos - 0.7F) * 0.4F) + 0.7F) * animationSpeed;
+        float leftLegWalk = -(Mth.sin((animationPos + 0.7F) * 0.4F) - 0.7F) * animationSpeed;
+        float walkAnim = Mth.sin(animationPos * 0.4F) * animationSpeed;
+        float breatheAnim = Mth.sin(state.ageInTicks * 0.1F);
+        float faceYaw = state.yRot * Mth.PI / 180.0F;
+        float facePitch = state.xRot * Mth.PI / 180.0F;
+        if (state.deathTime <= 0) {
+            if (state.animation == MutantZombie.SLAM_GROUND_ANIMATION) {
+                this.animateMelee(state);
             }
 
-            if (renderState.animation == MutantZombie.ROAR_ANIMATION) {
-                this.animateRoar(renderState);
-                scale = 1.0F - Mth.clamp(renderState.animationTime / 6.0F, 0.0F, 1.0F);
-                walkAnim1 *= scale;
-                walkAnim2 *= scale;
+            if (state.animation == MutantZombie.ROAR_ANIMATION) {
+                this.animateRoar(state);
+                float scale = 1.0F - Mth.clamp(state.animationTime / 6.0F, 0.0F, 1.0F);
+                rightLegWalk *= scale;
+                leftLegWalk *= scale;
                 walkAnim *= scale;
                 facePitch *= scale;
             }
 
-            if (renderState.animation == MutantZombie.THROW_ANIMATION) {
-                this.animateThrow(renderState);
-                scale = 1.0F - Mth.clamp(renderState.animationTime / 3.0F, 0.0F, 1.0F);
-                walkAnim1 *= scale;
-                walkAnim2 *= scale;
+            if (state.animation == MutantZombie.THROW_ANIMATION) {
+                this.animateThrow(state);
+                float scale = 1.0F - Mth.clamp(state.animationTime / 3.0F, 0.0F, 1.0F);
+                rightLegWalk *= scale;
+                leftLegWalk *= scale;
                 walkAnim *= scale;
                 facePitch *= scale;
             }
         } else {
-            this.animateDeath(renderState);
-            scale = 1.0F - Mth.clamp(renderState.deathTime / 6.0F, 0.0F, 1.0F);
-            walkAnim1 *= scale;
-            walkAnim2 *= scale;
+            this.animateDeath(state);
+            float scale = 1.0F - Mth.clamp(state.deathTime / 6.0F, 0.0F, 1.0F);
+            rightLegWalk *= scale;
+            leftLegWalk *= scale;
             walkAnim *= scale;
             breatheAnim *= scale;
             faceYaw *= scale;
@@ -147,306 +153,295 @@ public class MutantZombieModel extends EntityModel<MutantZombieRenderState> {
         }
 
         this.chest.xRot += breatheAnim * 0.02F;
-        this.arm1.zRot -= breatheAnim * 0.05F;
-        this.arm2.zRot += breatheAnim * 0.05F;
+        this.rightArm.zRot -= breatheAnim * 0.05F;
+        this.leftArm.zRot += breatheAnim * 0.05F;
         this.head.xRot += facePitch * 0.6F;
         this.head.yRot += faceYaw * 0.8F;
         this.head.zRot -= faceYaw * 0.2F;
         this.chest.xRot += facePitch * 0.4F;
         this.chest.yRot += faceYaw * 0.2F;
-        this.pelvis.y += Mth.sin(renderState.walkAnimationPos * 0.8F) * renderState.walkAnimationSpeed * 0.5F;
+        this.pelvis.y += Mth.sin(animationPos * 0.8F) * animationSpeed * 0.5F;
         this.chest.yRot -= walkAnim * 0.1F;
-        this.arm1.xRot -= walkAnim * 0.6F;
-        this.arm2.xRot += walkAnim * 0.6F;
-        this.leg1.xRot += walkAnim1 * 0.9F;
-        this.leg2.xRot += walkAnim2 * 0.9F;
+        this.rightArm.xRot -= walkAnim * 0.6F;
+        this.leftArm.xRot += walkAnim * 0.6F;
+        this.rightLeg.xRot += rightLegWalk * 0.9F;
+        this.leftLeg.xRot += leftLegWalk * 0.9F;
     }
 
-    private void animateMelee(MutantZombieRenderState renderState) {
-        this.arm1.zRot = 0.0F;
-        this.arm2.zRot = 0.0F;
-        float tick;
-        float f;
-        float f1;
-        if (renderState.animationTime < 8.0F) {
-            tick = renderState.animationTime / 8.0F;
-            f = -Mth.sin(tick * 3.1415927F / 2.0F);
-            f1 = Mth.cos(tick * 3.1415927F / 2.0F);
-            this.waist.xRot += f * 0.2F;
-            this.chest.xRot += f * 0.2F;
-            this.arm1.xRot += f * 2.3F;
-            this.arm1.zRot += f1 * 3.1415927F / 8.0F;
-            this.arm2.xRot += f * 2.3F;
-            this.arm2.zRot -= f1 * 3.1415927F / 8.0F;
-            this.forearm1.xRot += f * 0.8F;
-            this.forearm2.xRot += f * 0.8F;
-        } else if (renderState.animationTime < 12.0F) {
-            tick = (renderState.animationTime - 8.0F) / 4.0F;
-            f = -Mth.cos(tick * 3.1415927F / 2.0F);
-            f1 = Mth.sin(tick * 3.1415927F / 2.0F);
-            this.waist.xRot += f * 0.9F + 0.7F;
-            this.chest.xRot += f * 0.9F + 0.7F;
-            this.arm1.xRot += f * 0.2F - 2.1F;
-            this.arm1.zRot += f1 * 0.3F;
-            this.arm2.xRot += f * 0.2F - 2.1F;
-            this.arm2.zRot -= f1 * 0.3F;
-            this.forearm1.xRot += f + 0.2F;
-            this.forearm2.xRot += f + 0.2F;
-        } else if (renderState.animationTime < 16.0F) {
+    private void animateMelee(MutantZombieRenderState state) {
+        this.rightArm.zRot = 0.0F;
+        this.leftArm.zRot = 0.0F;
+        if (state.animationTime < 8.0F) {
+            float progress = state.animationTime / 8.0F;
+            float swingAmount = -Mth.sin(progress * Mth.PI / 2.0F);
+            float swayAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            this.waist.xRot += swingAmount * 0.2F;
+            this.chest.xRot += swingAmount * 0.2F;
+            this.rightArm.xRot += swingAmount * 2.3F;
+            this.rightArm.zRot += swayAmount * Mth.PI / 8.0F;
+            this.leftArm.xRot += swingAmount * 2.3F;
+            this.leftArm.zRot -= swayAmount * Mth.PI / 8.0F;
+            this.rightArmLower.xRot += swingAmount * 0.8F;
+            this.leftArmLower.xRot += swingAmount * 0.8F;
+        } else if (state.animationTime < 12.0F) {
+            float progress = (state.animationTime - 8.0F) / 4.0F;
+            float swingAmount = -Mth.cos(progress * Mth.PI / 2.0F);
+            float swayAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            this.waist.xRot += swingAmount * 0.9F + 0.7F;
+            this.chest.xRot += swingAmount * 0.9F + 0.7F;
+            this.rightArm.xRot += swingAmount * 0.2F - 2.1F;
+            this.rightArm.zRot += swayAmount * 0.3F;
+            this.leftArm.xRot += swingAmount * 0.2F - 2.1F;
+            this.leftArm.zRot -= swayAmount * 0.3F;
+            this.rightArmLower.xRot += swingAmount + 0.2F;
+            this.leftArmLower.xRot += swingAmount + 0.2F;
+        } else if (state.animationTime < 16.0F) {
             this.waist.xRot += 0.7F;
             this.chest.xRot += 0.7F;
-            this.arm1.xRot -= 2.1F;
-            this.arm1.zRot += 0.3F;
-            this.arm2.xRot -= 2.1F;
-            this.arm2.zRot -= 0.3F;
-            this.forearm1.xRot += 0.2F;
-            this.forearm2.xRot += 0.2F;
-        } else if (renderState.animationTime < 24.0F) {
-            tick = (renderState.animationTime - 16.0F) / 8.0F;
-            f = Mth.cos(tick * 3.1415927F / 2.0F);
-            this.waist.xRot += f * 0.7F;
-            this.chest.xRot += f * 0.7F;
-            this.arm1.xRot -= f * 2.1F;
-            this.arm1.zRot += f * -0.09269908F + 0.3926991F;
-            this.arm2.xRot -= f * 2.1F;
-            this.arm2.zRot -= f * -0.09269908F + 0.3926991F;
-            this.forearm1.xRot += f * 0.2F;
-            this.forearm2.xRot += f * 0.2F;
+            this.rightArm.xRot -= 2.1F;
+            this.rightArm.zRot += 0.3F;
+            this.leftArm.xRot -= 2.1F;
+            this.leftArm.zRot -= 0.3F;
+            this.rightArmLower.xRot += 0.2F;
+            this.leftArmLower.xRot += 0.2F;
+        } else if (state.animationTime < 24.0F) {
+            float progress = (state.animationTime - 16.0F) / 8.0F;
+            float swingAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            this.waist.xRot += swingAmount * 0.7F;
+            this.chest.xRot += swingAmount * 0.7F;
+            this.rightArm.xRot -= swingAmount * 2.1F;
+            this.rightArm.zRot += swingAmount * -0.09269908F + Mth.PI / 8.0F;
+            this.leftArm.xRot -= swingAmount * 2.1F;
+            this.leftArm.zRot -= swingAmount * -0.09269908F + Mth.PI / 8.0F;
+            this.rightArmLower.xRot += swingAmount * 0.2F;
+            this.leftArmLower.xRot += swingAmount * 0.2F;
         } else {
-            this.arm1.zRot += 0.3926991F;
-            this.arm2.zRot += -0.3926991F;
+            this.rightArm.zRot += Mth.PI / 8.0F;
+            this.leftArm.zRot += -Mth.PI / 8.0F;
         }
     }
 
-    private void animateRoar(MutantZombieRenderState renderState) {
-        float tick;
-        float f;
-        float f1;
-        if (renderState.animationTime < 10.0F) {
-            tick = renderState.animationTime / 10.0F;
-            f = Mth.sin(tick * 3.1415927F / 2.0F);
-            f1 = Mth.sin(tick * 3.1415927F * 3.1415927F / 8.0F);
-            this.waist.xRot += f * 0.2F;
-            this.chest.xRot += f * 0.4F;
-            this.chest.yRot += f1 * 0.06F;
-            this.head.xRot += f * 0.8F;
-            this.arm1.xRot -= f * 1.2F;
-            this.arm1.zRot += f * 0.6F;
-            this.arm2.xRot -= f * 1.2F;
-            this.arm2.zRot -= f * 0.6F;
-            this.forearm1.xRot -= f * 0.8F;
-            this.forearm2.xRot -= f * 0.8F;
-        } else if (renderState.animationTime < 15.0F) {
-            tick = (renderState.animationTime - 10.0F) / 5.0F;
-            f = Mth.cos(tick * 3.1415927F / 2.0F);
-            f1 = Mth.sin(tick * 3.1415927F / 2.0F);
-            this.waist.xRot += f * 0.39634955F - 0.19634955F;
-            this.chest.xRot += f * 0.6F - 0.2F;
-            this.head.xRot += f - 0.2F;
-            this.arm1.xRot -= f * 2.2F - 1.0F;
-            this.arm1.yRot += f1 * 0.4F;
-            this.arm1.zRot += 0.6F;
-            this.arm2.xRot -= f * 2.2F - 1.0F;
-            this.arm2.yRot -= f1 * 0.4F;
-            this.arm2.zRot -= 0.6F;
-            this.forearm1.xRot -= f - 0.2F;
-            this.forearm2.xRot -= f - 0.2F;
-            this.leg1.yRot += f1 * 0.3F;
-            this.leg2.yRot -= f1 * 0.3F;
-        } else if (renderState.animationTime < 75.0F) {
-            this.waist.xRot -= 0.19634955F;
+    private void animateRoar(MutantZombieRenderState state) {
+        if (state.animationTime < 10.0F) {
+            float progress = state.animationTime / 10.0F;
+            float roarAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            float swayAmount = Mth.sin(progress * Mth.PI * Mth.PI / 8.0F);
+            this.waist.xRot += roarAmount * 0.2F;
+            this.chest.xRot += roarAmount * 0.4F;
+            this.chest.yRot += swayAmount * 0.06F;
+            this.head.xRot += roarAmount * 0.8F;
+            this.rightArm.xRot -= roarAmount * 1.2F;
+            this.rightArm.zRot += roarAmount * 0.6F;
+            this.leftArm.xRot -= roarAmount * 1.2F;
+            this.leftArm.zRot -= roarAmount * 0.6F;
+            this.rightArmLower.xRot -= roarAmount * 0.8F;
+            this.leftArmLower.xRot -= roarAmount * 0.8F;
+        } else if (state.animationTime < 15.0F) {
+            float progress = (state.animationTime - 10.0F) / 5.0F;
+            float roarAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            float swayAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            this.waist.xRot += roarAmount * 0.39634955F - Mth.PI / 16.0F;
+            this.chest.xRot += roarAmount * 0.6F - 0.2F;
+            this.head.xRot += roarAmount - 0.2F;
+            this.rightArm.xRot -= roarAmount * 2.2F - 1.0F;
+            this.rightArm.yRot += swayAmount * 0.4F;
+            this.rightArm.zRot += 0.6F;
+            this.leftArm.xRot -= roarAmount * 2.2F - 1.0F;
+            this.leftArm.yRot -= swayAmount * 0.4F;
+            this.leftArm.zRot -= 0.6F;
+            this.rightArmLower.xRot -= roarAmount - 0.2F;
+            this.leftArmLower.xRot -= roarAmount - 0.2F;
+            this.rightLeg.yRot += swayAmount * 0.3F;
+            this.leftLeg.yRot -= swayAmount * 0.3F;
+        } else if (state.animationTime < 75.0F) {
+            this.waist.xRot -= Mth.PI / 16.0F;
             this.chest.xRot -= 0.2F;
             this.head.xRot -= 0.2F;
-            Animator.addRotationAngle(this.arm1, 1.0F, 0.4F, 0.6F);
-            Animator.addRotationAngle(this.arm2, 1.0F, -0.4F, -0.6F);
-            this.forearm1.xRot += 0.2F;
-            this.forearm2.xRot += 0.2F;
-            this.leg1.yRot += 0.3F;
-            this.leg2.yRot -= 0.3F;
-        } else if (renderState.animationTime < 90.0F) {
-            tick = (renderState.animationTime - 75.0F) / 15.0F;
-            f = Mth.cos(tick * 3.1415927F / 2.0F);
-            this.waist.xRot -= f * 0.69634956F - 0.5F;
-            this.chest.xRot -= f * 0.7F - 0.5F;
-            this.head.xRot -= f * 0.6F - 0.4F;
-            Animator.addRotationAngle(this.arm1, f * 2.6F - 1.6F, f * 0.4F, f * 0.99269915F - 0.3926991F);
-            Animator.addRotationAngle(this.arm2, f * 2.6F - 1.6F, -f * 0.4F, -f * 0.99269915F + 0.3926991F);
-            this.forearm1.xRot += f * -0.6F + 0.8F;
-            this.forearm2.xRot += f * -0.6F + 0.8F;
-            this.leg1.yRot += f * 0.3F;
-            this.leg2.yRot -= f * 0.3F;
-        } else if (renderState.animationTime < 110.0F) {
+            Animator.addRotationAngle(this.rightArm, 1.0F, 0.4F, 0.6F);
+            Animator.addRotationAngle(this.leftArm, 1.0F, -0.4F, -0.6F);
+            this.rightArmLower.xRot += 0.2F;
+            this.leftArmLower.xRot += 0.2F;
+            this.rightLeg.yRot += 0.3F;
+            this.leftLeg.yRot -= 0.3F;
+        } else if (state.animationTime < 90.0F) {
+            float progress = (state.animationTime - 75.0F) / 15.0F;
+            float roarAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            this.waist.xRot -= roarAmount * 0.69634956F - 0.5F;
+            this.chest.xRot -= roarAmount * 0.7F - 0.5F;
+            this.head.xRot -= roarAmount * 0.6F - 0.4F;
+            Animator.addRotationAngle(this.rightArm, roarAmount * 2.6F - 1.6F, roarAmount * 0.4F, roarAmount * 0.99269915F - Mth.PI / 8.0F);
+            Animator.addRotationAngle(this.leftArm, roarAmount * 2.6F - 1.6F, -roarAmount * 0.4F, -roarAmount * 0.99269915F + Mth.PI / 8.0F);
+            this.rightArmLower.xRot += roarAmount * -0.6F + 0.8F;
+            this.leftArmLower.xRot += roarAmount * -0.6F + 0.8F;
+            this.rightLeg.yRot += roarAmount * 0.3F;
+            this.leftLeg.yRot -= roarAmount * 0.3F;
+        } else if (state.animationTime < 110.0F) {
             this.waist.xRot += 0.5F;
             this.chest.xRot += 0.5F;
             this.head.xRot += 0.4F;
-            Animator.addRotationAngle(this.arm1, -1.6F, 0.0F, -0.3926991F);
-            Animator.addRotationAngle(this.arm2, -1.6F, 0.0F, 0.3926991F);
-            this.forearm1.xRot += 0.8F;
-            this.forearm2.xRot += 0.8F;
+            Animator.addRotationAngle(this.rightArm, -1.6F, 0.0F, -Mth.PI / 8.0F);
+            Animator.addRotationAngle(this.leftArm, -1.6F, 0.0F, Mth.PI / 8.0F);
+            this.rightArmLower.xRot += 0.8F;
+            this.leftArmLower.xRot += 0.8F;
         } else {
-            tick = (renderState.animationTime - 110.0F) / 10.0F;
-            f = Mth.cos(tick * 3.1415927F / 2.0F);
-            this.waist.xRot += f * 0.5F;
-            this.chest.xRot += f * 0.5F;
-            this.head.xRot += f * 0.4F;
-            Animator.addRotationAngle(this.arm1, f * -1.6F, 0.0F, f * -3.1415927F / 8.0F);
-            Animator.addRotationAngle(this.arm2, f * -1.6F, 0.0F, f * 3.1415927F / 8.0F);
-            this.forearm1.xRot += f * 0.8F;
-            this.forearm2.xRot += f * 0.8F;
+            float progress = (state.animationTime - 110.0F) / 10.0F;
+            float roarAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            this.waist.xRot += roarAmount * 0.5F;
+            this.chest.xRot += roarAmount * 0.5F;
+            this.head.xRot += roarAmount * 0.4F;
+            Animator.addRotationAngle(this.rightArm, roarAmount * -1.6F, 0.0F, roarAmount * -Mth.PI / 8.0F);
+            Animator.addRotationAngle(this.leftArm, roarAmount * -1.6F, 0.0F, roarAmount * Mth.PI / 8.0F);
+            this.rightArmLower.xRot += roarAmount * 0.8F;
+            this.leftArmLower.xRot += roarAmount * 0.8F;
         }
 
-        if (renderState.animationTime >= 10.0F && renderState.animationTime < 75.0F) {
-            tick = (renderState.animationTime - 10.0F) / 65.0F;
-            f = Mth.sin(tick * 3.1415927F * 8.0F);
-            f1 = Mth.sin(tick * 3.1415927F * 8.0F + 0.7853982F);
-            this.head.yRot += f * 0.5F - f1 * 0.2F;
-            this.head.zRot -= f * 0.5F;
-            this.chest.yRot += f1 * 0.06F;
+        if (state.animationTime >= 10.0F && state.animationTime < 75.0F) {
+            float progress = (state.animationTime - 10.0F) / 65.0F;
+            float roarAmount = Mth.sin(progress * Mth.PI * 8.0F);
+            float swayAmount = Mth.sin(progress * Mth.PI * 8.0F + Mth.PI / 4.0F);
+            this.head.yRot += roarAmount * 0.5F - swayAmount * 0.2F;
+            this.head.zRot -= roarAmount * 0.5F;
+            this.chest.yRot += swayAmount * 0.06F;
         }
     }
 
-    private void animateThrow(MutantZombieRenderState renderState) {
-        float tick;
-        float f;
-        if (renderState.animationTime < 3.0F) {
-            tick = renderState.animationTime / 3.0F;
-            f = Mth.sin(tick * 3.1415927F / 2.0F);
-            this.chest.xRot -= f * 0.4F;
-            this.arm1.xRot -= f * 1.8F;
-            this.arm1.zRot -= f * 3.1415927F / 8.0F;
-            this.arm2.xRot -= f * 1.8F;
-            this.arm2.zRot += f * 3.1415927F / 8.0F;
-        } else if (renderState.animationTime < 5.0F) {
+    private void animateThrow(MutantZombieRenderState state) {
+        if (state.animationTime < 3.0F) {
+            float progress = state.animationTime / 3.0F;
+            float throwAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            this.chest.xRot -= throwAmount * 0.4F;
+            this.rightArm.xRot -= throwAmount * 1.8F;
+            this.rightArm.zRot -= throwAmount * Mth.PI / 8.0F;
+            this.leftArm.xRot -= throwAmount * 1.8F;
+            this.leftArm.zRot += throwAmount * Mth.PI / 8.0F;
+        } else if (state.animationTime < 5.0F) {
             this.chest.xRot -= 0.4F;
-            --this.arm1.xRot;
-            this.arm1.zRot = 0.0F;
-            --this.arm2.xRot;
-            this.arm2.zRot = 0.0F;
+            --this.rightArm.xRot;
+            this.rightArm.zRot = 0.0F;
+            --this.leftArm.xRot;
+            this.leftArm.zRot = 0.0F;
         } else {
-            float f1;
-            if (renderState.animationTime < 8.0F) {
-                tick = (renderState.animationTime - 5.0F) / 3.0F;
-                f = Mth.cos(tick * 3.1415927F / 2.0F);
-                f1 = Mth.sin(tick * 3.1415927F / 2.0F);
-                this.waist.xRot += f1 * 0.2F;
-                this.chest.xRot -= f * 0.6F - 0.2F;
-                this.arm1.xRot -= f * 2.2F - 0.4F;
-                this.arm1.zRot -= f * 3.1415927F / 8.0F;
-                this.arm2.xRot -= f * 2.2F - 0.4F;
-                this.arm2.zRot += f * 3.1415927F / 8.0F;
-                this.forearm1.xRot -= f1 * 0.4F;
-                this.forearm2.xRot -= f1 * 0.4F;
-            } else if (renderState.animationTime < 10.0F) {
+            if (state.animationTime < 8.0F) {
+                float progress = (state.animationTime - 5.0F) / 3.0F;
+                float throwAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                float liftAmount = Mth.sin(progress * Mth.PI / 2.0F);
+                this.waist.xRot += liftAmount * 0.2F;
+                this.chest.xRot -= throwAmount * 0.6F - 0.2F;
+                this.rightArm.xRot -= throwAmount * 2.2F - 0.4F;
+                this.rightArm.zRot -= throwAmount * Mth.PI / 8.0F;
+                this.leftArm.xRot -= throwAmount * 2.2F - 0.4F;
+                this.leftArm.zRot += throwAmount * Mth.PI / 8.0F;
+                this.rightArmLower.xRot -= liftAmount * 0.4F;
+                this.leftArmLower.xRot -= liftAmount * 0.4F;
+            } else if (state.animationTime < 10.0F) {
                 this.waist.xRot += 0.2F;
                 this.chest.xRot += 0.2F;
-                this.arm1.xRot += 0.4F;
-                this.arm2.xRot += 0.4F;
-                this.forearm1.xRot -= 0.4F;
-                this.forearm2.xRot -= 0.4F;
-            } else if (renderState.animationTime < 15.0F) {
-                tick = (renderState.animationTime - 10.0F) / 5.0F;
-                f = Mth.cos(tick * 3.1415927F / 2.0F);
-                f1 = Mth.sin(tick * 3.1415927F / 2.0F);
-                this.waist.xRot += f * 0.39634955F - 0.19634955F;
-                this.chest.xRot += f * 0.8F - 0.6F;
-                this.arm1.xRot += f * 3.0F - 2.6F;
-                this.arm2.xRot += f * 3.0F - 2.6F;
-                this.forearm1.xRot -= f * 0.4F;
-                this.forearm2.xRot -= f * 0.4F;
-                this.leg1.xRot += f1 * 0.6F;
-                this.leg2.xRot += f1 * 0.6F;
-            } else if (renderState.throwHitTime == -1.0F) {
-                this.waist.xRot -= 0.19634955F;
+                this.rightArm.xRot += 0.4F;
+                this.leftArm.xRot += 0.4F;
+                this.rightArmLower.xRot -= 0.4F;
+                this.leftArmLower.xRot -= 0.4F;
+            } else if (state.animationTime < 15.0F) {
+                float progress = (state.animationTime - 10.0F) / 5.0F;
+                float throwAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                float liftAmount = Mth.sin(progress * Mth.PI / 2.0F);
+                this.waist.xRot += throwAmount * 0.39634955F - Mth.PI / 16.0F;
+                this.chest.xRot += throwAmount * 0.8F - 0.6F;
+                this.rightArm.xRot += throwAmount * 3.0F - 2.6F;
+                this.leftArm.xRot += throwAmount * 3.0F - 2.6F;
+                this.rightArmLower.xRot -= throwAmount * 0.4F;
+                this.leftArmLower.xRot -= throwAmount * 0.4F;
+                this.rightLeg.xRot += liftAmount * 0.6F;
+                this.leftLeg.xRot += liftAmount * 0.6F;
+            } else if (state.throwHitTime == -1.0F) {
+                this.waist.xRot -= Mth.PI / 16.0F;
                 this.chest.xRot -= 0.6F;
-                this.arm1.xRot -= 2.6F;
-                this.arm2.xRot -= 2.6F;
-                this.leg1.xRot += 0.6F;
-                this.leg2.xRot += 0.6F;
-            } else if (renderState.throwHitTime < 5.0F) {
-                tick = renderState.throwHitTime / 3.0F;
-                f = Mth.cos(tick * 3.1415927F / 2.0F);
-                f1 = Mth.sin(tick * 3.1415927F / 2.0F);
-                this.waist.xRot -= f * 0.39634955F - 0.2F;
-                this.chest.xRot -= f * 0.8F - 0.2F;
-                Animator.addRotationAngle(this.arm1, -(f * 2.2F + 0.4F), -f1 * 3.1415927F / 8.0F, f1 * 0.4F);
-                Animator.addRotationAngle(this.arm2, -(f * 2.2F + 0.4F), f1 * 3.1415927F / 8.0F, -f1 * 0.4F);
-                this.forearm1.xRot += f1 * 0.2F;
-                this.forearm2.xRot += f1 * 0.2F;
-                this.leg1.xRot += f * 0.8F - 0.2F;
-                this.leg2.xRot += f * 0.8F - 0.2F;
-            } else if (renderState.throwFinishTime == -1.0F) {
+                this.rightArm.xRot -= 2.6F;
+                this.leftArm.xRot -= 2.6F;
+                this.rightLeg.xRot += 0.6F;
+                this.leftLeg.xRot += 0.6F;
+            } else if (state.throwHitTime < 5.0F) {
+                float progress = state.throwHitTime / 3.0F;
+                float throwAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                float liftAmount = Mth.sin(progress * Mth.PI / 2.0F);
+                this.waist.xRot -= throwAmount * 0.39634955F - 0.2F;
+                this.chest.xRot -= throwAmount * 0.8F - 0.2F;
+                Animator.addRotationAngle(this.rightArm, -(throwAmount * 2.2F + 0.4F), -liftAmount * Mth.PI / 8.0F, liftAmount * 0.4F);
+                Animator.addRotationAngle(this.leftArm, -(throwAmount * 2.2F + 0.4F), liftAmount * Mth.PI / 8.0F, -liftAmount * 0.4F);
+                this.rightArmLower.xRot += liftAmount * 0.2F;
+                this.leftArmLower.xRot += liftAmount * 0.2F;
+                this.rightLeg.xRot += throwAmount * 0.8F - 0.2F;
+                this.leftLeg.xRot += throwAmount * 0.8F - 0.2F;
+            } else if (state.throwFinishTime == -1.0F) {
                 this.waist.xRot += 0.2F;
                 this.chest.xRot += 0.2F;
-                Animator.addRotationAngle(this.arm1, -0.4F, -0.3926991F, 0.4F);
-                Animator.addRotationAngle(this.arm2, -0.4F, 0.3926991F, -0.4F);
-                this.forearm1.xRot += 0.2F;
-                this.forearm2.xRot += 0.2F;
-                this.leg1.xRot -= 0.2F;
-                this.leg2.xRot -= 0.2F;
-            } else if (renderState.throwFinishTime < 10.0F) {
-                tick = renderState.throwFinishTime / 10.0F;
-                f = Mth.cos(tick * 3.1415927F / 2.0F);
-                this.waist.xRot += f * 0.2F;
-                this.chest.xRot += f * 0.2F;
-                Animator.addRotationAngle(this.arm1, -f * 0.4F, -f * 3.1415927F / 8.0F, f * 0.4F);
-                Animator.addRotationAngle(this.arm1, -f * 0.4F, f * 3.1415927F / 8.0F, -f * 0.4F);
-                this.forearm1.xRot += f * 0.2F;
-                this.forearm2.xRot += f * 0.2F;
-                this.leg1.xRot -= f * 0.2F;
-                this.leg2.xRot -= f * 0.2F;
+                Animator.addRotationAngle(this.rightArm, -0.4F, -Mth.PI / 8.0F, 0.4F);
+                Animator.addRotationAngle(this.leftArm, -0.4F, Mth.PI / 8.0F, -0.4F);
+                this.rightArmLower.xRot += 0.2F;
+                this.leftArmLower.xRot += 0.2F;
+                this.rightLeg.xRot -= 0.2F;
+                this.leftLeg.xRot -= 0.2F;
+            } else if (state.throwFinishTime < 10.0F) {
+                float progress = state.throwFinishTime / 10.0F;
+                float throwAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                this.waist.xRot += throwAmount * 0.2F;
+                this.chest.xRot += throwAmount * 0.2F;
+                Animator.addRotationAngle(this.rightArm, -throwAmount * 0.4F, -throwAmount * Mth.PI / 8.0F, throwAmount * 0.4F);
+                Animator.addRotationAngle(this.rightArm, -throwAmount * 0.4F, throwAmount * Mth.PI / 8.0F, -throwAmount * 0.4F);
+                this.rightArmLower.xRot += throwAmount * 0.2F;
+                this.leftArmLower.xRot += throwAmount * 0.2F;
+                this.rightLeg.xRot -= throwAmount * 0.2F;
+                this.leftLeg.xRot -= throwAmount * 0.2F;
             }
         }
     }
 
-    private void animateDeath(MutantZombieRenderState renderState) {
-        float tick;
-        float f;
-        if (renderState.deathTime <= 20.0F) {
-            tick = (renderState.deathTime - 1.0F) / 20.0F;
-            f = Mth.sin(tick * 3.1415927F / 2.0F);
-            this.pelvis.y += f * 28.0F;
-            this.head.xRot -= f * 3.1415927F / 10.0F;
-            this.head.yRot += f * 3.1415927F / 5.0F;
-            this.chest.xRot -= f * 3.1415927F / 12.0F;
-            this.waist.xRot -= f * 3.1415927F / 10.0F;
-            this.arm1.xRot -= f * 3.1415927F / 2.0F;
-            this.arm1.yRot += f * 3.1415927F / 2.8F;
-            this.arm2.xRot -= f * 3.1415927F / 2.0F;
-            this.arm2.yRot -= f * 3.1415927F / 2.8F;
-            this.leg1.xRot += f * 3.1415927F / 6.0F;
-            this.leg1.zRot += f * 3.1415927F / 12.0F;
-            this.leg2.xRot += f * 3.1415927F / 6.0F;
-            this.leg2.zRot -= f * 3.1415927F / 12.0F;
-        } else if (renderState.deathTime <= 100.0F) {
+    private void animateDeath(MutantZombieRenderState state) {
+        if (state.deathTime <= 20.0F) {
+            float progress = (state.deathTime - 1.0F) / 20.0F;
+            float deathAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            this.pelvis.y += deathAmount * 28.0F;
+            this.head.xRot -= deathAmount * Mth.PI / 10.0F;
+            this.head.yRot += deathAmount * Mth.PI / 5.0F;
+            this.chest.xRot -= deathAmount * Mth.PI / 12.0F;
+            this.waist.xRot -= deathAmount * Mth.PI / 10.0F;
+            this.rightArm.xRot -= deathAmount * Mth.PI / 2.0F;
+            this.rightArm.yRot += deathAmount * Mth.PI / 2.8F;
+            this.leftArm.xRot -= deathAmount * Mth.PI / 2.0F;
+            this.leftArm.yRot -= deathAmount * Mth.PI / 2.8F;
+            this.rightLeg.xRot += deathAmount * Mth.PI / 6.0F;
+            this.rightLeg.zRot += deathAmount * Mth.PI / 12.0F;
+            this.leftLeg.xRot += deathAmount * Mth.PI / 6.0F;
+            this.leftLeg.zRot -= deathAmount * Mth.PI / 12.0F;
+        } else if (state.deathTime <= 100.0F) {
             this.pelvis.y += 28.0F;
-            this.head.xRot -= 0.31415927F;
-            this.head.yRot += 0.62831855F;
-            this.chest.xRot -= 0.2617994F;
-            this.waist.xRot -= 0.31415927F;
-            --this.arm1.xRot;
-            ++this.arm1.yRot;
-            --this.arm2.xRot;
-            --this.arm2.yRot;
-            this.leg1.xRot += 0.5235988F;
-            this.leg1.zRot += 0.2617994F;
-            this.leg2.xRot += 0.5235988F;
-            this.leg2.zRot -= 0.2617994F;
+            this.head.xRot -= Mth.PI / 10.0F;
+            this.head.yRot += Mth.PI / 5.0F;
+            this.chest.xRot -= Mth.PI / 12.0F;
+            this.waist.xRot -= Mth.PI / 10.0F;
+            --this.rightArm.xRot;
+            ++this.rightArm.yRot;
+            --this.leftArm.xRot;
+            --this.leftArm.yRot;
+            this.rightLeg.xRot += Mth.PI / 6.0F;
+            this.rightLeg.zRot += Mth.PI / 12.0F;
+            this.leftLeg.xRot += Mth.PI / 6.0F;
+            this.leftLeg.zRot -= Mth.PI / 12.0F;
         } else {
-            tick = (40.0F - (140.0F - renderState.deathTime)) / 40.0F;
-            f = Mth.cos(tick * 3.1415927F / 2.0F);
-            this.pelvis.y += f * 28.0F;
-            this.head.xRot -= f * 3.1415927F / 10.0F;
-            this.head.yRot += f * 3.1415927F / 5.0F;
-            this.chest.xRot -= f * 3.1415927F / 12.0F;
-            this.waist.xRot -= f * 3.1415927F / 10.0F;
-            this.arm1.xRot -= f * 3.1415927F / 2.0F;
-            this.arm1.yRot += f * 3.1415927F / 2.8F;
-            this.arm2.xRot -= f * 3.1415927F / 2.0F;
-            this.arm2.yRot -= f * 3.1415927F / 2.8F;
-            this.leg1.xRot += f * 3.1415927F / 6.0F;
-            this.leg1.zRot += f * 3.1415927F / 12.0F;
-            this.leg2.xRot += f * 3.1415927F / 6.0F;
-            this.leg2.zRot -= f * 3.1415927F / 12.0F;
+            float progress = (40.0F - (140.0F - state.deathTime)) / 40.0F;
+            float deathAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            this.pelvis.y += deathAmount * 28.0F;
+            this.head.xRot -= deathAmount * Mth.PI / 10.0F;
+            this.head.yRot += deathAmount * Mth.PI / 5.0F;
+            this.chest.xRot -= deathAmount * Mth.PI / 12.0F;
+            this.waist.xRot -= deathAmount * Mth.PI / 10.0F;
+            this.rightArm.xRot -= deathAmount * Mth.PI / 2.0F;
+            this.rightArm.yRot += deathAmount * Mth.PI / 2.8F;
+            this.leftArm.xRot -= deathAmount * Mth.PI / 2.0F;
+            this.leftArm.yRot -= deathAmount * Mth.PI / 2.8F;
+            this.rightLeg.xRot += deathAmount * Mth.PI / 6.0F;
+            this.rightLeg.zRot += deathAmount * Mth.PI / 12.0F;
+            this.leftLeg.xRot += deathAmount * Mth.PI / 6.0F;
+            this.leftLeg.zRot -= deathAmount * Mth.PI / 12.0F;
         }
     }
 }

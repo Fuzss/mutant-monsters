@@ -3,212 +3,138 @@ package fuzs.mutantmonsters.common.client.model;
 import fuzs.mutantmonsters.common.client.renderer.entity.state.MutantCreeperRenderState;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 
 public class MutantCreeperModel extends EntityModel<MutantCreeperRenderState> {
+    private static final String PELVIS = "pelvis";
+    private static final String RIGHT_FRONT_LEG_LOWER = "right_front_leg_lower";
+    private static final String LEFT_FRONT_LEG_LOWER = "left_front_leg_lower";
+    private static final String RIGHT_HIND_LEG_LOWER = "right_hind_leg_lower";
+    private static final String LEFT_HIND_LEG_LOWER = "left_hind_leg_lower";
+
     private final ModelPart pelvis;
     private final ModelPart body;
     private final ModelPart neck;
     private final ModelPart head;
-    private final ModelPart frontRightLeg;
-    private final ModelPart frontLeftLeg;
-    private final ModelPart frontRightForeLeg;
-    private final ModelPart frontLeftForeLeg;
-    private final ModelPart backRightLeg;
-    private final ModelPart backLeftLeg;
-    private final ModelPart backRightForeLeg;
-    private final ModelPart backLeftForeLeg;
+    private final ModelPart rightFrontLeg;
+    private final ModelPart leftFrontLeg;
+    private final ModelPart rightHindLeg;
+    private final ModelPart leftHindLeg;
 
-    public MutantCreeperModel(ModelPart modelPart) {
-        super(modelPart);
-        this.pelvis = modelPart.getChild("pelvis");
-        this.body = this.pelvis.getChild("body");
-        this.neck = this.body.getChild("neck");
-        this.head = this.neck.getChild("head");
-        this.frontRightLeg = this.pelvis.getChild("front_right_leg");
-        this.frontLeftLeg = this.pelvis.getChild("front_left_leg");
-        this.frontRightForeLeg = this.frontRightLeg.getChild("front_right_fore_leg");
-        this.frontLeftForeLeg = this.frontLeftLeg.getChild("front_left_fore_leg");
-        this.backRightLeg = this.pelvis.getChild("back_right_leg");
-        this.backLeftLeg = this.pelvis.getChild("back_left_leg");
-        this.backRightForeLeg = this.backRightLeg.getChild("back_right_fore_leg");
-        this.backLeftForeLeg = this.backLeftLeg.getChild("back_left_fore_leg");
+    public MutantCreeperModel(ModelPart root) {
+        super(root);
+        this.pelvis = root.getChild(PELVIS);
+        this.body = this.pelvis.getChild(PartNames.BODY);
+        this.neck = this.body.getChild(PartNames.NECK);
+        this.head = this.neck.getChild(PartNames.HEAD);
+        this.rightFrontLeg = this.pelvis.getChild(PartNames.RIGHT_FRONT_LEG);
+        this.leftFrontLeg = this.pelvis.getChild(PartNames.LEFT_FRONT_LEG);
+        this.rightHindLeg = this.pelvis.getChild(PartNames.RIGHT_HIND_LEG);
+        this.leftHindLeg = this.pelvis.getChild(PartNames.LEFT_HIND_LEG);
     }
 
-    public static LayerDefinition createBodyLayer(CubeDeformation cubeDeformation) {
-
+    public static LayerDefinition createBodyLayer(CubeDeformation g) {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
 
-        PartDefinition pelvis = root.addOrReplaceChild("pelvis",
-                CubeListBuilder.create()
-                        .texOffs(0, 0)
-                        .addBox(-5.0F, -14.0F, -4.0F, 10.0F, 14.0F, 8.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, 14.0F, -3.0F, -0.7853982F, 0.0F, 0.0F));
+        PartDefinition pelvis = root.addOrReplaceChild(PELVIS,
+                CubeListBuilder.create().texOffs(0, 0).addBox(-5.0F, -14.0F, -4.0F, 10.0F, 14.0F, 8.0F, g),
+                PartPose.offsetAndRotation(0.0F, 14.0F, -3.0F, -Mth.PI / 4.0F, 0.0F, 0.0F));
 
-        PartDefinition body = pelvis.addOrReplaceChild("body",
-                CubeListBuilder.create()
-                        .texOffs(36, 0)
-                        .addBox(-4.5F, -14.0F, -3.5F, 9.0F, 16.0F, 7.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, 0.9424778F, 0.0F, 0.0F));
+        PartDefinition body = pelvis.addOrReplaceChild(PartNames.BODY,
+                CubeListBuilder.create().texOffs(36, 0).addBox(-4.5F, -14.0F, -3.5F, 9.0F, 16.0F, 7.0F, g),
+                PartPose.offsetAndRotation(0.0F, -12.0F, 0.0F, Mth.PI * 3.0F / 10.0F, 0.0F, 0.0F));
 
-        PartDefinition neck = body.addOrReplaceChild("neck",
-                CubeListBuilder.create()
-                        .texOffs(68, 0)
-                        .addBox(-4.0F, -14.0F, -3.0F, 8.0F, 14.0F, 6.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -11.0F, 1.0F, 1.0471976F, 0.0F, 0.0F));
+        PartDefinition neck = body.addOrReplaceChild(PartNames.NECK,
+                CubeListBuilder.create().texOffs(68, 0).addBox(-4.0F, -14.0F, -3.0F, 8.0F, 14.0F, 6.0F, g),
+                PartPose.offsetAndRotation(0.0F, -11.0F, 1.0F, Mth.PI / 3.0F, 0.0F, 0.0F));
 
-        neck.addOrReplaceChild("head",
-                CubeListBuilder.create()
-                        .texOffs(0, 22)
-                        .addBox(-5.0F, -12.0F, -5.0F, 10.0F, 12.0F, 10.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -12.0F, 1.0F, 0.5235988F, 0.0F, 0.0F));
+        neck.addOrReplaceChild(PartNames.HEAD,
+                CubeListBuilder.create().texOffs(0, 22).addBox(-5.0F, -12.0F, -5.0F, 10.0F, 12.0F, 10.0F, g),
+                PartPose.offsetAndRotation(0.0F, -12.0F, 1.0F, Mth.PI / 6.0F, 0.0F, 0.0F));
 
-        PartDefinition frontRightLeg = pelvis.addOrReplaceChild("front_right_leg",
-                CubeListBuilder.create()
-                        .texOffs(40, 24)
-                        .addBox(-3.0F, -4.0F, -14.0F, 6.0F, 4.0F, 14.0F, cubeDeformation),
-                PartPose.offsetAndRotation(3.0F, 0.0F, 0.0F, 0.31415927F, -0.7853982F, 0.0F));
+        PartDefinition rightFrontLeg = pelvis.addOrReplaceChild(PartNames.RIGHT_FRONT_LEG,
+                CubeListBuilder.create().texOffs(40, 24).mirror().addBox(-3.0F, -4.0F, -14.0F, 6.0F, 4.0F, 14.0F, g),
+                PartPose.offsetAndRotation(-3.0F, 0.0F, 0.0F, Mth.PI / 10.0F, Mth.PI / 4.0F, 0.0F));
 
-        frontRightLeg.addOrReplaceChild("front_right_fore_leg",
-                CubeListBuilder.create().texOffs(96, 0).addBox(-3.5F, 0.0F, -4.0F, 7.0F, 20.0F, 8.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -4.0F, -14.0F, -0.20943952F, 0.3926991F, 0.0F));
+        rightFrontLeg.addOrReplaceChild(RIGHT_FRONT_LEG_LOWER,
+                CubeListBuilder.create().texOffs(96, 0).mirror().addBox(-3.5F, 0.0F, -4.0F, 7.0F, 20.0F, 8.0F, g),
+                PartPose.offsetAndRotation(0.0F, -4.0F, -14.0F, -Mth.PI / 15.0F, -Mth.PI / 8.0F, 0.0F));
 
-        PartDefinition frontLeftLeg = pelvis.addOrReplaceChild("front_left_leg",
-                CubeListBuilder.create()
-                        .texOffs(40, 24)
-                        .mirror()
-                        .addBox(-3.0F, -4.0F, -14.0F, 6.0F, 4.0F, 14.0F, cubeDeformation),
-                PartPose.offsetAndRotation(-3.0F, 0.0F, 0.0F, 0.31415927F, 0.7853982F, 0.0F));
+        PartDefinition leftFrontLeg = pelvis.addOrReplaceChild(PartNames.LEFT_FRONT_LEG,
+                CubeListBuilder.create().texOffs(40, 24).addBox(-3.0F, -4.0F, -14.0F, 6.0F, 4.0F, 14.0F, g),
+                PartPose.offsetAndRotation(3.0F, 0.0F, 0.0F, Mth.PI / 10.0F, -Mth.PI / 4.0F, 0.0F));
 
-        frontLeftLeg.addOrReplaceChild("front_left_fore_leg",
-                CubeListBuilder.create()
-                        .texOffs(96, 0)
-                        .mirror()
-                        .addBox(-3.5F, 0.0F, -4.0F, 7.0F, 20.0F, 8.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -4.0F, -14.0F, -0.20943952F, -0.3926991F, 0.0F));
+        leftFrontLeg.addOrReplaceChild(LEFT_FRONT_LEG_LOWER,
+                CubeListBuilder.create().texOffs(96, 0).addBox(-3.5F, 0.0F, -4.0F, 7.0F, 20.0F, 8.0F, g),
+                PartPose.offsetAndRotation(0.0F, -4.0F, -14.0F, -Mth.PI / 15.0F, Mth.PI / 8.0F, 0.0F));
 
-        PartDefinition backRightLeg = pelvis.addOrReplaceChild("back_right_leg",
-                CubeListBuilder.create().texOffs(0, 44).addBox(-2.0F, -4.0F, 0.0F, 4.0F, 4.0F, 14.0F, cubeDeformation),
-                PartPose.offsetAndRotation(2.0F, -2.0F, 4.0F, 0.9F, 0.62831855F, 0.0F));
+        PartDefinition rightHindLeg = pelvis.addOrReplaceChild(PartNames.RIGHT_HIND_LEG,
+                CubeListBuilder.create().texOffs(0, 44).mirror().addBox(-2.0F, -4.0F, 0.0F, 4.0F, 4.0F, 14.0F, g),
+                PartPose.offsetAndRotation(-2.0F, -2.0F, 4.0F, 0.9F, -Mth.PI / 5.0F, 0.0F));
 
-        backRightLeg.addOrReplaceChild("back_right_fore_leg",
-                CubeListBuilder.create().texOffs(80, 28).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 18.0F, 6.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -4.0F, 14.0F, 0.48332196F, 0.0F, 0.0F));
+        rightHindLeg.addOrReplaceChild(RIGHT_HIND_LEG_LOWER,
+                CubeListBuilder.create().texOffs(80, 28).mirror().addBox(-3.0F, 0.0F, -3.0F, 6.0F, 18.0F, 6.0F, g),
+                PartPose.offsetAndRotation(0.0F, -4.0F, 14.0F, 2.0F * Mth.PI / 13.0F, 0.0F, 0.0F));
 
-        PartDefinition backLeftLeg = pelvis.addOrReplaceChild("back_left_leg",
-                CubeListBuilder.create()
-                        .texOffs(0, 44)
-                        .mirror()
-                        .addBox(-2.0F, -4.0F, 0.0F, 4.0F, 4.0F, 14.0F, cubeDeformation),
-                PartPose.offsetAndRotation(-2.0F, -2.0F, 4.0F, 0.9F, -0.62831855F, 0.0F));
+        PartDefinition leftHindLeg = pelvis.addOrReplaceChild(PartNames.LEFT_HIND_LEG,
+                CubeListBuilder.create().texOffs(0, 44).addBox(-2.0F, -4.0F, 0.0F, 4.0F, 4.0F, 14.0F, g),
+                PartPose.offsetAndRotation(2.0F, -2.0F, 4.0F, 0.9F, Mth.PI / 5.0F, 0.0F));
 
-        backLeftLeg.addOrReplaceChild("back_left_fore_leg",
-                CubeListBuilder.create()
-                        .texOffs(80, 28)
-                        .mirror()
-                        .addBox(-3.0F, 0.0F, -3.0F, 6.0F, 18.0F, 6.0F, cubeDeformation),
-                PartPose.offsetAndRotation(0.0F, -4.0F, 14.0F, 0.48332196F, 0.0F, 0.0F));
+        leftHindLeg.addOrReplaceChild(LEFT_HIND_LEG_LOWER,
+                CubeListBuilder.create().texOffs(80, 28).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 18.0F, 6.0F, g),
+                PartPose.offsetAndRotation(0.0F, -4.0F, 14.0F, 2.0F * Mth.PI / 13.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(mesh, 128, 64);
     }
 
     @Override
-    public void setupAnim(MutantCreeperRenderState renderState) {
-        super.setupAnim(renderState);
-        // TODO finish removing this
-//        this.setupInitialAngles();
-        this.animate(renderState,
-                renderState.walkAnimationPos,
-                renderState.walkAnimationSpeed,
-                renderState.ageInTicks,
-                renderState.yRot,
-                renderState.xRot);
-    }
-
-    private void setupInitialAngles() {
-        this.pelvis.y = 14.0F;
-        this.pelvis.xRot = -0.7853982F;
-        this.body.xRot = 0.9424778F;
-        this.body.yRot = 0.0F;
-        this.neck.xRot = 1.0471976F;
-        this.head.xRot = 0.5235988F;
-        this.frontRightLeg.xRot = 0.31415927F;
-        this.frontRightLeg.yRot = -0.7853982F;
-        this.frontRightLeg.zRot = 0.0F;
-        this.frontLeftLeg.xRot = 0.31415927F;
-        this.frontLeftLeg.yRot = 0.7853982F;
-        this.frontLeftLeg.zRot = 0.0F;
-        this.frontRightForeLeg.xRot = -0.20943952F;
-        this.frontRightForeLeg.yRot = 0.3926991F;
-        this.frontLeftForeLeg.xRot = -0.20943952F;
-        this.frontLeftForeLeg.yRot = -0.3926991F;
-        this.backRightLeg.xRot = 0.9F;
-        this.backRightLeg.yRot = 0.62831855F;
-        this.backRightLeg.zRot = 0.0F;
-        this.backLeftLeg.xRot = 0.9F;
-        this.backLeftLeg.yRot = -0.62831855F;
-        this.backLeftLeg.zRot = 0.0F;
-        this.backRightForeLeg.xRot = 0.48332196F;
-        this.backLeftForeLeg.xRot = 0.48332196F;
-    }
-
-    private void animate(MutantCreeperRenderState renderState, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        float breatheAnim = Mth.sin(ageInTicks * 0.1F);
-        float walkAnim1 = (Mth.sin(limbSwing * 3.1415927F / 4.0F) + 0.4F) * limbSwingAmount;
-        float walkAnim2 = (Mth.sin(limbSwing * 3.1415927F / 4.0F + 3.1415927F) + 0.4F) * limbSwingAmount;
-        if (walkAnim1 < 0.0F) {
-            walkAnim1 = 0.0F;
-        }
-
-        if (walkAnim2 < 0.0F) {
-            walkAnim2 = 0.0F;
-        }
-
-        float walkAnim3 = Mth.sin(limbSwing * 3.1415927F / 8.0F) * limbSwingAmount;
-        float walkAnim4 = (Mth.sin(limbSwing * 3.1415927F / 4.0F + 1.5707964F) + 0.4F) * limbSwingAmount;
-        float walkAnim5 = (Mth.sin(limbSwing * 3.1415927F / 4.0F + 4.712389F) + 0.4F) * limbSwingAmount;
-        if (walkAnim4 < 0.0F) {
-            walkAnim4 = 0.0F;
-        }
-
-        if (walkAnim5 < 0.0F) {
-            walkAnim5 = 0.0F;
-        }
-
-        float walkAnim6 = Mth.sin(limbSwing * 3.1415927F / 8.0F + 1.5707964F) * limbSwingAmount;
-        float faceYaw = netHeadYaw / 57.295776F;
-        float facePitch = headPitch / 57.295776F;
-        float f6 = faceYaw / 3.0F;
-        float f7 = facePitch / 3.0F;
-        this.pelvis.y += Mth.sin(limbSwing * 3.1415927F / 4.0F) * limbSwingAmount * 0.5F;
+    public void setupAnim(MutantCreeperRenderState state) {
+        super.setupAnim(state);
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        float breatheAnim = Mth.sin(state.ageInTicks * 0.1F);
+        float leftFrontLegWalk = (Mth.sin(animationPos * Mth.PI / 4.0F) + 0.4F) * animationSpeed;
+        float rightFrontLegWalk = (Mth.sin(animationPos * Mth.PI / 4.0F + Mth.PI) + 0.4F) * animationSpeed;
+        leftFrontLegWalk = Math.max(0.0F, leftFrontLegWalk);
+        rightFrontLegWalk = Math.max(0.0F, rightFrontLegWalk);
+        float frontLegSway = Mth.sin(animationPos * Mth.PI / 8.0F) * animationSpeed;
+        float rightHindLegWalk = (Mth.sin(animationPos * Mth.PI / 4.0F + Mth.HALF_PI) + 0.4F) * animationSpeed;
+        float leftHindLegWalk = (Mth.sin(animationPos * Mth.PI / 4.0F + Mth.PI * 1.5F) + 0.4F) * animationSpeed;
+        rightHindLegWalk = Math.max(0.0F, rightHindLegWalk);
+        leftHindLegWalk = Math.max(0.0F, leftHindLegWalk);
+        float hindLegSway = Mth.sin(animationPos * Mth.PI / 8.0F + Mth.HALF_PI) * animationSpeed;
+        float faceYaw = state.yRot / Mth.RAD_TO_DEG;
+        float facePitch = state.xRot / Mth.RAD_TO_DEG;
+        this.pelvis.y += Mth.sin(animationPos * Mth.PI / 4.0F) * animationSpeed * 0.5F;
         this.body.xRot += breatheAnim * 0.02F;
-        this.body.xRot += f7;
-        this.body.yRot += f6;
+        this.body.xRot += facePitch / 3.0F;
+        this.body.yRot += faceYaw / 3.0F;
         this.neck.xRot += breatheAnim * 0.02F;
-        this.neck.xRot += f7;
-        this.neck.yRot = f6;
+        this.neck.xRot += facePitch / 3.0F;
+        this.neck.yRot = faceYaw / 3.0F;
         this.head.xRot += breatheAnim * 0.02F;
-        this.head.xRot += f7;
-        this.head.yRot = f6;
-        this.frontRightLeg.xRot -= walkAnim1 * 0.3F;
-        this.frontRightLeg.yRot += walkAnim3 * 0.2F;
-        this.frontRightLeg.zRot += walkAnim3 * 0.2F;
-        this.frontLeftLeg.xRot -= walkAnim2 * 0.3F;
-        this.frontLeftLeg.yRot -= walkAnim3 * 0.2F;
-        this.frontLeftLeg.zRot -= walkAnim3 * 0.2F;
-        this.backRightLeg.xRot += walkAnim5 * 0.3F;
-        this.backRightLeg.yRot -= walkAnim6 * 0.2F;
-        this.backRightLeg.zRot -= walkAnim6 * 0.2F;
-        this.backLeftLeg.xRot += walkAnim4 * 0.3F;
-        this.backLeftLeg.yRot += walkAnim6 * 0.2F;
-        this.backLeftLeg.zRot += walkAnim6 * 0.2F;
-        if (renderState.attackTime > 0.0F) {
-            float swingAnim = Mth.sin(renderState.attackTime * 3.1415927F);
-            this.body.xRot += swingAnim * 3.1415927F / 3.0F;
-            this.neck.xRot -= swingAnim * 3.1415927F / 4.0F;
+        this.head.xRot += facePitch / 3.0F;
+        this.head.yRot = faceYaw / 3.0F;
+        this.leftFrontLeg.xRot -= leftFrontLegWalk * 0.3F;
+        this.leftFrontLeg.yRot += frontLegSway * 0.2F;
+        this.leftFrontLeg.zRot += frontLegSway * 0.2F;
+        this.rightFrontLeg.xRot -= rightFrontLegWalk * 0.3F;
+        this.rightFrontLeg.yRot -= frontLegSway * 0.2F;
+        this.rightFrontLeg.zRot -= frontLegSway * 0.2F;
+        this.leftHindLeg.xRot += leftHindLegWalk * 0.3F;
+        this.leftHindLeg.yRot -= hindLegSway * 0.2F;
+        this.leftHindLeg.zRot -= hindLegSway * 0.2F;
+        this.rightHindLeg.xRot += rightHindLegWalk * 0.3F;
+        this.rightHindLeg.yRot += hindLegSway * 0.2F;
+        this.rightHindLeg.zRot += hindLegSway * 0.2F;
+        if (state.attackTime > 0.0F) {
+            float swingAnim = Mth.sin(state.attackTime * Mth.PI);
+            this.body.xRot += swingAnim * Mth.PI / 3.0F;
+            this.neck.xRot -= swingAnim * Mth.PI / 4.0F;
         }
     }
 }

@@ -7,6 +7,7 @@ import fuzs.mutantmonsters.common.world.entity.mutant.MutantSkeleton;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.client.model.geom.ModelPart;
+import net.minecraft.client.model.geom.PartNames;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.renderer.rendertype.RenderTypes;
@@ -14,274 +15,248 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
 
 public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> {
+    private static final String BASE = "base";
+    public static final String PELVIS = "pelvis";
+    private static final String INNER_HEAD = "inner_head";
+    public static final String RIGHT_SHOULDER = "right_shoulder";
+    public static final String LEFT_SHOULDER = "left_shoulder";
+    private static final String RIGHT_ARM_INNER = "right_arm_inner";
+    private static final String LEFT_ARM_INNER = "left_arm_inner";
+    public static final String RIGHT_ARM_LOWER = "right_arm_lower";
+    public static final String LEFT_ARM_LOWER = "left_arm_lower";
+    private static final String RIGHT_ARM_LOWER_INNER = "right_arm_lower_inner";
+    private static final String LEFT_ARM_LOWER_INNER = "left_arm_lower_inner";
+    private static final String RIGHT_LEG_INNER = "right_leg_inner";
+    private static final String LEFT_LEG_INNER = "left_leg_inner";
+    public static final String RIGHT_LEG_LOWER = "right_leg_lower";
+    public static final String LEFT_LEG_LOWER = "left_leg_lower";
+    private static final String RIGHT_LEG_LOWER_INNER = "right_leg_lower_inner";
+    private static final String LEFT_LEG_LOWER_INNER = "left_leg_lower_inner";
+
     private final Animator animator = new Animator();
-    private final ModelPart skeleBase;
+    private final ModelPart base;
     private final ModelPart pelvis;
     private final ModelPart waist;
     private final Spine[] spine = new Spine[3];
     private final ModelPart neck;
     private final ModelPart head;
-    private final ModelPart innerhead;
+    private final ModelPart innerHead;
     private final ModelPart jaw;
-    private final ModelPart shoulder1;
-    private final ModelPart shoulder2;
-    private final ModelPart arm1;
-    private final ModelPart innerarm1;
-    private final ModelPart arm2;
-    private final ModelPart innerarm2;
-    private final ModelPart forearm1;
-    private final ModelPart innerforearm1;
-    private final ModelPart forearm2;
-    private final ModelPart innerforearm2;
-    private final ModelPart leg1;
-    private final ModelPart innerleg1;
-    private final ModelPart leg2;
-    private final ModelPart innerleg2;
-    private final ModelPart foreleg1;
-    private final ModelPart innerforeleg1;
-    private final ModelPart foreleg2;
-    private final ModelPart innerforeleg2;
+    private final ModelPart rightShoulder;
+    private final ModelPart leftShoulder;
+    private final ModelPart rightArm;
+    private final ModelPart rightArmInner;
+    private final ModelPart leftArm;
+    private final ModelPart leftArmInner;
+    private final ModelPart rightArmLower;
+    private final ModelPart rightArmLowerInner;
+    private final ModelPart leftArmLower;
+    private final ModelPart leftArmLowerInner;
+    private final ModelPart rightLeg;
+    private final ModelPart leftLeg;
+    private final ModelPart rightLegLower;
+    private final ModelPart rightLegLowerInner;
+    private final ModelPart leftLegLower;
+    private final ModelPart leftLegLowerInner;
 
-    public MutantSkeletonModel(ModelPart modelPart) {
-        super(modelPart);
-        this.skeleBase = modelPart.getChild("base");
-        this.pelvis = this.skeleBase.getChild("pelvis");
-        this.waist = this.pelvis.getChild("waist");
-        modelPart = this.waist;
+    public MutantSkeletonModel(ModelPart root) {
+        super(root);
+        this.base = root.getChild(BASE);
+        this.pelvis = this.base.getChild(PELVIS);
+        this.waist = this.pelvis.getChild(PartNames.WAIST);
+        ModelPart middle = this.waist;
         for (int i = 0; i < 3; i++) {
-            this.spine[i] = new Spine(modelPart, "" + (i + 1));
-            modelPart = this.spine[i].middle;
+            this.spine[i] = new Spine(middle, "" + (i + 1));
+            middle = this.spine[i].middle;
         }
 
-        this.neck = modelPart.getChild("neck");
-        this.head = this.neck.getChild("head");
-        this.innerhead = this.head.getChild("inner_head");
-        this.jaw = this.innerhead.getChild("jaw");
-        this.shoulder1 = modelPart.getChild("shoulder1");
-        this.shoulder2 = modelPart.getChild("shoulder2");
-        this.arm1 = this.shoulder1.getChild("arm1");
-        this.innerarm1 = this.arm1.getChild("inner_arm1");
-        this.arm2 = this.shoulder2.getChild("arm2");
-        this.innerarm2 = this.arm2.getChild("inner_arm2");
-        this.forearm1 = this.innerarm1.getChild("fore_arm1");
-        this.innerforearm1 = this.forearm1.getChild("inner_fore_arm1");
-        this.forearm2 = this.innerarm2.getChild("fore_arm2");
-        this.innerforearm2 = this.forearm2.getChild("inner_fore_arm2");
-        this.leg1 = this.pelvis.getChild("leg1");
-        this.innerleg1 = this.leg1.getChild("inner_leg1");
-        this.leg2 = this.pelvis.getChild("leg2");
-        this.innerleg2 = this.leg2.getChild("inner_leg2");
-        this.foreleg1 = this.innerleg1.getChild("fore_leg1");
-        this.innerforeleg1 = this.foreleg1.getChild("inner_fore_leg1");
-        this.foreleg2 = this.innerleg2.getChild("fore_leg2");
-        this.innerforeleg2 = this.foreleg2.getChild("inner_fore_leg2");
+        this.neck = middle.getChild(PartNames.NECK);
+        this.head = this.neck.getChild(PartNames.HEAD);
+        this.innerHead = this.head.getChild(INNER_HEAD);
+        this.jaw = this.innerHead.getChild(PartNames.JAW);
+        this.rightShoulder = middle.getChild(RIGHT_SHOULDER);
+        this.leftShoulder = middle.getChild(LEFT_SHOULDER);
+        this.rightArm = this.rightShoulder.getChild(PartNames.RIGHT_ARM);
+        this.rightArmInner = this.rightArm.getChild(RIGHT_ARM_INNER);
+        this.leftArm = this.leftShoulder.getChild(PartNames.LEFT_ARM);
+        this.leftArmInner = this.leftArm.getChild(LEFT_ARM_INNER);
+        this.rightArmLower = this.rightArmInner.getChild(RIGHT_ARM_LOWER);
+        this.rightArmLowerInner = this.rightArmLower.getChild(RIGHT_ARM_LOWER_INNER);
+        this.leftArmLower = this.leftArmInner.getChild(LEFT_ARM_LOWER);
+        this.leftArmLowerInner = this.leftArmLower.getChild(LEFT_ARM_LOWER_INNER);
+        this.rightLeg = this.pelvis.getChild(PartNames.RIGHT_LEG);
+        ModelPart rightLegInner = this.rightLeg.getChild(RIGHT_LEG_INNER);
+        this.leftLeg = this.pelvis.getChild(PartNames.LEFT_LEG);
+        ModelPart leftLegInner = this.leftLeg.getChild(LEFT_LEG_INNER);
+        this.rightLegLower = rightLegInner.getChild(RIGHT_LEG_LOWER);
+        this.rightLegLowerInner = this.rightLegLower.getChild(RIGHT_LEG_LOWER_INNER);
+        this.leftLegLower = leftLegInner.getChild(LEFT_LEG_LOWER);
+        this.leftLegLowerInner = this.leftLegLower.getChild(LEFT_LEG_LOWER_INNER);
     }
 
     public static LayerDefinition createBodyLayer() {
         MeshDefinition mesh = new MeshDefinition();
         PartDefinition root = mesh.getRoot();
 
-        PartDefinition base = root.addOrReplaceChild("base",
+        PartDefinition base = root.addOrReplaceChild(BASE,
                 CubeListBuilder.create().texOffs(0, 0),
                 PartPose.offset(0.0F, 3.0F, 0.0F));
-        PartDefinition pelvis = base.addOrReplaceChild("pelvis",
+        PartDefinition pelvis = base.addOrReplaceChild(PELVIS,
                 CubeListBuilder.create().texOffs(0, 16).addBox(-4.0F, -6.0F, -3.0F, 8.0F, 6.0F, 6.0F),
-                PartPose.ZERO);
-        PartDefinition waist = pelvis.addOrReplaceChild("waist",
+                PartPose.rotation(-Mth.PI / 10.0F, 0.0F, 0.0F));
+        PartDefinition middle = pelvis.addOrReplaceChild(PartNames.WAIST,
                 CubeListBuilder.create().texOffs(32, 0).addBox(-2.5F, -8.0F, -2.0F, 5.0F, 8.0F, 4.0F),
-                PartPose.offset(0.0F, -5.0F, 0.0F));
-
-        PartDefinition middle = waist;
+                PartPose.offsetAndRotation(0.0F, -5.0F, 0.0F, Mth.PI / 14.0F, 0.0F, 0.0F));
         for (int i = 0; i < 3; i++) {
             Spine.createSpineLayer(middle, i);
             middle = middle.getChild("middle" + (i + 1));
         }
 
-        PartDefinition neck = middle.addOrReplaceChild("neck",
+        PartDefinition neck = middle.addOrReplaceChild(PartNames.NECK,
                 CubeListBuilder.create().texOffs(64, 0).addBox(-1.5F, -4.0F, -1.5F, 3.0F, 4.0F, 3.0F),
-                PartPose.offset(0.0F, -4.0F, 0.0F));
-        PartDefinition head = neck.addOrReplaceChild("head",
+                PartPose.offsetAndRotation(0.0F, -4.0F, 0.0F, -Mth.PI / 24.0F, 0.0F, 0.0F));
+        PartDefinition head = neck.addOrReplaceChild(PartNames.HEAD,
                 CubeListBuilder.create().texOffs(0, 0),
-                PartPose.offset(0.0F, -4.0F, -1.0F));
-        PartDefinition innerHead = head.addOrReplaceChild("inner_head",
+                PartPose.offsetAndRotation(0.0F, -4.0F, -1.0F, -Mth.PI / 24.0F, 0.0F, 0.0F));
+        PartDefinition innerHead = head.addOrReplaceChild(INNER_HEAD,
                 CubeListBuilder.create()
                         .texOffs(0, 0)
                         .addBox(-4.0F, -8.0F, -4.0F, 8.0F, 8.0F, 8.0F, new CubeDeformation(0.4F)),
                 PartPose.ZERO);
-        innerHead.addOrReplaceChild("jaw",
+        innerHead.addOrReplaceChild(PartNames.JAW,
                 CubeListBuilder.create()
                         .texOffs(72, 0)
                         .addBox(-4.0F, -3.0F, -8.0F, 8.0F, 3.0F, 8.0F, new CubeDeformation(0.7F)),
-                PartPose.offset(0.0F, -0.2F, 3.5F));
+                PartPose.offsetAndRotation(0.0F, -0.2F, 3.5F, Mth.PI / 32.0F, 0.0F, 0.0F));
 
-        PartDefinition shoulder1 = middle.addOrReplaceChild("shoulder1",
+        PartDefinition rightShoulder = middle.addOrReplaceChild(RIGHT_SHOULDER,
                 CubeListBuilder.create().texOffs(28, 16).addBox(-4.0F, -3.0F, -3.0F, 8.0F, 3.0F, 6.0F),
-                PartPose.offset(-7.0F, -3.0F, -1.0F));
-        PartDefinition shoulder2 = middle.addOrReplaceChild("shoulder2",
+                PartPose.offsetAndRotation(-7.0F, -3.0F, -1.0F, -Mth.PI / 4.0F, 0.0F, 0.0F));
+        PartDefinition leftShoulder = middle.addOrReplaceChild(LEFT_SHOULDER,
                 CubeListBuilder.create().texOffs(28, 16).mirror().addBox(-4.0F, -3.0F, -3.0F, 8.0F, 3.0F, 6.0F),
-                PartPose.offset(7.0F, -3.0F, -1.0F));
-        PartDefinition arm1 = shoulder1.addOrReplaceChild("arm1",
+                PartPose.offsetAndRotation(7.0F, -3.0F, -1.0F, -Mth.PI / 4.0F, 0.0F, 0.0F));
+        PartDefinition rightArm = rightShoulder.addOrReplaceChild(PartNames.RIGHT_ARM,
                 CubeListBuilder.create().texOffs(0, 28),
                 PartPose.offset(-1.0F, -1.0F, 0.0F));
-        PartDefinition innerArm1 = arm1.addOrReplaceChild("inner_arm1",
+        PartDefinition rightArmInner = rightArm.addOrReplaceChild(RIGHT_ARM_INNER,
                 CubeListBuilder.create().texOffs(0, 28).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
-                PartPose.ZERO);
-        PartDefinition arm2 = shoulder2.addOrReplaceChild("arm2",
+                PartPose.rotation(Mth.PI / 6.0F, 0.0F, Mth.PI / 10.0F));
+        PartDefinition leftArm = leftShoulder.addOrReplaceChild(PartNames.LEFT_ARM,
                 CubeListBuilder.create().texOffs(0, 28).mirror(),
                 PartPose.offset(1.0F, -1.0F, 0.0F));
-        PartDefinition innerArm2 = arm2.addOrReplaceChild("inner_arm2",
+        PartDefinition leftArmInner = leftArm.addOrReplaceChild(LEFT_ARM_INNER,
                 CubeListBuilder.create().texOffs(0, 28).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
-                PartPose.ZERO);
-        PartDefinition foreArm1 = innerArm1.addOrReplaceChild("fore_arm1",
+                PartPose.rotation(Mth.PI / 6.0F, 0.0F, -Mth.PI / 10.0F));
+        PartDefinition rightArmLower = rightArmInner.addOrReplaceChild(RIGHT_ARM_LOWER,
                 CubeListBuilder.create().texOffs(16, 28),
                 PartPose.offset(0.0F, 11.0F, 0.0F));
-        foreArm1.addOrReplaceChild("inner_fore_arm1",
+        rightArmLower.addOrReplaceChild(RIGHT_ARM_LOWER_INNER,
                 CubeListBuilder.create()
                         .texOffs(16, 28)
                         .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 14.0F, 4.0F, new CubeDeformation(-0.01F)),
-                PartPose.ZERO);
-        PartDefinition foreArm2 = innerArm2.addOrReplaceChild("fore_arm2",
+                PartPose.rotation(-Mth.PI / 6.0F, 0.0F, 0.0F));
+        PartDefinition leftArmLower = leftArmInner.addOrReplaceChild(LEFT_ARM_LOWER,
                 CubeListBuilder.create().texOffs(16, 28).mirror(),
                 PartPose.offset(0.0F, 11.0F, 0.0F));
-        foreArm2.addOrReplaceChild("inner_fore_arm2",
+        leftArmLower.addOrReplaceChild(LEFT_ARM_LOWER_INNER,
                 CubeListBuilder.create()
                         .texOffs(16, 28)
                         .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 14.0F, 4.0F, new CubeDeformation(-0.01F)),
-                PartPose.ZERO);
+                PartPose.rotation(-Mth.PI / 6.0F, 0.0F, 0.0F));
 
-        PartDefinition leg1 = pelvis.addOrReplaceChild("leg1",
+        PartDefinition rightLeg = pelvis.addOrReplaceChild(PartNames.RIGHT_LEG,
                 CubeListBuilder.create().texOffs(0, 28),
-                PartPose.offset(-2.5F, -2.5F, 0.0F));
-        PartDefinition innerLeg1 = leg1.addOrReplaceChild("inner_leg1",
+                PartPose.offsetAndRotation(-2.5F, -2.5F, 0.0F, Mth.PI / 60.0F, 0.0F, Mth.PI / 16.0F));
+        PartDefinition rightLegInner = rightLeg.addOrReplaceChild(RIGHT_LEG_INNER,
                 CubeListBuilder.create().texOffs(0, 28).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
                 PartPose.ZERO);
-        PartDefinition leg2 = pelvis.addOrReplaceChild("leg2",
+        PartDefinition leftLeg = pelvis.addOrReplaceChild(PartNames.LEFT_LEG,
                 CubeListBuilder.create().texOffs(0, 28).mirror(),
-                PartPose.offset(2.5F, -2.5F, 0.0F));
-        PartDefinition innerLeg2 = leg2.addOrReplaceChild("inner_leg2",
+                PartPose.offsetAndRotation(2.5F, -2.5F, 0.0F, Mth.PI / 60.0F, 0.0F, -Mth.PI / 16.0F));
+        PartDefinition leftLegInner = leftLeg.addOrReplaceChild(LEFT_LEG_INNER,
                 CubeListBuilder.create().texOffs(0, 28).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
                 PartPose.ZERO);
-        PartDefinition foreLeg1 = innerLeg1.addOrReplaceChild("fore_leg1",
+        PartDefinition rightLegLower = rightLegInner.addOrReplaceChild(RIGHT_LEG_LOWER,
                 CubeListBuilder.create().texOffs(32, 28),
-                PartPose.offset(0.0F, 12.0F, 0.0F));
-        foreLeg1.addOrReplaceChild("inner_fore_leg1",
+                PartPose.offsetAndRotation(0.0F, 12.0F, 0.0F, 0.0F, 0.0F, -Mth.PI / 24.0F));
+        rightLegLower.addOrReplaceChild(RIGHT_LEG_LOWER_INNER,
                 CubeListBuilder.create().texOffs(32, 28).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
-                PartPose.ZERO);
-        PartDefinition foreLeg2 = innerLeg2.addOrReplaceChild("fore_leg2",
+                PartPose.rotation(Mth.PI / 10.0F, 0.0F, 0.0F));
+        PartDefinition leftLegLower = leftLegInner.addOrReplaceChild(LEFT_LEG_LOWER,
                 CubeListBuilder.create().texOffs(32, 28).mirror(),
-                PartPose.offset(0.0F, 12.0F, 0.0F));
-        foreLeg2.addOrReplaceChild("inner_fore_leg2",
+                PartPose.offsetAndRotation(0.0F, 12.0F, 0.0F, 0.0F, 0.0F, Mth.PI / 24.0F));
+        leftLegLower.addOrReplaceChild(LEFT_LEG_LOWER_INNER,
                 CubeListBuilder.create().texOffs(32, 28).addBox(-2.0F, 0.0F, -2.0F, 4.0F, 12.0F, 4.0F),
-                PartPose.ZERO);
+                PartPose.rotation(Mth.PI / 10.0F, 0.0F, 0.0F));
 
         return LayerDefinition.create(mesh, 128, 128);
     }
 
     @Override
-    public void setupAnim(MutantSkeletonRenderState renderState) {
-        super.setupAnim(renderState);
-        this.animator.update(renderState);
-        this.setupInitialAngles();
-        this.animate(renderState,
-                renderState.walkAnimationPos,
-                renderState.walkAnimationSpeed,
-                renderState.ageInTicks,
-                renderState.yRot,
-                renderState.xRot);
-    }
-
-    private void setupInitialAngles() {
-        this.skeleBase.y = 3.0F;
-        this.pelvis.xRot = -0.31415927F;
-        this.waist.xRot = 0.22439948F;
-        for (int i = 0; i < this.spine.length; ++i) {
-            this.spine[i].setupAnim(i == 1);
-        }
-
-        this.neck.xRot = -0.1308997F;
-        this.head.xRot = -0.1308997F;
-        this.jaw.xRot = 0.09817477F;
-        this.shoulder1.xRot = -0.7853982F;
-        this.shoulder2.xRot = -0.7853982F;
-        this.innerarm1.xRot = 0.5235988F;
-        this.innerarm1.zRot = 0.31415927F;
-        this.innerarm2.xRot = 0.5235988F;
-        this.innerarm2.zRot = -0.31415927F;
-        this.innerforearm1.xRot = -0.5235988F;
-        this.innerforearm2.xRot = -0.5235988F;
-        this.leg1.xRot = -0.2617994F - this.pelvis.xRot;
-        this.leg1.zRot = 0.19634955F;
-        this.leg2.xRot = -0.2617994F - this.pelvis.xRot;
-        this.leg2.zRot = -0.19634955F;
-        this.foreleg1.zRot = -0.1308997F;
-        this.innerforeleg1.xRot = 0.31415927F;
-        this.foreleg2.zRot = 0.1308997F;
-        this.innerforeleg2.xRot = 0.31415927F;
-    }
-
-    private void animate(MutantSkeletonRenderState renderState, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        float walkAnim1 = Mth.sin(limbSwing * 0.5F);
-        float walkAnim2 = Mth.sin(limbSwing * 0.5F - 1.1F);
-        float breatheAnim = Mth.sin(ageInTicks * 0.1F);
-        float faceYaw = netHeadYaw * Mth.PI / 180.0F;
-        float facePitch = headPitch * Mth.PI / 180.0F;
-        float scale;
-        if (renderState.animation == MutantSkeleton.MELEE_ANIMATION) {
-            this.animateMelee(renderState);
-            scale = 1.0F - Mth.clamp(renderState.animationTime / 4.0F, 0.0F, 1.0F);
-            walkAnim1 *= scale;
-            walkAnim2 *= scale;
-        } else if (renderState.animation == MutantSkeleton.SHOOT_ANIMATION) {
-            this.animateShoot(renderState, facePitch, faceYaw);
-            scale = 1.0F - Mth.clamp(renderState.animationTime / 4.0F, 0.0F, 1.0F);
-            walkAnim1 *= scale;
-            walkAnim2 *= scale;
+    public void setupAnim(MutantSkeletonRenderState state) {
+        super.setupAnim(state);
+        this.animator.update(state);
+        float animationPos = state.walkAnimationPos;
+        float animationSpeed = state.walkAnimationSpeed;
+        float walkAnim = Mth.sin(animationPos * 0.5F);
+        float lowerLegWalk = Mth.sin(animationPos * 0.5F - 1.1F);
+        float breatheAnim = Mth.sin(state.ageInTicks * 0.1F);
+        float faceYaw = state.yRot * Mth.PI / 180.0F;
+        float facePitch = state.xRot * Mth.PI / 180.0F;
+        if (state.animation == MutantSkeleton.MELEE_ANIMATION) {
+            this.animateMelee(state);
+            float scale = 1.0F - Mth.clamp(state.animationTime / 4.0F, 0.0F, 1.0F);
+            walkAnim *= scale;
+            lowerLegWalk *= scale;
+        } else if (state.animation == MutantSkeleton.SHOOT_ANIMATION) {
+            this.animateShoot(state, facePitch, faceYaw);
+            float scale = 1.0F - Mth.clamp(state.animationTime / 4.0F, 0.0F, 1.0F);
+            walkAnim *= scale;
+            lowerLegWalk *= scale;
             facePitch *= scale;
             faceYaw *= scale;
-        } else if (renderState.animation == MutantSkeleton.MULTI_SHOT_ANIMATION) {
-            this.animateMultiShoot(renderState, facePitch, faceYaw);
-            scale = 1.0F - Mth.clamp(renderState.animationTime / 4.0F, 0.0F, 1.0F);
-            walkAnim1 *= scale;
-            walkAnim2 *= scale;
+        } else if (state.animation == MutantSkeleton.MULTI_SHOT_ANIMATION) {
+            this.animateMultiShoot(state, facePitch, faceYaw);
+            float scale = 1.0F - Mth.clamp(state.animationTime / 4.0F, 0.0F, 1.0F);
+            walkAnim *= scale;
+            lowerLegWalk *= scale;
             facePitch *= scale;
             faceYaw *= scale;
         } else if (this.animator.setAnimation(MutantSkeleton.CONSTRICT_RIBS_ANIMATION)) {
-            this.animateConstrict(renderState);
-            scale = 1.0F - Mth.clamp(renderState.animationTime / 6.0F, 0.0F, 1.0F);
+            this.animateConstrict(state);
+            float scale = 1.0F - Mth.clamp(state.animationTime / 6.0F, 0.0F, 1.0F);
             facePitch *= scale;
             faceYaw *= scale;
         }
 
-        this.skeleBase.y -= (-0.5F + Math.abs(walkAnim1)) * limbSwingAmount;
-        this.spine[0].middle.yRot -= walkAnim1 * 0.06F * limbSwingAmount;
-        this.arm1.xRot -= walkAnim1 * 0.9F * limbSwingAmount;
-        this.arm2.xRot += walkAnim1 * 0.9F * limbSwingAmount;
-        this.leg1.xRot += (0.2F + walkAnim1) * 1.0F * limbSwingAmount;
-        this.leg2.xRot -= (-0.2F + walkAnim1) * 1.0F * limbSwingAmount;
-        this.innerforeleg1.xRot += (0.6F + walkAnim2) * 0.6F * limbSwingAmount;
-        this.innerforeleg2.xRot -= (-0.6F + walkAnim2) * 0.6F * limbSwingAmount;
+        this.base.y -= (-0.5F + Math.abs(walkAnim)) * animationSpeed;
+        this.spine[0].middle.yRot -= walkAnim * 0.06F * animationSpeed;
+        this.rightArm.xRot -= walkAnim * 0.9F * animationSpeed;
+        this.leftArm.xRot += walkAnim * 0.9F * animationSpeed;
+        this.rightLeg.xRot += (0.2F + walkAnim) * 1.0F * animationSpeed;
+        this.leftLeg.xRot -= (-0.2F + walkAnim) * 1.0F * animationSpeed;
+        this.rightLegLowerInner.xRot += (0.6F + lowerLegWalk) * 0.6F * animationSpeed;
+        this.leftLegLowerInner.xRot -= (-0.6F + lowerLegWalk) * 0.6F * animationSpeed;
         for (Spine spine : this.spine) {
             spine.animate(breatheAnim);
         }
 
         this.head.xRot -= breatheAnim * 0.02F;
         this.jaw.xRot += breatheAnim * 0.04F + 0.04F;
-        this.arm1.zRot += breatheAnim * 0.025F;
-        this.arm2.zRot -= breatheAnim * 0.025F;
-        this.innerhead.xRot += facePitch;
-        this.innerhead.yRot += faceYaw;
+        this.rightArm.zRot += breatheAnim * 0.025F;
+        this.leftArm.zRot -= breatheAnim * 0.025F;
+        this.innerHead.xRot += facePitch;
+        this.innerHead.yRot += faceYaw;
     }
 
-    private void animateMelee(MutantSkeletonRenderState renderState) {
-        boolean leftHanded = renderState.mainArm == HumanoidArm.LEFT;
-        ModelPart meleeArm = leftHanded ? this.arm2 : this.arm1;
-        ModelPart offArm = leftHanded ? this.arm1 : this.arm2;
+    private void animateMelee(MutantSkeletonRenderState state) {
+        boolean leftHanded = state.mainArm == HumanoidArm.LEFT;
+        ModelPart meleeArm = leftHanded ? this.leftArm : this.rightArm;
+        ModelPart offArm = leftHanded ? this.rightArm : this.leftArm;
         int offsetMultiplier = leftHanded ? -1 : 1;
-        float animationProgress;
-        float rotationAmount;
-        if (renderState.animationTime < 3.0F) {
-            animationProgress = renderState.animationTime / 3.0F;
-            rotationAmount = Mth.sin(animationProgress * Mth.PI / 2.0F);
+        if (state.animationTime < 3.0F) {
+            float animationProgress = state.animationTime / 3.0F;
+            float rotationAmount = Mth.sin(animationProgress * Mth.PI / 2.0F);
             for (Spine spine : this.spine) {
                 spine.middle.yRot += rotationAmount * Mth.PI / 16.0F * (float) offsetMultiplier;
             }
@@ -289,27 +264,28 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
             meleeArm.yRot += rotationAmount * Mth.PI / 10.0F * (float) offsetMultiplier;
             meleeArm.zRot += rotationAmount * Mth.PI / 4.0F * (float) offsetMultiplier;
             offArm.zRot += rotationAmount * -Mth.PI / 16.0F * (float) offsetMultiplier;
-        } else if (renderState.animationTime < 5.0F) {
-            animationProgress = (renderState.animationTime - 3.0F) / 2.0F;
-            rotationAmount = Mth.cos(animationProgress * Mth.PI / 2.0F);
+        } else if (state.animationTime < 5.0F) {
+            float animationProgress = (state.animationTime - 3.0F) / 2.0F;
+            float rotationAmount = Mth.cos(animationProgress * Mth.PI / 2.0F);
             for (Spine spine : this.spine) {
-                spine.middle.yRot += (rotationAmount * 0.5890486F - 0.3926991F) * (float) offsetMultiplier;
+                spine.middle.yRot +=
+                        (rotationAmount * 3.0F * Mth.PI / 16.0F - Mth.PI / 8.0F) * (float) offsetMultiplier;
             }
 
             meleeArm.yRot += (rotationAmount * 2.7307692F - 2.41661F) * (float) offsetMultiplier;
-            meleeArm.zRot += (rotationAmount * 1.1780972F - 0.3926991F) * (float) offsetMultiplier;
-            offArm.zRot += -0.19634955F * (float) offsetMultiplier;
-        } else if (renderState.animationTime < 8.0F) {
+            meleeArm.zRot += (rotationAmount * 3.0F * Mth.PI / 8.0F - Mth.PI / 8.0F) * (float) offsetMultiplier;
+            offArm.zRot += -Mth.PI / 16.0F * (float) offsetMultiplier;
+        } else if (state.animationTime < 8.0F) {
             for (Spine spine : this.spine) {
-                spine.middle.yRot += -0.3926991F * (float) offsetMultiplier;
+                spine.middle.yRot += -Mth.PI / 8.0F * (float) offsetMultiplier;
             }
 
             meleeArm.yRot += -2.41661F * (float) offsetMultiplier;
-            meleeArm.zRot += -0.3926991F * (float) offsetMultiplier;
-            offArm.zRot += -0.19634955F * (float) offsetMultiplier;
-        } else if (renderState.animationTime < 14.0F) {
-            animationProgress = (renderState.animationTime - 8.0F) / 6.0F;
-            rotationAmount = Mth.cos(animationProgress * Mth.PI / 2.0F);
+            meleeArm.zRot += -Mth.PI / 8.0F * (float) offsetMultiplier;
+            offArm.zRot += -Mth.PI / 16.0F * (float) offsetMultiplier;
+        } else if (state.animationTime < 14.0F) {
+            float animationProgress = (state.animationTime - 8.0F) / 6.0F;
+            float rotationAmount = Mth.cos(animationProgress * Mth.PI / 2.0F);
             for (Spine spine : this.spine) {
                 spine.middle.yRot += rotationAmount * -Mth.PI / 8.0F * (float) offsetMultiplier;
             }
@@ -320,296 +296,294 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
         }
     }
 
-    private void animateShoot(MutantSkeletonRenderState renderState, float facePitch, float faceYaw) {
-        boolean leftHanded = renderState.mainArm == HumanoidArm.LEFT;
-        ModelPart drawingArm = leftHanded ? this.arm2 : this.arm1;
-        ModelPart holdingArm = leftHanded ? this.arm1 : this.arm2;
-        ModelPart innerDrawingArm = leftHanded ? this.innerarm2 : this.innerarm1;
-        ModelPart innerHoldingArm = leftHanded ? this.innerarm1 : this.innerarm2;
-        ModelPart drawingForearm = leftHanded ? this.forearm2 : this.forearm1;
-        ModelPart holdingforearm = leftHanded ? this.forearm1 : this.forearm2;
+    private void animateShoot(MutantSkeletonRenderState state, float facePitch, float faceYaw) {
+        boolean leftHanded = state.mainArm == HumanoidArm.LEFT;
+        ModelPart drawingArm = leftHanded ? this.leftArm : this.rightArm;
+        ModelPart holdingArm = leftHanded ? this.rightArm : this.leftArm;
+        ModelPart innerDrawingArm = leftHanded ? this.leftArmInner : this.rightArmInner;
+        ModelPart innerHoldingArm = leftHanded ? this.rightArmInner : this.leftArmInner;
+        ModelPart drawingForearm = leftHanded ? this.leftArmLower : this.rightArmLower;
+        ModelPart holdingforearm = leftHanded ? this.rightArmLower : this.leftArmLower;
         int offset = leftHanded ? -1 : 1;
-        if (renderState.animationTime < 5.0F) {
-            float tick = renderState.animationTime / 5.0F;
-            float f = Mth.sin(tick * Mth.PI / 2.0F);
-            innerDrawingArm.xRot += -f * Mth.PI / 4.0F;
-            drawingArm.yRot += -f * Mth.PI / 2.0F * (float) offset;
-            drawingArm.zRot += f * Mth.PI / 16.0F * (float) offset;
-            drawingForearm.xRot += f * Mth.PI / 7.0F;
-            innerHoldingArm.xRot += -f * Mth.PI / 4.0F;
-            holdingArm.yRot += f * Mth.PI / 2.0F * (float) offset;
-            holdingArm.zRot += -f * Mth.PI / 16.0F * (float) offset;
-            innerHoldingArm.zRot += -f * Mth.PI / 8.0F * (float) offset;
-            holdingforearm.xRot += -f * Mth.PI / 6.0F;
-        } else if (renderState.animationTime < 12.0F) {
-            float tick = (renderState.animationTime - 5.0F) / 7.0F;
-            float f = Mth.cos(tick * Mth.PI / 2.0F);
-            float f1 = Mth.sin(tick * Mth.PI / 2.0F);
-            this.innerhead.yRot += f1 * Mth.PI / 4.0F * (float) offset;
+        if (state.animationTime < 5.0F) {
+            float progress = state.animationTime / 5.0F;
+            float drawAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            innerDrawingArm.xRot += -drawAmount * Mth.PI / 4.0F;
+            drawingArm.yRot += -drawAmount * Mth.PI / 2.0F * (float) offset;
+            drawingArm.zRot += drawAmount * Mth.PI / 16.0F * (float) offset;
+            drawingForearm.xRot += drawAmount * Mth.PI / 7.0F;
+            innerHoldingArm.xRot += -drawAmount * Mth.PI / 4.0F;
+            holdingArm.yRot += drawAmount * Mth.PI / 2.0F * (float) offset;
+            holdingArm.zRot += -drawAmount * Mth.PI / 16.0F * (float) offset;
+            innerHoldingArm.zRot += -drawAmount * Mth.PI / 8.0F * (float) offset;
+            holdingforearm.xRot += -drawAmount * Mth.PI / 6.0F;
+        } else if (state.animationTime < 12.0F) {
+            float progress = (state.animationTime - 5.0F) / 7.0F;
+            float drawAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            float turnAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            this.innerHead.yRot += turnAmount * Mth.PI / 4.0F * (float) offset;
             for (Spine spine : this.spine) {
-                spine.middle.yRot += -f1 * Mth.PI / 12.0F * (float) offset;
-                spine.middle.xRot += f1 * facePitch / 3.0F;
-                spine.middle.yRot += f1 * faceYaw / 3.0F;
+                spine.middle.yRot += -turnAmount * Mth.PI / 12.0F * (float) offset;
+                spine.middle.xRot += turnAmount * facePitch / 3.0F;
+                spine.middle.yRot += turnAmount * faceYaw / 3.0F;
             }
 
-            innerDrawingArm.xRot += f * 0.2617994F - 1.0471976F;
-            drawingArm.yRot += (f * -0.9424778F - 0.62831855F) * (float) offset;
-            drawingArm.zRot += (f * -0.850848F + 1.0471976F) * (float) offset;
-            drawingForearm.xRot += 0.44879895F;
-            innerHoldingArm.xRot += f * 1.8325956F - 2.6179938F;
-            holdingArm.yRot += (f * 0.9424778F + 0.62831855F) * (float) offset;
-            holdingArm.zRot += (f * 0.850848F - 1.0471976F) * (float) offset;
-            innerHoldingArm.zRot += -f * Mth.PI / 8.0F * (float) offset;
-            holdingforearm.xRot += f * 0.10471976F - 0.62831855F;
-        } else if (renderState.animationTime < 26.0F) {
-            this.innerhead.yRot += 0.7853982F * (float) offset;
+            innerDrawingArm.xRot += drawAmount * Mth.PI / 12.0F - Mth.PI / 3.0F;
+            drawingArm.yRot += (drawAmount * -3.0F * Mth.PI / 10.0F - Mth.PI / 5.0F) * (float) offset;
+            drawingArm.zRot += (drawAmount * -0.850848F + Mth.PI / 3.0F) * (float) offset;
+            drawingForearm.xRot += Mth.PI / 7.0F;
+            innerHoldingArm.xRot += drawAmount * 7.0F * Mth.PI / 12.0F - 5.0F * Mth.PI / 6.0F;
+            holdingArm.yRot += (drawAmount * 3.0F * Mth.PI / 10.0F + Mth.PI / 5.0F) * (float) offset;
+            holdingArm.zRot += (drawAmount * 0.850848F - Mth.PI / 3.0F) * (float) offset;
+            innerHoldingArm.zRot += -drawAmount * Mth.PI / 8.0F * (float) offset;
+            holdingforearm.xRot += drawAmount * Mth.PI / 30.0F - Mth.PI / 5.0F;
+        } else if (state.animationTime < 26.0F) {
+            this.innerHead.yRot += Mth.PI / 4.0F * (float) offset;
             for (Spine spine : this.spine) {
-                spine.middle.yRot += -0.2617994F * (float) offset;
+                spine.middle.yRot += -Mth.PI / 12.0F * (float) offset;
                 spine.middle.xRot += facePitch / 3.0F;
                 spine.middle.yRot += faceYaw / 3.0F;
             }
 
-            innerDrawingArm.xRot += -1.0471976F;
-            drawingArm.yRot += -0.62831855F * (float) offset;
+            innerDrawingArm.xRot += -Mth.PI / 3.0F;
+            drawingArm.yRot += -Mth.PI / 5.0F * (float) offset;
             drawingArm.zRot += (float) offset;
-            drawingForearm.xRot += 0.44879895F;
-            innerHoldingArm.xRot += -2.6179938F;
-            holdingArm.yRot += 0.62831855F * (float) offset;
-            holdingArm.zRot += -1.0471976F * (float) offset;
-            holdingforearm.xRot += -0.62831855F;
-        } else if (renderState.animationTime < 30.0F) {
-            float tick = (renderState.animationTime - 26.0F) / 4.0F;
-            float f = Mth.cos(tick * Mth.PI / 2.0F);
-            this.innerhead.yRot += f * Mth.PI / 4.0F * (float) offset;
+            drawingForearm.xRot += Mth.PI / 7.0F;
+            innerHoldingArm.xRot += -5.0F * Mth.PI / 6.0F;
+            holdingArm.yRot += Mth.PI / 5.0F * (float) offset;
+            holdingArm.zRot += -Mth.PI / 3.0F * (float) offset;
+            holdingforearm.xRot += -Mth.PI / 5.0F;
+        } else if (state.animationTime < 30.0F) {
+            float progress = (state.animationTime - 26.0F) / 4.0F;
+            float drawAmount = Mth.cos(progress * Mth.PI / 2.0F);
+            this.innerHead.yRot += drawAmount * Mth.PI / 4.0F * (float) offset;
 
             for (Spine spine : this.spine) {
-                spine.middle.yRot += -f * Mth.PI / 12.0F * (float) offset;
-                spine.middle.xRot += f * facePitch / 3.0F;
-                spine.middle.yRot += f * faceYaw / 3.0F;
+                spine.middle.yRot += -drawAmount * Mth.PI / 12.0F * (float) offset;
+                spine.middle.xRot += drawAmount * facePitch / 3.0F;
+                spine.middle.yRot += drawAmount * faceYaw / 3.0F;
             }
 
-            innerDrawingArm.xRot += -f * Mth.PI / 3.0F;
-            drawingArm.yRot += -f * Mth.PI / 5.0F * (float) offset;
-            drawingArm.zRot += f * Mth.PI / 3.0F * (float) offset;
-            drawingForearm.xRot += f * Mth.PI / 7.0F;
-            innerHoldingArm.xRot += -f * Mth.PI / 1.2F;
-            holdingArm.yRot += f * Mth.PI / 5.0F * (float) offset;
-            holdingArm.zRot += -f * Mth.PI / 3.0F * (float) offset;
-            holdingforearm.xRot += -f * Mth.PI / 5.0F;
+            innerDrawingArm.xRot += -drawAmount * Mth.PI / 3.0F;
+            drawingArm.yRot += -drawAmount * Mth.PI / 5.0F * (float) offset;
+            drawingArm.zRot += drawAmount * Mth.PI / 3.0F * (float) offset;
+            drawingForearm.xRot += drawAmount * Mth.PI / 7.0F;
+            innerHoldingArm.xRot += -drawAmount * Mth.PI / 1.2F;
+            holdingArm.yRot += drawAmount * Mth.PI / 5.0F * (float) offset;
+            holdingArm.zRot += -drawAmount * Mth.PI / 3.0F * (float) offset;
+            holdingforearm.xRot += -drawAmount * Mth.PI / 5.0F;
         }
     }
 
-    private void animateMultiShoot(MutantSkeletonRenderState renderState, float facePitch, float faceYaw) {
-        boolean leftHanded = renderState.mainArm == HumanoidArm.LEFT;
-        if (renderState.animationTime < 10.0F) {
-            float tick = renderState.animationTime / 10.0F;
-            float f = Mth.sin(tick * Mth.PI / 2.0F);
-            this.skeleBase.y += f * 3.5F;
-            this.spine[0].middle.xRot += f * Mth.PI / 6.0F;
-            this.head.xRot += -f * Mth.PI / 4.0F;
-            this.arm1.xRot += f * Mth.PI / 6.0F;
-            this.arm1.zRot += f * Mth.PI / 16.0F;
-            this.arm2.xRot += f * Mth.PI / 6.0F;
-            this.arm2.zRot += -f * Mth.PI / 16.0F;
-            this.leg1.xRot += -f * Mth.PI / 8.0F;
-            this.leg2.xRot += -f * Mth.PI / 8.0F;
-            this.innerforeleg1.xRot += f * Mth.PI / 4.0F;
-            this.innerforeleg2.xRot += f * Mth.PI / 4.0F;
+    private void animateMultiShoot(MutantSkeletonRenderState state, float facePitch, float faceYaw) {
+        boolean leftHanded = state.mainArm == HumanoidArm.LEFT;
+        if (state.animationTime < 10.0F) {
+            float progress = state.animationTime / 10.0F;
+            float drawAmount = Mth.sin(progress * Mth.PI / 2.0F);
+            this.base.y += drawAmount * 3.5F;
+            this.spine[0].middle.xRot += drawAmount * Mth.PI / 6.0F;
+            this.head.xRot += -drawAmount * Mth.PI / 4.0F;
+            this.rightArm.xRot += drawAmount * Mth.PI / 6.0F;
+            this.rightArm.zRot += drawAmount * Mth.PI / 16.0F;
+            this.leftArm.xRot += drawAmount * Mth.PI / 6.0F;
+            this.leftArm.zRot += -drawAmount * Mth.PI / 16.0F;
+            this.rightLeg.xRot += -drawAmount * Mth.PI / 8.0F;
+            this.leftLeg.xRot += -drawAmount * Mth.PI / 8.0F;
+            this.rightLegLowerInner.xRot += drawAmount * Mth.PI / 4.0F;
+            this.leftLegLowerInner.xRot += drawAmount * Mth.PI / 4.0F;
         } else {
-            ModelPart drawingArm = leftHanded ? this.arm2 : this.arm1;
-            ModelPart holdingArm = leftHanded ? this.arm1 : this.arm2;
-            ModelPart innerDrawingArm = leftHanded ? this.innerarm2 : this.innerarm1;
-            ModelPart innerHoldingArm = leftHanded ? this.innerarm1 : this.innerarm2;
-            ModelPart drawingForearm = leftHanded ? this.forearm2 : this.forearm1;
-            ModelPart holdingforearm = leftHanded ? this.forearm1 : this.forearm2;
+            ModelPart drawingArm = leftHanded ? this.leftArm : this.rightArm;
+            ModelPart holdingArm = leftHanded ? this.rightArm : this.leftArm;
+            ModelPart innerDrawingArm = leftHanded ? this.leftArmInner : this.rightArmInner;
+            ModelPart innerHoldingArm = leftHanded ? this.rightArmInner : this.leftArmInner;
+            ModelPart drawingForearm = leftHanded ? this.leftArmLower : this.rightArmLower;
+            ModelPart holdingforearm = leftHanded ? this.rightArmLower : this.leftArmLower;
             int offset = leftHanded ? -1 : 1;
-            if (renderState.animationTime < 12.0F) {
-                float tick = (renderState.animationTime - 10.0F) / 2.0F;
-                float f = Mth.cos(tick * Mth.PI / 2.0F);
-                float f1 = Mth.sin(tick * Mth.PI / 2.0F);
-                this.skeleBase.y += f * 3.5F;
-                this.spine[0].middle.xRot += f * Mth.PI / 6.0F;
-                this.head.xRot += -f * Mth.PI / 4.0F;
-                drawingArm.xRot += f * Mth.PI / 6.0F;
-                drawingArm.zRot += f * Mth.PI / 16.0F * (float) offset;
-                holdingArm.xRot += f * Mth.PI / 6.0F;
-                holdingArm.zRot += -f * Mth.PI / 16.0F * (float) offset;
-                this.leg1.xRot += -f * Mth.PI / 8.0F;
-                this.leg2.xRot += -f * Mth.PI / 8.0F;
-                this.innerforeleg1.xRot += f * Mth.PI / 4.0F;
-                this.innerforeleg2.xRot += f * Mth.PI / 4.0F;
-                drawingArm.zRot += -f1 * Mth.PI / 14.0F * (float) offset;
-                holdingArm.zRot += f1 * Mth.PI / 14.0F * (float) offset;
-                this.leg1.zRot += -f1 * Mth.PI / 24.0F;
-                this.leg2.zRot += f1 * Mth.PI / 24.0F;
-                this.foreleg1.zRot += f1 * Mth.PI / 64.0F;
-                this.foreleg2.zRot += -f1 * Mth.PI / 64.0F;
-            } else if (renderState.animationTime < 14.0F) {
-                drawingArm.zRot += -0.22439948F * (float) offset;
-                holdingArm.zRot += 0.22439948F * (float) offset;
-                this.leg1.zRot += -0.1308997F;
-                this.leg2.zRot += 0.1308997F;
-                this.foreleg1.zRot += 0.049087387F;
-                this.foreleg2.zRot += -0.049087387F;
-            } else if (renderState.animationTime < 17.0F) {
-                float tick = (renderState.animationTime - 14.0F) / 3.0F;
-                float f = Mth.sin(tick * Mth.PI / 2.0F);
-                float f1 = Mth.cos(tick * Mth.PI / 2.0F);
-                drawingArm.zRot += -f1 * Mth.PI / 14.0F * (float) offset;
-                holdingArm.zRot += f1 * Mth.PI / 14.0F * (float) offset;
-                this.leg1.zRot += -f1 * Mth.PI / 24.0F;
-                this.leg2.zRot += f1 * Mth.PI / 24.0F;
-                this.foreleg1.zRot += f1 * Mth.PI / 64.0F;
-                this.foreleg2.zRot += -f1 * Mth.PI / 64.0F;
-                innerDrawingArm.xRot += -f * Mth.PI / 4.0F;
-                drawingArm.yRot += -f * Mth.PI / 2.0F * (float) offset;
-                drawingArm.zRot += f * Mth.PI / 16.0F * (float) offset;
-                drawingForearm.xRot += f * Mth.PI / 7.0F;
-                innerHoldingArm.xRot += -f * Mth.PI / 4.0F;
-                holdingArm.yRot += f * Mth.PI / 2.0F * (float) offset;
-                holdingArm.zRot += -f * Mth.PI / 16.0F * (float) offset;
-                innerHoldingArm.zRot += -f * Mth.PI / 8.0F * (float) offset;
-                holdingforearm.xRot += -f * Mth.PI / 6.0F;
-            } else if (renderState.animationTime < 20.0F) {
-                float tick = (renderState.animationTime - 17.0F) / 3.0F;
-                float f = Mth.cos(tick * Mth.PI / 2.0F);
-                float f1 = Mth.sin(tick * Mth.PI / 2.0F);
-                this.innerhead.yRot += f1 * Mth.PI / 4.0F * (float) offset;
+            if (state.animationTime < 12.0F) {
+                float progress = (state.animationTime - 10.0F) / 2.0F;
+                float drawAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                float turnAmount = Mth.sin(progress * Mth.PI / 2.0F);
+                this.base.y += drawAmount * 3.5F;
+                this.spine[0].middle.xRot += drawAmount * Mth.PI / 6.0F;
+                this.head.xRot += -drawAmount * Mth.PI / 4.0F;
+                drawingArm.xRot += drawAmount * Mth.PI / 6.0F;
+                drawingArm.zRot += drawAmount * Mth.PI / 16.0F * (float) offset;
+                holdingArm.xRot += drawAmount * Mth.PI / 6.0F;
+                holdingArm.zRot += -drawAmount * Mth.PI / 16.0F * (float) offset;
+                this.rightLeg.xRot += -drawAmount * Mth.PI / 8.0F;
+                this.leftLeg.xRot += -drawAmount * Mth.PI / 8.0F;
+                this.rightLegLowerInner.xRot += drawAmount * Mth.PI / 4.0F;
+                this.leftLegLowerInner.xRot += drawAmount * Mth.PI / 4.0F;
+                drawingArm.zRot += -turnAmount * Mth.PI / 14.0F * (float) offset;
+                holdingArm.zRot += turnAmount * Mth.PI / 14.0F * (float) offset;
+                this.rightLeg.zRot += -turnAmount * Mth.PI / 24.0F;
+                this.leftLeg.zRot += turnAmount * Mth.PI / 24.0F;
+                this.rightLegLower.zRot += turnAmount * Mth.PI / 64.0F;
+                this.leftLegLower.zRot += -turnAmount * Mth.PI / 64.0F;
+            } else if (state.animationTime < 14.0F) {
+                drawingArm.zRot += -Mth.PI / 14.0F * (float) offset;
+                holdingArm.zRot += Mth.PI / 14.0F * (float) offset;
+                this.rightLeg.zRot += -Mth.PI / 24.0F;
+                this.leftLeg.zRot += Mth.PI / 24.0F;
+                this.rightLegLower.zRot += Mth.PI / 64.0F;
+                this.leftLegLower.zRot += -Mth.PI / 64.0F;
+            } else if (state.animationTime < 17.0F) {
+                float progress = (state.animationTime - 14.0F) / 3.0F;
+                float drawAmount = Mth.sin(progress * Mth.PI / 2.0F);
+                float turnAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                drawingArm.zRot += -turnAmount * Mth.PI / 14.0F * (float) offset;
+                holdingArm.zRot += turnAmount * Mth.PI / 14.0F * (float) offset;
+                this.rightLeg.zRot += -turnAmount * Mth.PI / 24.0F;
+                this.leftLeg.zRot += turnAmount * Mth.PI / 24.0F;
+                this.rightLegLower.zRot += turnAmount * Mth.PI / 64.0F;
+                this.leftLegLower.zRot += -turnAmount * Mth.PI / 64.0F;
+                innerDrawingArm.xRot += -drawAmount * Mth.PI / 4.0F;
+                drawingArm.yRot += -drawAmount * Mth.PI / 2.0F * (float) offset;
+                drawingArm.zRot += drawAmount * Mth.PI / 16.0F * (float) offset;
+                drawingForearm.xRot += drawAmount * Mth.PI / 7.0F;
+                innerHoldingArm.xRot += -drawAmount * Mth.PI / 4.0F;
+                holdingArm.yRot += drawAmount * Mth.PI / 2.0F * (float) offset;
+                holdingArm.zRot += -drawAmount * Mth.PI / 16.0F * (float) offset;
+                innerHoldingArm.zRot += -drawAmount * Mth.PI / 8.0F * (float) offset;
+                holdingforearm.xRot += -drawAmount * Mth.PI / 6.0F;
+            } else if (state.animationTime < 20.0F) {
+                float progress = (state.animationTime - 17.0F) / 3.0F;
+                float drawAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                float turnAmount = Mth.sin(progress * Mth.PI / 2.0F);
+                this.innerHead.yRot += turnAmount * Mth.PI / 4.0F * (float) offset;
 
                 for (Spine spine : this.spine) {
-                    spine.middle.yRot += -f1 * Mth.PI / 12.0F * (float) offset;
-                    spine.middle.xRot += f1 * facePitch / 3.0F;
-                    spine.middle.yRot += f1 * faceYaw / 3.0F;
+                    spine.middle.yRot += -turnAmount * Mth.PI / 12.0F * (float) offset;
+                    spine.middle.xRot += turnAmount * facePitch / 3.0F;
+                    spine.middle.yRot += turnAmount * faceYaw / 3.0F;
                 }
 
-                innerDrawingArm.xRot += f * 0.2617994F - 1.0471976F;
-                drawingArm.yRot += (f * -0.9424778F - 0.62831855F) * (float) offset;
-                drawingArm.zRot += (f * -0.850848F + 1.0471976F) * (float) offset;
-                drawingForearm.xRot += 0.44879895F;
-                innerHoldingArm.xRot += f * 1.8325956F - 2.6179938F;
-                holdingArm.yRot += (f * 0.9424778F + 0.62831855F) * (float) offset;
-                holdingArm.zRot += (f * 0.850848F - 1.0471976F) * (float) offset;
-                innerHoldingArm.zRot += -f * Mth.PI / 8.0F * (float) offset;
-                holdingforearm.xRot += f * 0.10471976F - 0.62831855F;
-            } else if (renderState.animationTime < 24.0F) {
-                this.innerhead.yRot += 0.7853982F * (float) offset;
+                innerDrawingArm.xRot += drawAmount * Mth.PI / 12.0F - Mth.PI / 3.0F;
+                drawingArm.yRot += (drawAmount * -3.0F * Mth.PI / 10.0F - Mth.PI / 5.0F) * (float) offset;
+                drawingArm.zRot += (drawAmount * -0.850848F + Mth.PI / 3.0F) * (float) offset;
+                drawingForearm.xRot += Mth.PI / 7.0F;
+                innerHoldingArm.xRot += drawAmount * 7.0F * Mth.PI / 12.0F - 5.0F * Mth.PI / 6.0F;
+                holdingArm.yRot += (drawAmount * 3.0F * Mth.PI / 10.0F + Mth.PI / 5.0F) * (float) offset;
+                holdingArm.zRot += (drawAmount * 0.850848F - Mth.PI / 3.0F) * (float) offset;
+                innerHoldingArm.zRot += -drawAmount * Mth.PI / 8.0F * (float) offset;
+                holdingforearm.xRot += drawAmount * Mth.PI / 30.0F - Mth.PI / 5.0F;
+            } else if (state.animationTime < 24.0F) {
+                this.innerHead.yRot += Mth.PI / 4.0F * (float) offset;
 
                 for (Spine spine : this.spine) {
-                    spine.middle.yRot += -0.2617994F * (float) offset;
+                    spine.middle.yRot += -Mth.PI / 12.0F * (float) offset;
                     spine.middle.xRot += facePitch / 3.0F;
                     spine.middle.yRot += faceYaw / 3.0F;
                 }
 
-                innerDrawingArm.xRot += -1.0471976F;
-                drawingArm.yRot += -0.62831855F * (float) offset;
+                innerDrawingArm.xRot += -Mth.PI / 3.0F;
+                drawingArm.yRot += -Mth.PI / 5.0F * (float) offset;
                 drawingArm.zRot += (float) offset;
-                drawingForearm.xRot += 0.44879895F;
-                innerHoldingArm.xRot += -2.6179938F;
-                holdingArm.yRot += 0.62831855F * (float) offset;
-                holdingArm.zRot += -1.0471976F * (float) offset;
-                holdingforearm.xRot += -0.62831855F;
-            } else if (renderState.animationTime < 28.0F) {
-                float tick = (renderState.animationTime - 24.0F) / 4.0F;
-                float f = Mth.cos(tick * Mth.PI / 2.0F);
-                this.innerhead.yRot += f * Mth.PI / 4.0F * (float) offset;
+                drawingForearm.xRot += Mth.PI / 7.0F;
+                innerHoldingArm.xRot += -5.0F * Mth.PI / 6.0F;
+                holdingArm.yRot += Mth.PI / 5.0F * (float) offset;
+                holdingArm.zRot += -Mth.PI / 3.0F * (float) offset;
+                holdingforearm.xRot += -Mth.PI / 5.0F;
+            } else if (state.animationTime < 28.0F) {
+                float progress = (state.animationTime - 24.0F) / 4.0F;
+                float drawAmount = Mth.cos(progress * Mth.PI / 2.0F);
+                this.innerHead.yRot += drawAmount * Mth.PI / 4.0F * (float) offset;
 
                 for (Spine spine : this.spine) {
-                    spine.middle.yRot += -f * Mth.PI / 12.0F * (float) offset;
-                    spine.middle.xRot += f * facePitch / 3.0F;
-                    spine.middle.yRot += f * faceYaw / 3.0F;
+                    spine.middle.yRot += -drawAmount * Mth.PI / 12.0F * (float) offset;
+                    spine.middle.xRot += drawAmount * facePitch / 3.0F;
+                    spine.middle.yRot += drawAmount * faceYaw / 3.0F;
                 }
 
-                innerDrawingArm.xRot += -f * Mth.PI / 3.0F;
-                drawingArm.yRot += -f * Mth.PI / 5.0F * (float) offset;
-                drawingArm.zRot += f * Mth.PI / 3.0F * (float) offset;
-                drawingForearm.xRot += f * Mth.PI / 7.0F;
-                innerHoldingArm.xRot += -f * Mth.PI / 1.2F;
-                holdingArm.yRot += f * Mth.PI / 5.0F * (float) offset;
-                holdingArm.zRot += -f * Mth.PI / 3.0F * (float) offset;
-                holdingforearm.xRot += -f * Mth.PI / 5.0F;
+                innerDrawingArm.xRot += -drawAmount * Mth.PI / 3.0F;
+                drawingArm.yRot += -drawAmount * Mth.PI / 5.0F * (float) offset;
+                drawingArm.zRot += drawAmount * Mth.PI / 3.0F * (float) offset;
+                drawingForearm.xRot += drawAmount * Mth.PI / 7.0F;
+                innerHoldingArm.xRot += -drawAmount * Mth.PI / 1.2F;
+                holdingArm.yRot += drawAmount * Mth.PI / 5.0F * (float) offset;
+                holdingArm.zRot += -drawAmount * Mth.PI / 3.0F * (float) offset;
+                holdingforearm.xRot += -drawAmount * Mth.PI / 5.0F;
             }
         }
     }
 
-    private void animateConstrict(MutantSkeletonRenderState renderState) {
+    private void animateConstrict(MutantSkeletonRenderState state) {
         this.animator.startPhase(5);
-        this.animator.rotate(this.waist, 0.1308997F, 0.0F, 0.0F);
+        this.animator.rotate(this.waist, Mth.PI / 24.0F, 0.0F, 0.0F);
 
-        float tick;
-        float f;
         for (int i = 0; i < this.spine.length; ++i) {
-            tick = i == 0 ? 0.3926991F : (i == 2 ? -0.3926991F : 0.0F);
-            f = i == 1 ? 0.3926991F : 0.31415927F;
-            this.animator.rotate(this.spine[i].side1[0], tick, f, 0.0F);
-            this.animator.rotate(this.spine[i].side1[1], 0.0F, 0.15707964F, 0.0F);
-            this.animator.rotate(this.spine[i].side1[2], 0.0F, 0.2617994F, 0.0F);
-            this.animator.rotate(this.spine[i].side2[0], tick, -f, 0.0F);
-            this.animator.rotate(this.spine[i].side2[1], 0.0F, -0.15707964F, 0.0F);
-            this.animator.rotate(this.spine[i].side2[2], 0.0F, -0.2617994F, 0.0F);
+            float ribXRot = i == 0 ? Mth.PI / 8.0F : (i == 2 ? -Mth.PI / 8.0F : 0.0F);
+            float ribYRot = i == 1 ? Mth.PI / 8.0F : Mth.PI / 10.0F;
+            this.animator.rotate(this.spine[i].side1[0], ribXRot, ribYRot, 0.0F);
+            this.animator.rotate(this.spine[i].side1[1], 0.0F, Mth.PI / 20.0F, 0.0F);
+            this.animator.rotate(this.spine[i].side1[2], 0.0F, Mth.PI / 12.0F, 0.0F);
+            this.animator.rotate(this.spine[i].side2[0], ribXRot, -ribYRot, 0.0F);
+            this.animator.rotate(this.spine[i].side2[1], 0.0F, -Mth.PI / 20.0F, 0.0F);
+            this.animator.rotate(this.spine[i].side2[2], 0.0F, -Mth.PI / 12.0F, 0.0F);
         }
 
-        this.animator.rotate(this.arm1, 0.0F, 0.0F, 0.8975979F);
-        this.animator.rotate(this.arm2, 0.0F, 0.0F, -0.8975979F);
-        this.animator.move(this.skeleBase, 0.0F, 1.0F, 0.0F);
-        this.animator.rotate(this.leg1, -0.44879895F, 0.0F, 0.0F);
-        this.animator.rotate(this.leg2, -0.44879895F, 0.0F, 0.0F);
-        this.animator.rotate(this.innerforeleg1, 0.5235988F, 0.0F, 0.0F);
-        this.animator.rotate(this.innerforeleg2, 0.5235988F, 0.0F, 0.0F);
+        this.animator.rotate(this.rightArm, 0.0F, 0.0F, Mth.TWO_PI / 7.0F);
+        this.animator.rotate(this.leftArm, 0.0F, 0.0F, -Mth.TWO_PI / 7.0F);
+        this.animator.move(this.base, 0.0F, 1.0F, 0.0F);
+        this.animator.rotate(this.rightLeg, -Mth.PI / 7.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.leftLeg, -Mth.PI / 7.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.rightLegLowerInner, Mth.PI / 6.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.leftLegLowerInner, Mth.PI / 6.0F, 0.0F, 0.0F);
         this.animator.endPhase();
         this.animator.setStationaryPhase(2);
         this.animator.startPhase(1);
-        this.animator.rotate(this.neck, 0.19634955F, 0.0F, 0.0F);
-        this.animator.rotate(this.head, 0.15707964F, 0.0F, 0.0F);
-        this.animator.rotate(this.waist, 0.31415927F, 0.0F, 0.0F);
-        this.animator.rotate(this.spine[0].middle, 0.2617994F, 0.0F, 0.0F);
+        this.animator.rotate(this.neck, Mth.PI / 16.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.head, Mth.PI / 20.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.waist, Mth.PI / 10.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.spine[0].middle, Mth.PI / 12.0F, 0.0F, 0.0F);
 
         for (int i = 0; i < this.spine.length; ++i) {
-            tick = i == 0 ? 0.1308997F : (i == 2 ? -0.1308997F : 0.0F);
-            f = i == 1 ? -0.17453294F : -0.22439948F;
-            this.animator.rotate(this.spine[i].side1[0], tick - 0.08F, f, 0.0F);
-            this.animator.rotate(this.spine[i].side1[1], 0.0F, 0.15707964F, 0.0F);
-            this.animator.rotate(this.spine[i].side1[2], 0.0F, 0.2617994F, 0.0F);
-            this.animator.rotate(this.spine[i].side2[0], tick + 0.08F, -f, 0.0F);
-            this.animator.rotate(this.spine[i].side2[1], 0.0F, -0.15707964F, 0.0F);
-            this.animator.rotate(this.spine[i].side2[2], 0.0F, -0.2617994F, 0.0F);
+            float ribXRot = i == 0 ? Mth.PI / 24.0F : (i == 2 ? -Mth.PI / 24.0F : 0.0F);
+            float ribYRot = i == 1 ? -Mth.PI / 18.0F : -Mth.PI / 14.0F;
+            this.animator.rotate(this.spine[i].side1[0], ribXRot - 0.08F, ribYRot, 0.0F);
+            this.animator.rotate(this.spine[i].side1[1], 0.0F, Mth.PI / 20.0F, 0.0F);
+            this.animator.rotate(this.spine[i].side1[2], 0.0F, Mth.PI / 12.0F, 0.0F);
+            this.animator.rotate(this.spine[i].side2[0], ribXRot + 0.08F, -ribYRot, 0.0F);
+            this.animator.rotate(this.spine[i].side2[1], 0.0F, -Mth.PI / 20.0F, 0.0F);
+            this.animator.rotate(this.spine[i].side2[2], 0.0F, -Mth.PI / 12.0F, 0.0F);
         }
 
-        this.animator.move(this.skeleBase, 0.0F, 1.0F, 0.0F);
-        this.animator.rotate(this.leg1, -0.44879895F, 0.0F, 0.0F);
-        this.animator.rotate(this.leg2, -0.44879895F, 0.0F, 0.0F);
-        this.animator.rotate(this.innerforeleg1, 0.5235988F, 0.0F, 0.0F);
-        this.animator.rotate(this.innerforeleg2, 0.5235988F, 0.0F, 0.0F);
+        this.animator.move(this.base, 0.0F, 1.0F, 0.0F);
+        this.animator.rotate(this.rightLeg, -Mth.PI / 7.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.leftLeg, -Mth.PI / 7.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.rightLegLowerInner, Mth.PI / 6.0F, 0.0F, 0.0F);
+        this.animator.rotate(this.leftLegLowerInner, Mth.PI / 6.0F, 0.0F, 0.0F);
         this.animator.endPhase();
         this.animator.setStationaryPhase(4);
         this.animator.resetPhase(8);
 
-        if (renderState.animationTime < 5.0F) {
-            tick = renderState.animationTime / 5.0F;
-            f = Mth.sin(tick * Mth.PI / 2.0F);
+        if (state.animationTime < 5.0F) {
+            float progress = state.animationTime / 5.0F;
+            float swellAmount = Mth.sin(progress * Mth.PI / 2.0F);
 
             for (Spine spine : this.spine) {
-                Animator.setScale(spine.side1[0], 1.0F + f * 0.6F);
-                Animator.setScale(spine.side2[0], 1.0F + f * 0.6F);
+                Animator.setScale(spine.side1[0], 1.0F + swellAmount * 0.6F);
+                Animator.setScale(spine.side2[0], 1.0F + swellAmount * 0.6F);
             }
-        } else if (renderState.animationTime < 12.0F) {
+        } else if (state.animationTime < 12.0F) {
 
             for (Spine spine : this.spine) {
                 Animator.setScale(spine.side1[0], 1.6F);
                 Animator.setScale(spine.side2[0], 1.6F);
             }
-        } else if (renderState.animationTime < 20) {
-            tick = (renderState.animationTime - 12.0F) / 8.0F;
-            f = Mth.cos(tick * Mth.PI / 2.0F);
+        } else if (state.animationTime < 20) {
+            float progress = (state.animationTime - 12.0F) / 8.0F;
+            float swellAmount = Mth.cos(progress * Mth.PI / 2.0F);
 
             for (Spine spine : this.spine) {
-                Animator.setScale(spine.side1[0], 1.0F + f * 0.6F);
-                Animator.setScale(spine.side2[0], 1.0F + f * 0.6F);
+                Animator.setScale(spine.side1[0], 1.0F + swellAmount * 0.6F);
+                Animator.setScale(spine.side2[0], 1.0F + swellAmount * 0.6F);
             }
         }
     }
 
     public void translateHand(boolean leftHanded, PoseStack poseStack) {
-        this.skeleBase.translateAndRotate(poseStack);
+        this.base.translateAndRotate(poseStack);
         this.pelvis.translateAndRotate(poseStack);
         this.waist.translateAndRotate(poseStack);
 
@@ -618,17 +592,17 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
         }
 
         if (leftHanded) {
-            this.shoulder2.translateAndRotate(poseStack);
-            this.arm2.translateAndRotate(poseStack);
-            this.innerarm2.translateAndRotate(poseStack);
-            this.forearm2.translateAndRotate(poseStack);
-            this.innerforearm2.translateAndRotate(poseStack);
+            this.leftShoulder.translateAndRotate(poseStack);
+            this.leftArm.translateAndRotate(poseStack);
+            this.leftArmInner.translateAndRotate(poseStack);
+            this.leftArmLower.translateAndRotate(poseStack);
+            this.leftArmLowerInner.translateAndRotate(poseStack);
         } else {
-            this.shoulder1.translateAndRotate(poseStack);
-            this.arm1.translateAndRotate(poseStack);
-            this.innerarm1.translateAndRotate(poseStack);
-            this.forearm1.translateAndRotate(poseStack);
-            this.innerforearm1.translateAndRotate(poseStack);
+            this.rightShoulder.translateAndRotate(poseStack);
+            this.rightArm.translateAndRotate(poseStack);
+            this.rightArmInner.translateAndRotate(poseStack);
+            this.rightArmLower.translateAndRotate(poseStack);
+            this.rightArmLowerInner.translateAndRotate(poseStack);
         }
     }
 
@@ -663,11 +637,12 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
         }
 
         public static void createSpineLayer(PartDefinition root, int index) {
-            PartPose partPose = PartPose.ZERO;
+            float spineScale = index == 1 ? 0.98F : 1.0F;
+            PartPose partPose = PartPose.rotation(Mth.PI / 18.0F, 0.0F, 0.0F);
             if (index == 0) {
-                partPose = PartPose.offset(0.0F, -7.0F, 0.0F);
+                partPose = PartPose.offsetAndRotation(0.0F, -7.0F, 0.0F, Mth.PI / 18.0F, 0.0F, 0.0F);
             } else if (index > 0) {
-                partPose = PartPose.offset(0.0F, -5.0F, 0.0F);
+                partPose = PartPose.offsetAndRotation(0.0F, -5.0F, 0.0F, Mth.PI / 18.0F, 0.0F, 0.0F);
             }
 
             boolean skeletonPart = index < 0;
@@ -677,7 +652,9 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
                             .texOffs(50, 0)
                             .addBox(-2.5F, -4.0F, -2.0F, 5.0F, 4.0F, 4.0F, new CubeDeformation(0.5F)),
                     partPose);
-            partPose = !skeletonPart ? PartPose.offset(-3.0F, -1.0F, 1.75F) : PartPose.ZERO;
+            partPose = !skeletonPart ?
+                    PartPose.offsetAndRotation(-3.0F, -1.0F, 1.75F, 0.0F, -Mth.PI / 4.5F * spineScale, 0.0F) :
+                    PartPose.rotation(0.0F, -Mth.PI / 4.5F * spineScale, 0.0F);
             PartDefinition side11 = middle.addOrReplaceChild("side11" + indexString,
                     CubeListBuilder.create()
                             .texOffs(32, 12)
@@ -694,13 +671,20 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
                             .texOffs(32, 12)
                             .mirror()
                             .addBox(-6.0F, -2.0F, -2.0F, 6.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)),
-                    PartPose.offset(skeletonPart ? -0.5F : -6.5F, 0.0F, 0.0F));
+                    PartPose.offsetAndRotation(skeletonPart ? -0.5F : -6.5F,
+                            0.0F,
+                            0.0F,
+                            0.0F,
+                            -Mth.PI / 3.0F * spineScale,
+                            0.0F));
             side12.addOrReplaceChild("side13" + indexString,
                     CubeListBuilder.create()
                             .texOffs(32, 12)
                             .addBox(-6.0F, -2.0F, -2.0F, 6.0F, 2.0F, 2.0F, new CubeDeformation(0.15F)),
-                    PartPose.offset(-6.4F, 0.0F, 0.0F));
-            partPose = !skeletonPart ? PartPose.offset(3.0F, -1.0F, 1.75F) : PartPose.ZERO;
+                    PartPose.offsetAndRotation(-6.4F, 0.0F, 0.0F, 0.0F, -Mth.PI / 3.5F * spineScale, 0.0F));
+            partPose = !skeletonPart ?
+                    PartPose.offsetAndRotation(3.0F, -1.0F, 1.75F, 0.0F, Mth.PI / 4.5F * spineScale, 0.0F) :
+                    PartPose.rotation(0.0F, Mth.PI / 4.5F * spineScale, 0.0F);
             PartDefinition side21 = middle.addOrReplaceChild("side21" + indexString,
                     CubeListBuilder.create()
                             .texOffs(32, 12)
@@ -717,34 +701,18 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
                     CubeListBuilder.create()
                             .texOffs(32, 12)
                             .addBox(0.0F, -2.0F, -2.0F, 6.0F, 2.0F, 2.0F, new CubeDeformation(0.2F)),
-                    PartPose.offset(skeletonPart ? 0.5F : 6.5F, 0.0F, 0.0F));
+                    PartPose.offsetAndRotation(skeletonPart ? 0.5F : 6.5F,
+                            0.0F,
+                            0.0F,
+                            0.0F,
+                            Mth.PI / 3.0F * spineScale,
+                            0.0F));
             side22.addOrReplaceChild("side23" + indexString,
                     CubeListBuilder.create()
                             .texOffs(32, 12)
                             .mirror()
                             .addBox(0.0F, -2.0F, -2.0F, 6.0F, 2.0F, 2.0F, new CubeDeformation(0.15F)),
-                    PartPose.offset(6.4F, 0.0F, 0.0F));
-        }
-
-        @Override
-        public void setupAnim(Boolean middleSpine) {
-            super.setupAnim(middleSpine);
-            this.middle.xRot = Mth.PI / 18.0F;
-            this.side1[0].yRot = -Mth.PI / 4.5F;
-            this.side2[0].yRot = Mth.PI / 4.5F;
-            this.side1[1].yRot = -Mth.PI / 3.0F;
-            this.side2[1].yRot = Mth.PI / 3.0F;
-            this.side1[2].yRot = -Mth.PI / 3.5F;
-            this.side2[2].yRot = Mth.PI / 3.5F;
-            if (middleSpine) {
-                for (int i = 0; i < this.side1.length; ++i) {
-                    this.side1[i].yRot *= 0.98F;
-                    this.side2[i].yRot *= 0.98F;
-                }
-            }
-
-            Animator.setScale(this.side1[0], 1.0F);
-            Animator.setScale(this.side2[0], 1.0F);
+                    PartPose.offsetAndRotation(6.4F, 0.0F, 0.0F, 0.0F, Mth.PI / 3.5F * spineScale, 0.0F));
         }
 
         public void animate(float breatheAnim) {

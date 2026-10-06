@@ -67,7 +67,7 @@ public class EndersoulHandSpecialRenderer implements NoDataSpecialModelRenderer 
         @Override
         public EndersoulHandSpecialRenderer bake(BakingContext context) {
             return new EndersoulHandSpecialRenderer(new EndersoulHandModel(context.entityModelSet()
-                    .bakeLayer(ModModelLayers.ENDERSOUL_HAND_RIGHT), true));
+                    .bakeLayer(ModModelLayers.ENDERSOUL_HAND_RIGHT)));
         }
     }
 }
