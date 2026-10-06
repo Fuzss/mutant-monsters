@@ -44,8 +44,7 @@ public class CreeperMinionEggRenderer extends EntityRenderer<CreeperMinionEgg, C
                 this.model.renderType(TEXTURE_LOCATION),
                 renderState.lightCoords,
                 OverlayTexture.NO_OVERLAY,
-                renderState.outlineColor,
-                null);
+                renderState.outlineColor);
         if (renderState.isCharged) {
             RenderType renderType = ModRenderTypes.energySwirl(PowerableLayer.LIGHTNING_TEXTURE,
                     renderState.ageInTicks * 0.01F,
@@ -59,8 +58,7 @@ public class CreeperMinionEggRenderer extends EntityRenderer<CreeperMinionEgg, C
                     OverlayTexture.NO_OVERLAY,
                     color,
                     null,
-                    renderState.outlineColor,
-                    null);
+                    renderState.outlineColor);
         }
 
         poseStack.popPose();

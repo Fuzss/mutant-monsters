@@ -46,8 +46,7 @@ public class MutantSkeletonCrossbowLayer extends RenderLayer<MutantSkeletonRende
                 this.crossbowModel.renderType(CROSSBOW_TEXTURE_LOCATION),
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
-                renderState.outlineColor,
-                null);
+                renderState.outlineColor);
         poseStack.popPose();
         if (renderState.animation == MutantSkeleton.SHOOT_ANIMATION && renderState.animationTime > 10.0F
                 && renderState.animationTime < 26.0F
@@ -56,7 +55,7 @@ public class MutantSkeletonCrossbowLayer extends RenderLayer<MutantSkeletonRende
             poseStack.pushPose();
             this.getParentModel().translateHand(leftHanded, poseStack);
             poseStack.translate(leftHanded ? 0.2 : -0.2, 0.4, -1.8);
-            poseStack.mulPose(Axis.XP.rotationDegrees(90.0F));
+            poseStack.rotateDegrees(Axis.XP, 90.0F);
             poseStack.scale(1.2F, 1.2F, 1.2F);
             nodeCollector.submitModel(this.arrowModel,
                     Unit.INSTANCE,
@@ -64,8 +63,7 @@ public class MutantSkeletonCrossbowLayer extends RenderLayer<MutantSkeletonRende
                     this.arrowModel.renderType(MutantArrowRenderer.TEXTURE_LOCATION),
                     packedLight,
                     OverlayTexture.NO_OVERLAY,
-                    renderState.outlineColor,
-                    null);
+                    renderState.outlineColor);
             poseStack.popPose();
         }
     }

@@ -8,6 +8,7 @@ import net.minecraft.core.particles.ParticleType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,7 +19,7 @@ public class NeoForgeAbstractions implements CommonAbstractions {
 
     @Override
     public void onBlockCaughtFire(Block block, BlockState state, Level level, BlockPos pos, @Nullable Direction direction, @Nullable LivingEntity igniter) {
-        block.onCaughtFire(state, level, pos, direction, igniter);
+        block.onCaughtFire(state, level, pos, direction, igniter, ItemStack.EMPTY);
     }
 
     @Override

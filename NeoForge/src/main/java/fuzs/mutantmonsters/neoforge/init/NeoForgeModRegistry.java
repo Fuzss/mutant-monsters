@@ -13,11 +13,13 @@ public class NeoForgeModRegistry {
     public static final Holder.Reference<EntityType<MutantArrow>> MUTANT_ARROW_ENTITY_TYPE = REGISTRIES.registerEntityType(
             "mutant_arrow",
             () -> EntityType.Builder.<MutantArrow>of(MutantArrow::new, MobCategory.MISC)
+                    .noLootTable()
                     .setShouldReceiveVelocityUpdates(false)
                     .noSave());
     public static final Holder.Reference<EntityType<SkullSpirit>> SKULL_SPIRIT_ENTITY_TYPE = REGISTRIES.registerEntityType(
             "skull_spirit",
             () -> EntityType.Builder.<SkullSpirit>of(SkullSpirit::new, MobCategory.MISC)
+                    .noLootTable()
                     .clientTrackingRange(10)
                     .updateInterval(20)
                     .setShouldReceiveVelocityUpdates(false)

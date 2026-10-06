@@ -2,8 +2,8 @@ package fuzs.mutantmonsters.neoforge.data.client;
 
 import fuzs.mutantmonsters.common.MutantMonsters;
 import fuzs.mutantmonsters.common.init.ModSoundEvents;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
-import fuzs.puzzleslib.neoforge.api.client.data.v2.AbstractSoundProvider;
+import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
+import fuzs.puzzleslib.neoforge.api.client.data.v3.sounds.AbstractSoundProvider;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.animal.pig.PigSoundVariants;
 
@@ -14,7 +14,7 @@ public class ModSoundProvider extends AbstractSoundProvider {
     }
 
     @Override
-    public void addSounds() {
+    public void registerSounds() {
         this.add(ModSoundEvents.ENTITY_CREEPER_MINION_AMBIENT_SOUND_EVENT.value(),
                 sound(SoundEvents.CREEPER_HURT).volume(0.6));
         this.add(ModSoundEvents.ENTITY_CREEPER_MINION_DEATH_SOUND_EVENT.value(), SoundEvents.CREEPER_DEATH);

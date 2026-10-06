@@ -51,8 +51,7 @@ public class MutantSnowGolemJackOLanternLayer extends RenderLayer<MutantSnowGole
                     OverlayTexture.NO_OVERLAY,
                     color,
                     null,
-                    renderState.outlineColor,
-                    null);
+                    renderState.outlineColor);
         }
     }
 }

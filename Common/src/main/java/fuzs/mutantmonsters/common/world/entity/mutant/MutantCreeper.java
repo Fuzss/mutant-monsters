@@ -152,7 +152,7 @@ public class MutantCreeper extends MutantMonster {
             target.push(x / d * 0.5, y / d * 0.05 + 0.15, z / d * 0.5);
         }
 
-        this.swing(InteractionHand.MAIN_HAND);
+        this.swingForAttack(InteractionHand.MAIN_HAND);
         return hurt;
     }
 
@@ -202,9 +202,9 @@ public class MutantCreeper extends MutantMonster {
     }
 
     @Override
-    public double getVisibilityPercent(@Nullable Entity lookingEntity) {
+    public double getVisibilityPercent(ServerLevel serverLevel, @Nullable Entity lookingEntity) {
         return !(lookingEntity instanceof IronGolem) && !(lookingEntity instanceof Zoglin) ?
-                super.getVisibilityPercent(lookingEntity) : 0.0;
+                super.getVisibilityPercent(serverLevel, lookingEntity) : 0.0;
     }
 
     @Override

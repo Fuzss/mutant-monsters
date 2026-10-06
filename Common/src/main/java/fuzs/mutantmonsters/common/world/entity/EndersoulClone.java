@@ -93,7 +93,7 @@ public class EndersoulClone extends Monster {
             this.heal(2.0F);
         }
 
-        this.swing(InteractionHand.MAIN_HAND);
+        this.swingForAttack(InteractionHand.MAIN_HAND);
         return doHurtTarget;
     }
 

@@ -557,7 +557,7 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
         int timeLeft;
 
         public WebPos(BlockPos pos, int timeLeft) {
-            super(pos);
+            super(pos.getX(), pos.getY(), pos.getZ());
             this.timeLeft = timeLeft;
         }
 

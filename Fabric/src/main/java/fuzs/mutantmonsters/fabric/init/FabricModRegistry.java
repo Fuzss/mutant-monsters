@@ -14,6 +14,7 @@ public class FabricModRegistry {
             "mutant_arrow",
             () -> EntityType.Builder.<MutantArrow>of(MutantArrow::new, MobCategory.MISC)
                     .alwaysUpdateVelocity(false)
+                    .noLootTable()
                     .noSave());
     public static final Holder.Reference<EntityType<SkullSpirit>> SKULL_SPIRIT_ENTITY_TYPE = REGISTRIES.registerEntityType(
             "skull_spirit",
@@ -21,6 +22,7 @@ public class FabricModRegistry {
                     .clientTrackingRange(10)
                     .updateInterval(20)
                     .alwaysUpdateVelocity(false)
+                    .noLootTable()
                     .sized(0.1F, 0.1F));
 
     public static void bootstrap() {

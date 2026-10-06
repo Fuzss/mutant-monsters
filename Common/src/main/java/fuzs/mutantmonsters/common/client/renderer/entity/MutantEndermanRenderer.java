@@ -47,8 +47,8 @@ public class MutantEndermanRenderer extends MobRenderer<MutantEnderman, MutantEn
     }
 
     @Override
-    public boolean shouldRender(MutantEnderman mutantEnderman, Frustum camera, double camX, double camY, double camZ) {
-        if (super.shouldRender(mutantEnderman, camera, camX, camY, camZ)) {
+    public boolean shouldRender(MutantEnderman mutantEnderman, Frustum camera, double camX, double camY, double camZ, float partialTick) {
+        if (super.shouldRender(mutantEnderman, camera, camX, camY, camZ, partialTick)) {
             return true;
         } else if (mutantEnderman.getAnimation() == MutantEnderman.TELEPORT_ANIMATION) {
             return mutantEnderman.getTeleportPosition()
@@ -181,7 +181,7 @@ public class MutantEndermanRenderer extends MobRenderer<MutantEnderman, MutantEn
     }
 
     @Override
-    protected AABB getBoundingBoxForCulling(MutantEnderman mutantEnderman) {
-        return super.getBoundingBoxForCulling(mutantEnderman).inflate(3.0);
+    protected AABB getBoundingBoxForCulling(MutantEnderman mutantEnderman, float partialTick) {
+        return super.getBoundingBoxForCulling(mutantEnderman, partialTick).inflate(3.0);
     }
 }

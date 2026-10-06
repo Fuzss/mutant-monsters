@@ -41,8 +41,7 @@ public class MutantEndermanDeathLayer extends RenderLayer<MutantEndermanRenderSt
                     OverlayTexture.NO_OVERLAY,
                     color,
                     null,
-                    state.outlineColor,
-                    null);
+                    state.outlineColor);
         }
     }
 }

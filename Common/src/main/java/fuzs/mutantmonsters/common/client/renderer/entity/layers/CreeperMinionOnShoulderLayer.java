@@ -8,7 +8,7 @@ import fuzs.mutantmonsters.common.client.renderer.entity.CreeperMinionRenderer;
 import fuzs.mutantmonsters.common.client.renderer.entity.state.CreeperMinionRenderState;
 import fuzs.mutantmonsters.common.client.renderer.rendertype.ModRenderTypes;
 import fuzs.mutantmonsters.common.init.ModRegistry;
-import fuzs.puzzleslib.common.api.client.renderer.v1.RenderStateExtraData;
+import fuzs.puzzleslib.common.api.client.renderer.v2.RenderStateExtraData;
 import net.minecraft.client.model.player.PlayerModel;
 import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -123,8 +123,7 @@ public class CreeperMinionOnShoulderLayer extends RenderLayer<AvatarRenderState,
                 this.model.renderType(CreeperMinionRenderer.TEXTURE_LOCATION),
                 packedLight,
                 OverlayTexture.NO_OVERLAY,
-                avatarRenderState.outlineColor,
-                null);
+                avatarRenderState.outlineColor);
         if (renderState.isPowered) {
             RenderType renderType = ModRenderTypes.energySwirl(PowerableLayer.LIGHTNING_TEXTURE,
                     avatarRenderState.ageInTicks * 0.01F,
@@ -138,8 +137,7 @@ public class CreeperMinionOnShoulderLayer extends RenderLayer<AvatarRenderState,
                     OverlayTexture.NO_OVERLAY,
                     color,
                     null,
-                    avatarRenderState.outlineColor,
-                    null);
+                    avatarRenderState.outlineColor);
         }
 
         poseStack.popPose();

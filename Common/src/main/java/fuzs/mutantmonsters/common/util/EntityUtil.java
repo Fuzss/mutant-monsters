@@ -14,6 +14,7 @@ import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -148,7 +149,7 @@ public final class EntityUtil {
         if (mob.level().isLoaded(pos)) {
             while (true) {
                 pos.move(Direction.DOWN);
-                if (pos.getY() <= mob.level().getMinY() || mob.level().getBlockState(pos).blocksMotion()) {
+                if (pos.getY() <= mob.level().getMinY() || mob.level().getBlockState(pos).is(BlockTags.BLOCKS_MOTION)) {
                     pos.move(Direction.UP);
                     AABB bb = mob.getDimensions(Pose.STANDING)
                             .makeBoundingBox((double) pos.getX() + 0.5, pos.getY(), (double) pos.getZ() + 0.5);

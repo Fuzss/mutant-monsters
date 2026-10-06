@@ -1,9 +1,9 @@
 package fuzs.mutantmonsters.common.data.client;
 
 import fuzs.mutantmonsters.common.init.ModRegistry;
-import fuzs.puzzleslib.common.api.client.data.v2.AbstractParticleProvider;
+import fuzs.puzzleslib.common.api.client.data.v3.particles.AbstractParticleProvider;
 import net.minecraft.resources.Identifier;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
 
 public class ModParticleProvider extends AbstractParticleProvider {
 

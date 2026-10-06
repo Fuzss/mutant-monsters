@@ -39,7 +39,6 @@ public class CreeperMinionEgg extends Entity implements OwnableEntity {
             CreeperMinionEgg.class,
             EntityDataSerializers.OPTIONAL_LIVING_ENTITY_REFERENCE);
 
-    private final InterpolationHandler interpolation = new InterpolationHandler(this);
     private int health;
     private int age;
     private int recentlyHit;
@@ -100,6 +99,11 @@ public class CreeperMinionEgg extends Entity implements OwnableEntity {
     }
 
     @Override
+    public MoveSimulationType getMoveSimulationType() {
+        return MoveSimulationType.SERVER_AND_CLIENT;
+    }
+
+    @Override
     public boolean canCollideWith(Entity entity) {
         return Boat.canVehicleCollide(this, entity);
     }
@@ -115,8 +119,8 @@ public class CreeperMinionEgg extends Entity implements OwnableEntity {
     }
 
     @Override
-    public InterpolationHandler getInterpolation() {
-        return this.interpolation;
+    protected InterpolationHandler createInterpolationHandler() {
+        return LinearInterpolationHandler.create(this);
     }
 
     @Override

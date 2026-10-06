@@ -1,8 +1,8 @@
 package fuzs.mutantmonsters.common.data.client;
 
 import fuzs.mutantmonsters.common.init.ModItems;
-import fuzs.puzzleslib.common.api.client.data.v2.AbstractEquipmentProvider;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.client.data.v3.equipment.AbstractEquipmentProvider;
+import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
 import net.minecraft.client.resources.model.EquipmentClientInfo;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.equipment.EquipmentAsset;

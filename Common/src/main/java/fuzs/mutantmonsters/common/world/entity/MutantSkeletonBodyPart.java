@@ -43,7 +43,6 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
     private static final EntityDataAccessor<BodyPart> DATA_BODY_PART = SynchedEntityData.defineId(MutantSkeletonBodyPart.class,
             ModRegistry.BODY_PART_ENTITY_DATA_SERIALIZER.value());
 
-    private final InterpolationHandler interpolation = new InterpolationHandler(this);
     private final boolean yawPositive;
     private final boolean pitchPositive;
     @Nullable
@@ -92,6 +91,11 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
     }
 
     @Override
+    public MoveSimulationType getMoveSimulationType() {
+        return MoveSimulationType.SERVER_AND_CLIENT;
+    }
+
+    @Override
     public boolean hurtServer(ServerLevel level, DamageSource damageSource, float amount) {
         return false;
     }
@@ -102,8 +106,8 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
     }
 
     @Override
-    public InterpolationHandler getInterpolation() {
-        return this.interpolation;
+    protected InterpolationHandler createInterpolationHandler() {
+        return LinearInterpolationHandler.create(this);
     }
 
     @Override
@@ -160,7 +164,7 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
             ResourceKey<LootTable> resourceKey = this.getItemPartLootTableId();
             LootTable lootTable = serverLevel.getServer().reloadableRegistries().getLootTable(resourceKey);
             LootParams lootParams = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY,
-                    this).create(ModRegistry.BODY_PART_LOOT_CONTEXT_PARAM_SET);
+                    this).create(ModRegistry.BODY_PART_LOOT_CONTEXT_PARAM_SET.value());
             List<ItemStack> list = lootTable.getRandomItems(lootParams);
             for (ItemStack item : list) {
                 if (!item.isEmpty()) {

@@ -37,7 +37,7 @@ public class ZombieResurrection extends BlockPos {
     }
 
     public ZombieResurrection(BlockPos pos, int tick) {
-        super(pos);
+        super(pos.getX(), pos.getY(), pos.getZ());
         this.tick = tick;
     }
 

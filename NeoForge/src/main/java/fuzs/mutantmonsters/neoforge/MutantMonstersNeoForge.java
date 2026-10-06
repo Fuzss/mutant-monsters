@@ -14,7 +14,9 @@ import fuzs.mutantmonsters.neoforge.init.NeoForgeModRegistry;
 import fuzs.mutantmonsters.common.world.entity.mutant.MutantSkeleton;
 import fuzs.mutantmonsters.common.world.entity.mutant.MutantZombie;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
-import fuzs.puzzleslib.neoforge.api.data.v2.core.DataProviderHelper;
+import fuzs.puzzleslib.neoforge.api.data.v3.core.DataProviderBuilder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
@@ -28,19 +30,19 @@ public class MutantMonstersNeoForge {
         NeoForgeModRegistry.bootstrap();
         ModConstructor.construct(MutantMonsters.MOD_ID, MutantMonsters::new);
         registerLoadingHandlers(modContainer.getEventBus());
-        DataProviderHelper.registerDataProviders(MutantMonsters.MOD_ID,
-                ModRegistry.REGISTRY_SET_BUILDER,
-                ModBlockLootProvider::new,
-                ModBodyPartLootProvider::new,
-                ModEntityLootProvider::new,
-                ModEntityTypeLootProvider::new,
-                ModBiomeTagsProvider::new,
-                ModBlockTagsProvider::new,
-                ModDamageTypeTagsProvider::new,
-                ModEntityTypeTagsProvider::new,
-                ModItemTagsProvider::new,
-                ModRecipeProvider::new,
-                ModAdvancementProvider::new);
+        DataProviderBuilder.of(MutantMonsters.MOD_ID)
+                .addWorldBootstrap(Registries.DAMAGE_TYPE, ModRegistry::bootstrapDamageTypes)
+                .addLootProvider(ModBlockLootProvider::new, LootContextParamSets.BLOCK)
+                .addLootProvider(ModBodyPartLootProvider::new, ModRegistry.BODY_PART_LOOT_CONTEXT_PARAM_SET)
+                .addLootProvider(ModEntityLootProvider::new, LootContextParamSets.ENTITY)
+                .addLootProvider(ModEntityTypeLootProvider::new, LootContextParamSets.ENTITY)
+                .addProvider(ModBiomeTagsProvider::new,
+                        ModBlockTagsProvider::new,
+                        ModDamageTypeTagsProvider::new,
+                        ModEntityTypeTagsProvider::new,
+                        ModItemTagsProvider::new)
+                .addRecipeProvider(ModRecipeProvider::new)
+                .addAdvancementProvider(ModAdvancementProvider::new);
     }
 
     private static void registerLoadingHandlers(IEventBus eventBus) {

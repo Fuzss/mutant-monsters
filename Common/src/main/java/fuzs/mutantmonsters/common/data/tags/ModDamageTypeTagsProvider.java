@@ -2,15 +2,15 @@ package fuzs.mutantmonsters.common.data.tags;
 
 import fuzs.mutantmonsters.common.init.ModRegistry;
 import fuzs.mutantmonsters.common.init.ModTags;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
-import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagProvider;
+import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v3.tags.AbstractTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 
-public class ModDamageTypeTagsProvider extends AbstractTagProvider<DamageType> {
+public class ModDamageTypeTagsProvider extends AbstractTagsProvider<DamageType> {
 
     public ModDamageTypeTagsProvider(DataProviderContext context) {
         super(Registries.DAMAGE_TYPE, context);

@@ -90,6 +90,11 @@ public class SkullSpirit extends Entity {
     }
 
     @Override
+    public MoveSimulationType getMoveSimulationType() {
+        return MoveSimulationType.SERVER_AND_CLIENT;
+    }
+
+    @Override
     public void tick() {
         if (this.getTarget() instanceof Mob target && target.isAlive()) {
             if (this.isAttached()) {

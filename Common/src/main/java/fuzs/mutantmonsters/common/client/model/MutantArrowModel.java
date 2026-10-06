@@ -10,7 +10,7 @@ import net.minecraft.util.Unit;
 public class MutantArrowModel extends Model<Unit> {
 
     public MutantArrowModel(ModelPart root) {
-        super(root, RenderTypes::entityTranslucentCullItemTarget);
+        super(root, RenderTypes::entityTranslucentCull);
     }
 
     public static LayerDefinition createBodyLayer() {

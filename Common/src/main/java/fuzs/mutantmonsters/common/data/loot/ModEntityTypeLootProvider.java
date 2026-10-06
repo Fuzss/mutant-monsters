@@ -2,9 +2,8 @@ package fuzs.mutantmonsters.common.data.loot;
 
 import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModItems;
-import fuzs.puzzleslib.common.api.data.v2.AbstractLootProvider;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
-import net.minecraft.world.entity.EntityType;
+import fuzs.puzzleslib.common.api.data.v3.loot.AbstractEntityLootSubProvider;
+import net.minecraft.data.loot.LootTableSubProvider;
 import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -13,23 +12,24 @@ import net.minecraft.world.level.storage.loot.entries.LootItem;
 import net.minecraft.world.level.storage.loot.entries.NestedLootTable;
 import net.minecraft.world.level.storage.loot.functions.EnchantedCountIncreaseFunction;
 import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
+import net.minecraft.world.level.storage.loot.providers.number.floats.ContextFloatProviders;
+import net.minecraft.world.level.storage.loot.providers.number.ints.ContextIntProviders;
 
-public class ModEntityTypeLootProvider extends AbstractLootProvider.EntityTypes {
+public class ModEntityTypeLootProvider extends AbstractEntityLootSubProvider {
 
-    public ModEntityTypeLootProvider(DataProviderContext context) {
-        super(context);
+    public ModEntityTypeLootProvider(LootTableSubProvider.Context output) {
+        super(output);
     }
 
     @Override
-    public void addLootTables() {
+    public void generate() {
         this.add(ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value(),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .add(LootItem.lootTableItem(Items.GUNPOWDER)
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(0.0F, 1.0F)))
-                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.registries(),
-                                                UniformGenerator.between(0.0F, 1.0F))))));
+                                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(0, 1)))
+                                        .apply(EnchantedCountIncreaseFunction.lootingMultiplier(this.enchantments,
+                                                ContextFloatProviders.between(0.0F, 1.0F))))));
         this.add(ModEntityTypes.ENDERSOUL_CLONE_ENTITY_TYPE.value(), LootTable.lootTable());
         this.add(ModEntityTypes.MUTANT_CREEPER_ENTITY_TYPE.value(), LootTable.lootTable());
         this.add(ModEntityTypes.MUTANT_ENDERMAN_ENTITY_TYPE.value(), LootTable.lootTable());
@@ -38,25 +38,16 @@ public class ModEntityTypeLootProvider extends AbstractLootProvider.EntityTypes 
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
                                 .add(LootItem.lootTableItem(Items.SNOWBALL)
-                                        .apply(SetItemCountFunction.setCount(UniformGenerator.between(32.0F,
-                                                48.0F))))));
+                                        .apply(SetItemCountFunction.setCount(ContextIntProviders.between(32, 48))))));
         this.add(ModEntityTypes.MUTANT_ZOMBIE_ENTITY_TYPE.value(),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool().add(LootItem.lootTableItem(ModItems.HULK_HAMMER_ITEM.value()))));
-        this.skipValidation(ModEntityTypes.SPIDER_PIG_ENTITY_TYPE.value());
         this.add(ModEntityTypes.SPIDER_PIG_ENTITY_TYPE.value(),
                 LootTable.lootTable()
                         .withPool(LootPool.lootPool()
-                                .add(NestedLootTable.lootTableReference(EntityTypes.PIG.getDefaultLootTable()
-                                        .orElseThrow()))
-                                .add(NestedLootTable.lootTableReference(EntityTypes.SPIDER.getDefaultLootTable()
-                                        .orElseThrow()))));
-    }
-
-    @Override
-    protected boolean canHaveLootTable(EntityType<?> entityType) {
-        return entityType == ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value()
-                || entityType == ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value()
-                || super.canHaveLootTable(entityType);
+                                .add(NestedLootTable.lootTableReference(this.lootTables.getOrThrow(EntityTypes.PIG.getDefaultLootTable()
+                                        .orElseThrow())))
+                                .add(NestedLootTable.lootTableReference(this.lootTables.getOrThrow(EntityTypes.SPIDER.getDefaultLootTable()
+                                        .orElseThrow())))));
     }
 }

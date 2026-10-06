@@ -49,7 +49,7 @@ public class PlayerEventsHandler {
         return EventResult.PASS;
     }
 
-    public static EventResult onArrowLoose(Player player, ItemStack weapon, Level level, MutableInt charge, boolean hasAmmo) {
+    public static EventResult onArrowLoose(Player player, ItemStack weapon, Level level, MutableInt charge) {
         if (IS_USING_BOW.get()) {
             return EventResult.PASS;
         } else if (player.getItemBySlot(EquipmentSlot.HEAD).is(ModItems.MUTANT_SKELETON_SKULL_ITEM)

@@ -2,15 +2,15 @@ package fuzs.mutantmonsters.common.data.tags;
 
 import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModTags;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
-import fuzs.puzzleslib.common.api.data.v2.tags.AbstractTagProvider;
+import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v3.tags.AbstractTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.EntityTypeTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypeIds;
 
-public class ModEntityTypeTagsProvider extends AbstractTagProvider<EntityType<?>> {
+public class ModEntityTypeTagsProvider extends AbstractTagsProvider<EntityType<?>> {
 
     public ModEntityTypeTagsProvider(DataProviderContext context) {
         super(Registries.ENTITY_TYPE, context);

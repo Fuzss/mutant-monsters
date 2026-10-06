@@ -21,7 +21,7 @@ import fuzs.mutantmonsters.common.world.level.MutatedExplosionHelper;
 import fuzs.puzzleslib.common.api.config.v3.ConfigHolder;
 import fuzs.puzzleslib.common.api.core.v1.ModConstructor;
 import fuzs.puzzleslib.common.api.core.v1.ModLoaderEnvironment;
-import fuzs.puzzleslib.common.api.core.v1.context.BiomeModificationsContext;
+import fuzs.puzzleslib.common.api.core.v1.context.BiomeTransformationsContext;
 import fuzs.puzzleslib.common.api.core.v1.context.EntityAttributesContext;
 import fuzs.puzzleslib.common.api.core.v1.context.PayloadTypesContext;
 import fuzs.puzzleslib.common.api.core.v1.context.SpawnPlacementsContext;
@@ -148,8 +148,8 @@ public class MutantMonsters implements ModConstructor {
     }
 
     @Override
-    public void onRegisterBiomeModifications(BiomeModificationsContext context) {
-        BiomeModificationsHandler.onRegisterBiomeModifications(context);
+    public void onRegisterBiomeTransformations(BiomeTransformationsContext context) {
+        BiomeModificationsHandler.onRegisterBiomeTransformations(context);
     }
 
     public static Identifier id(String name) {

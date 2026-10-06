@@ -34,8 +34,7 @@ public class MutantEndermanEyesLayer extends RenderLayer<MutantEndermanRenderSta
                     OverlayTexture.NO_OVERLAY,
                     color,
                     null,
-                    state.outlineColor,
-                    null);
+                    state.outlineColor);
         }
     }
 }

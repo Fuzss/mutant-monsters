@@ -675,7 +675,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
                         double z = target.getZ() - this.mob.getZ();
                         double d = Math.sqrt(x * x + z * z);
                         target.setDeltaMovement(x / d * 0.6, -1.2, z / d * 0.6);
-                        target.invulnerableTime = 10;
+                        target.setInvulnerableTime(10);
                         EntityUtil.sendPlayerVelocityPacket(target);
                         EntityUtil.stunRavager(target);
                         this.mob.playSound(ModSoundEvents.ENTITY_MUTANT_ZOMBIE_GRUNT_SOUND_EVENT.value(),
@@ -728,7 +728,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
         @Override
         public void start() {
             super.start();
-            this.mob.invulnerableTime = 20;
+            this.mob.setInvulnerableTime(20);
             this.mob.ambientSoundTime = -this.mob.getAmbientSoundInterval();
         }
 

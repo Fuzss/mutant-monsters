@@ -27,7 +27,7 @@ public class MutantSnowGolemHeldBlockLayer extends RenderLayer<MutantSnowGolemRe
             poseStack.translate(0.0, 0.9, 0.0);
             poseStack.scale(-scale, -scale, scale);
             poseStack.translate(-0.5, -0.5, 0.5);
-            poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+            poseStack.rotateDegrees(Axis.YP, 90.0F);
             state.throwingBlock.submit(poseStack,
                     submitNodeCollector,
                     lightCoords,

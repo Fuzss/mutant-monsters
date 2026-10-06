@@ -97,6 +97,11 @@ public class EndersoulFragment extends Entity implements TraceableEntity {
     }
 
     @Override
+    public MoveSimulationType getMoveSimulationType() {
+        return MoveSimulationType.SERVER_AND_CLIENT;
+    }
+
+    @Override
     public boolean isPickable() {
         return this.isAlive();
     }

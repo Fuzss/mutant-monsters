@@ -34,8 +34,7 @@ public abstract class EnderEnergySwirlLayer<S extends LivingEntityRenderState, M
                 OverlayTexture.NO_OVERLAY,
                 color,
                 null,
-                renderState.outlineColor,
-                null);
+                renderState.outlineColor);
         poseStack.popPose();
     }
 

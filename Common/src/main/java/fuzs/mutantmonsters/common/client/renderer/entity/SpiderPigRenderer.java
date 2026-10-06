@@ -42,7 +42,7 @@ public class SpiderPigRenderer extends MobRenderer<SpiderPig, SpiderPigRenderSta
     @Override
     public void extractRenderState(SpiderPig spiderPig, SpiderPigRenderState reusedState, float partialTick) {
         super.extractRenderState(spiderPig, reusedState, partialTick);
-        reusedState.attackTime = spiderPig.getAttackAnim(partialTick);
+        reusedState.attackTime = spiderPig.getSwingAnimation(partialTick);
         reusedState.saddle = spiderPig.getItemBySlot(EquipmentSlot.SADDLE).copy();
     }
 

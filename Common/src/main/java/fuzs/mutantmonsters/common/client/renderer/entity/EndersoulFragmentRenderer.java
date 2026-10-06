@@ -56,8 +56,7 @@ public class EndersoulFragmentRenderer extends EntityRenderer<EndersoulFragment,
                 OverlayTexture.NO_OVERLAY,
                 color,
                 null,
-                renderState.outlineColor,
-                null);
+                renderState.outlineColor);
         poseStack.popPose();
     }
 

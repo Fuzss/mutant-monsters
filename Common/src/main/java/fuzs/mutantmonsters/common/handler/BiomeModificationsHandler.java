@@ -4,12 +4,12 @@ import fuzs.mutantmonsters.common.MutantMonsters;
 import fuzs.mutantmonsters.common.config.CommonConfig;
 import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModTags;
-import fuzs.puzzleslib.common.api.biome.v1.BiomeLoadingContext;
-import fuzs.puzzleslib.common.api.biome.v1.BiomeLoadingPhase;
-import fuzs.puzzleslib.common.api.biome.v1.BiomeModificationContext;
-import fuzs.puzzleslib.common.api.biome.v1.SpawnerDataBuilder;
-import fuzs.puzzleslib.common.api.core.v1.context.BiomeModificationsContext;
+import fuzs.puzzleslib.common.api.biome.v2.BiomeLoadingPhase;
+import fuzs.puzzleslib.common.api.biome.v2.BiomeTransformer;
+import fuzs.puzzleslib.common.api.biome.v2.SpawnerDataBuilder;
+import fuzs.puzzleslib.common.api.core.v1.context.BiomeTransformationsContext;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EntityTypes;
@@ -24,7 +24,7 @@ public final class BiomeModificationsHandler {
         // NO-OP
     }
 
-    public static void onRegisterBiomeModifications(BiomeModificationsContext context) {
+    public static void onRegisterBiomeTransformations(BiomeTransformationsContext context) {
         registerMutantSpawn(context,
                 ModTags.WITHOUT_MUTANT_CREEPER_SPAWNS_BIOME_TAG,
                 () -> MutantMonsters.CONFIG.get(CommonConfig.class).mutantCreeperSpawnWeight,
@@ -47,17 +47,19 @@ public final class BiomeModificationsHandler {
                 ModEntityTypes.MUTANT_ZOMBIE_ENTITY_TYPE);
     }
 
-    private static void registerMutantSpawn(BiomeModificationsContext context, TagKey<Biome> withoutSpawnsTag, Supplier<Double> spawnWeightSupplier, Holder.Reference<? extends EntityType<?>> vanillaEntityType, Holder.Reference<? extends EntityType<?>> mutantEntityType) {
-        context.registerBiomeModification(BiomeLoadingPhase.ADDITIONS, (BiomeLoadingContext biomeLoadingContext) -> {
-            return !biomeLoadingContext.is(withoutSpawnsTag);
-        }, (BiomeModificationContext biomeModificationContext) -> {
-            Fraction spawnWeight = getSpawnWeight(spawnWeightSupplier);
-            SpawnerDataBuilder.create(biomeModificationContext.mobSpawnSettings(), vanillaEntityType.value())
-                    .setWeight(spawnWeight)
-                    .setMinCount(1)
-                    .setMaxCount(1)
-                    .apply(mutantEntityType.value());
-        });
+    private static void registerMutantSpawn(BiomeTransformationsContext context, TagKey<Biome> withoutSpawnsTag, Supplier<Double> spawnWeightSupplier, Holder.Reference<? extends EntityType<?>> vanillaEntityType, Holder.Reference<? extends EntityType<?>> mutantEntityType) {
+        context.registerBiomeTransformation(BiomeLoadingPhase.ADD,
+                (HolderGetter.Provider lookupProvider, Holder<Biome> biome) -> {
+                    return !biome.is(withoutSpawnsTag);
+                },
+                (HolderGetter.Provider lookupProvider, Holder<Biome> biome, BiomeTransformer.Context transformation) -> {
+                    Fraction spawnWeight = getSpawnWeight(spawnWeightSupplier);
+                    SpawnerDataBuilder.create(transformation.mobSpawns(), vanillaEntityType.value())
+                            .setWeight(spawnWeight)
+                            .setMinCount(1)
+                            .setMaxCount(1)
+                            .apply(mutantEntityType.value());
+                });
     }
 
     private static Fraction getSpawnWeight(Supplier<Double> spawnWeightSupplier) {

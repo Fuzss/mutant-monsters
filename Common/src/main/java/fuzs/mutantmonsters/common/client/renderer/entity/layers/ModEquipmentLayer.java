@@ -111,20 +111,18 @@ public class ModEquipmentLayer<S extends LivingEntityRenderState, RM extends Ent
                                     OverlayTexture.NO_OVERLAY,
                                     tintColor,
                                     null,
-                                    outlineColor,
-                                    null);
+                                    outlineColor);
                     if (hasFoil) {
                         nodeCollector.order(order++)
                                 .submitModel(armorModel,
                                         renderState,
                                         poseStack,
-                                        RenderTypes.armorEntityGlint(),
+                                        RenderTypes.armorCutoutNoCullGlint(identifier),
                                         packedLight,
                                         OverlayTexture.NO_OVERLAY,
                                         tintColor,
                                         null,
-                                        outlineColor,
-                                        null);
+                                        outlineColor);
                     }
 
                     hasFoil = false;

@@ -37,6 +37,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -625,7 +626,7 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
                 EnchantmentHelper.doPostAttackEffects(serverLevel, entity, damageSource);
             }
 
-            this.swing(InteractionHand.MAIN_HAND);
+            this.swingForAttack(InteractionHand.MAIN_HAND);
             return hurt;
         } else {
             return true;
@@ -758,7 +759,9 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
             if (this.level().isLoaded(pos)) {
                 do {
                     pos.move(Direction.DOWN);
-                } while (pos.getY() > this.level().getMinY() && !this.level().getBlockState(pos).blocksMotion());
+                } while (pos.getY() > this.level().getMinY() && !this.level()
+                        .getBlockState(pos)
+                        .is(BlockTags.BLOCKS_MOTION));
 
                 pos.move(Direction.UP);
                 AABB aabb = this.getType()
@@ -830,11 +833,11 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
     }
 
     @Override
-    protected void blockedByItem(LivingEntity defender, DamageSource source, float damage) {
+    protected void blockedByItem(LivingEntity defender, DamageSource source, float damage, boolean fullyBlocked) {
         if (this.isClone()) {
-            this.knockbackBlockedAttacker(defender, source, damage);
+            this.knockbackBlockedAttacker(defender, source, damage, fullyBlocked);
         } else {
-            super.blockedByItem(defender, source, damage);
+            super.blockedByItem(defender, source, damage, fullyBlocked);
         }
     }
 
@@ -1335,7 +1338,7 @@ public class MutantEnderman extends MutantMonster implements NeutralMob, Animate
         @Override
         public void start() {
             super.start();
-            this.mob.invulnerableTime = 20;
+            this.mob.setInvulnerableTime(20);
             AttributeInstance attribute = this.mob.getAttribute(Attributes.STEP_HEIGHT);
             if (!attribute.hasModifier(STEP_HEIGHT_MODIFIER_CLONING_ID)) {
                 attribute.addTransientModifier(STEP_HEIGHT_MODIFIER_CLONING);

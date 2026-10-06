@@ -13,6 +13,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.stats.Stats;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.EquipmentSlotGroup;
@@ -97,7 +98,7 @@ public class EndersoulHandItem extends Item {
                     BlockPos startPos = ((BlockHitResult) result).getBlockPos();
                     BlockPos endPos = startPos.relative(((BlockHitResult) result).getDirection());
                     BlockPos posDown = startPos.below();
-                    if (!serverLevel.isEmptyBlock(posDown) || !serverLevel.getBlockState(posDown).blocksMotion()) {
+                    if (!serverLevel.isEmptyBlock(posDown) || !serverLevel.getBlockState(posDown).is(BlockTags.BLOCKS_MOTION)) {
                         for (int i = 0; i < 3; ++i) {
                             BlockPos checkPos = startPos.above(i + 1);
                             if (serverLevel.isEmptyBlock(checkPos)) {
@@ -129,7 +130,9 @@ public class EndersoulHandItem extends Item {
                 }
 
                 player.fallDistance = 0.0F;
-                player.swing(interactionHand);
+                player.swing(interactionHand,
+                        player.getItemInHand(interactionHand).getInteractAnimation(),
+                        false);
                 player.awardStat(Stats.ITEM_USED.get(this));
                 return InteractionResult.SUCCESS;
             }

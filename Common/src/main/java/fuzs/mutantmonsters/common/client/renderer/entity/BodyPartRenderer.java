@@ -40,8 +40,8 @@ public class BodyPartRenderer extends EntityRenderer<MutantSkeletonBodyPart, Bod
     public void submit(BodyPartRenderState renderState, PoseStack poseStack, SubmitNodeCollector nodeCollector, CameraRenderState cameraRenderState) {
         super.submit(renderState, poseStack, nodeCollector, cameraRenderState);
         poseStack.pushPose();
-        poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot));
-        poseStack.mulPose(Axis.XP.rotationDegrees(renderState.xRot));
+        poseStack.rotateDegrees(Axis.YP, renderState.yRot);
+        poseStack.rotateDegrees(Axis.XP, renderState.xRot);
         poseStack.scale(1.2F, -1.2F, -1.2F);
         ModelPart modelPart = this.model.getBodyPart(renderState.bodyPart);
         RenderType renderType = this.model.renderType(MutantSkeletonRenderer.TEXTURE_LOCATION);

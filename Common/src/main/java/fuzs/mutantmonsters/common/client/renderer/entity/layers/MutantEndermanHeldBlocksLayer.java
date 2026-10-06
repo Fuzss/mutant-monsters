@@ -28,12 +28,12 @@ public class MutantEndermanHeldBlocksLayer extends RenderLayer<MutantEndermanRen
                     this.getParentModel().translateRotateArm(poseStack, i);
                     poseStack.translate(0.0, 1.2, 0.0);
                     float rotationAmount = state.ageInTicks + (i + 1) * 2.0F * Mth.PI;
-                    poseStack.mulPose(Axis.XP.rotationDegrees(rotationAmount * 10.0F));
-                    poseStack.mulPose(Axis.YP.rotationDegrees(rotationAmount * 8.0F));
-                    poseStack.mulPose(Axis.ZP.rotationDegrees(rotationAmount * 6.0F));
+                    poseStack.rotateDegrees(Axis.XP, rotationAmount * 10.0F);
+                    poseStack.rotateDegrees(Axis.YP, rotationAmount * 8.0F);
+                    poseStack.rotateDegrees(Axis.ZP, rotationAmount * 6.0F);
                     poseStack.scale(-0.75F, -0.75F, 0.75F);
                     poseStack.translate(-0.5, -0.5, 0.5);
-                    poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+                    poseStack.rotateDegrees(Axis.YP, 90.0F);
                     blockModel.submit(poseStack,
                             submitNodeCollector,
                             lightCoords,

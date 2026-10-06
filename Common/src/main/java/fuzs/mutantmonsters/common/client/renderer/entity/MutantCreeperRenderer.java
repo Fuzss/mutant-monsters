@@ -24,7 +24,7 @@ public class MutantCreeperRenderer extends MobRenderer<MutantCreeper, MutantCree
     @Override
     public void extractRenderState(MutantCreeper entity, MutantCreeperRenderState reusedState, float partialTick) {
         super.extractRenderState(entity, reusedState, partialTick);
-        reusedState.attackTime = entity.getAttackAnim(partialTick);
+        reusedState.attackTime = entity.getSwingAnimation(partialTick);
         reusedState.isJumpAttacking = entity.isJumpAttacking();
         reusedState.overlayColor = entity.getOverlayColor(partialTick);
         reusedState.isPowered = entity.isCharged();

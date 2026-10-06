@@ -10,12 +10,11 @@ import fuzs.mutantmonsters.common.world.level.block.entity.SkullWithItemComponen
 import fuzs.puzzleslib.common.api.attachment.v4.DataAttachmentRegistry;
 import fuzs.puzzleslib.common.api.attachment.v4.DataAttachmentType;
 import fuzs.puzzleslib.common.api.core.v1.ModLoaderEnvironment;
-import fuzs.puzzleslib.common.api.init.v3.registry.ContentRegistrationHelper;
 import fuzs.puzzleslib.common.api.init.v3.registry.RegistryManager;
 import fuzs.puzzleslib.common.api.network.v4.PlayerSet;
 import net.minecraft.core.Holder;
-import net.minecraft.core.RegistrySetBuilder;
 import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -44,8 +43,6 @@ import java.util.Set;
 import java.util.function.Function;
 
 public class ModRegistry {
-    public static final RegistrySetBuilder REGISTRY_SET_BUILDER = new RegistrySetBuilder().add(Registries.DAMAGE_TYPE,
-            ModRegistry::bootstrapDamageTypes);
     public static final SkullBlock.Type MUTANT_SKELETON_SKULL_TYPE = MutantMonsters.id("mutant_skeleton")::toString;
     static final RegistryManager REGISTRIES = RegistryManager.from(MutantMonsters.MOD_ID);
     public static final Holder.Reference<Block> MUTANT_SKELETON_SKULL_BLOCK = REGISTRIES.registerBlock(
@@ -55,7 +52,7 @@ public class ModRegistry {
             () -> BlockBehaviour.Properties.of()
                     .instrument(NoteBlockInstrument.SKELETON)
                     .strength(1.0F)
-                    .pushReaction(PushReaction.DESTROY));
+                    .pushReaction(PushReaction.POPPED));
     public static final Holder.Reference<Block> MUTANT_SKELETON_WALL_SKULL_BLOCK = REGISTRIES.registerBlock(
             "mutant_skeleton_wall_skull",
             (BlockBehaviour.Properties properties) -> new WallSkullWithItemComponentsBlock(MUTANT_SKELETON_SKULL_TYPE,
@@ -82,7 +79,8 @@ public class ModRegistry {
             () -> EntityDataSerializer.forValueType(MutantSkeletonBodyPart.BodyPart.STREAM_CODEC));
 
     public static final DataAttachmentType<Entity, List<SeismicWave>> SEISMIC_WAVE_ATTACHMENT_TYPE = DataAttachmentRegistry.<List<SeismicWave>>entityBuilder()
-            .defaultValue(EntityTypes.PLAYER, Collections.emptyList())
+            .defaultValue(BuiltInRegistries.ENTITY_TYPE.getResourceKey(EntityTypes.PLAYER).orElseThrow(),
+                    Collections.emptyList())
             .build(MutantMonsters.id("seismic_waves"));
 
     public static final ResourceKey<DamageType> PLAYER_SEISMIC_WAVE_DAMAGE_TYPE = REGISTRIES.registerDamageType(
@@ -112,21 +110,22 @@ public class ModRegistry {
             "charged_mutant_creeper/root");
     public static final ResourceKey<LootTable> CHARGED_CREEPER_MINION_LOOT_TABLE = REGISTRIES.registerLootTable(
             "charged_creeper_minion/root");
-    public static final ContextKeySet BODY_PART_LOOT_CONTEXT_PARAM_SET = ContentRegistrationHelper.registerContextKeySet(
-            MutantMonsters.id("body_part"),
-            (ContextKeySet.Builder builder) -> {
-                builder.required(LootContextParams.THIS_ENTITY);
-            });
+    public static final Holder.Reference<ContextKeySet> BODY_PART_LOOT_CONTEXT_PARAM_SET = REGISTRIES.register(
+            Registries.CONTEXT_KEY_SET,
+            "body_part",
+            () -> new ContextKeySet.Builder().required(LootContextParams.THIS_ENTITY).build());
 
     public static final DataAttachmentType<Entity, Optional<Boolean>> LEFT_SHOULDER_CREEPER_MINION_ATTACHMENT_TYPE = DataAttachmentRegistry.<Optional<Boolean>>entityBuilder()
-            .defaultValue(EntityTypes.PLAYER, Optional.empty())
+            .defaultValue(BuiltInRegistries.ENTITY_TYPE.getResourceKey(EntityTypes.PLAYER).orElseThrow(),
+                    Optional.empty())
             .networkSynchronized(ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional),
                     // Do not sync to players to bypass this bug in Fabric: https://github.com/FabricMC/fabric-api/issues/4943
                     ModLoaderEnvironment.INSTANCE.getModLoader().isFabric() ?
                             (Entity entity) -> Function.identity()::apply : PlayerSet::nearEntity)
             .build(MutantMonsters.id("left_shoulder_creeper_minion"));
     public static final DataAttachmentType<Entity, Optional<Boolean>> RIGHT_SHOULDER_CREEPER_MINION_ATTACHMENT_TYPE = DataAttachmentRegistry.<Optional<Boolean>>entityBuilder()
-            .defaultValue(EntityTypes.PLAYER, Optional.empty())
+            .defaultValue(BuiltInRegistries.ENTITY_TYPE.getResourceKey(EntityTypes.PLAYER).orElseThrow(),
+                    Optional.empty())
             .networkSynchronized(ByteBufCodecs.BOOL.apply(ByteBufCodecs::optional),
                     // Do not sync to players to bypass this bug in Fabric: https://github.com/FabricMC/fabric-api/issues/4943
                     ModLoaderEnvironment.INSTANCE.getModLoader().isFabric() ?

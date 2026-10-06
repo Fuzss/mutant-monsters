@@ -59,7 +59,7 @@ public class MutantZombieRenderer extends MobRenderer<MutantZombie, MutantZombie
     @Override
     protected void setupRotations(MutantZombieRenderState renderState, PoseStack poseStack, float bodyRot, float scale) {
         if (renderState.deathTime > 0.0F) {
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F - bodyRot));
+            poseStack.rotateDegrees(Axis.YP, 180.0F - bodyRot);
             float deathAmount = Math.min(20.0F, renderState.deathTime);
             boolean reviving = false;
             if (renderState.deathTime > 100.0F) {
@@ -80,7 +80,7 @@ public class MutantZombieRenderer extends MobRenderer<MutantZombie, MutantZombie
                     flipAmount = 1.0F;
                 }
 
-                poseStack.mulPose(Axis.XN.rotationDegrees(flipAmount * this.getFlipDegrees()));
+                poseStack.rotateDegrees(Axis.XN, flipAmount * this.getFlipDegrees());
             }
         } else {
             super.setupRotations(renderState, poseStack, bodyRot, scale);
@@ -108,7 +108,7 @@ public class MutantZombieRenderer extends MobRenderer<MutantZombie, MutantZombie
     }
 
     @Override
-    protected AABB getBoundingBoxForCulling(MutantZombie mutantZombie) {
-        return super.getBoundingBoxForCulling(mutantZombie).inflate(1.0);
+    protected AABB getBoundingBoxForCulling(MutantZombie mutantZombie, float partialTick) {
+        return super.getBoundingBoxForCulling(mutantZombie, partialTick).inflate(1.0);
     }
 }

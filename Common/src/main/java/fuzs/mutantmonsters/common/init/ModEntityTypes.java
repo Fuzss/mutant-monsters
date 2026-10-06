@@ -46,12 +46,14 @@ public class ModEntityTypes {
     public static final Holder.Reference<EntityType<MutantSkeletonBodyPart>> BODY_PART_ENTITY_TYPE = ModRegistry.REGISTRIES.registerEntityType(
             "body_part",
             () -> EntityType.Builder.<MutantSkeletonBodyPart>of(MutantSkeletonBodyPart::new, MobCategory.MISC)
+                    .noLootTable()
                     .clientTrackingRange(4)
                     .updateInterval(10)
                     .sized(0.7F, 0.7F));
     public static final Holder.Reference<EntityType<CreeperMinionEgg>> CREEPER_MINION_EGG_ENTITY_TYPE = ModRegistry.REGISTRIES.registerEntityType(
             "creeper_minion_egg",
             () -> EntityType.Builder.<CreeperMinionEgg>of(CreeperMinionEgg::new, MobCategory.MISC)
+                    .noLootTable()
                     .clientTrackingRange(10)
                     .updateInterval(20)
                     .sized(0.5625F, 0.75F)
@@ -63,6 +65,7 @@ public class ModEntityTypes {
     public static final Holder.Reference<EntityType<EndersoulFragment>> ENDERSOUL_FRAGMENT_ENTITY_TYPE = ModRegistry.REGISTRIES.registerEntityType(
             "endersoul_fragment",
             () -> EntityType.Builder.<EndersoulFragment>of(EndersoulFragment::new, MobCategory.MISC)
+                    .noLootTable()
                     .clientTrackingRange(4)
                     .updateInterval(10)
                     .sized(0.75F, 0.75F));
@@ -75,6 +78,7 @@ public class ModEntityTypes {
     public static final Holder.Reference<EntityType<ThrowableBlock>> THROWABLE_BLOCK_ENTITY_TYPE = ModRegistry.REGISTRIES.registerEntityType(
             "throwable_block",
             () -> EntityType.Builder.<ThrowableBlock>of(ThrowableBlock::new, MobCategory.MISC)
+                    .noLootTable()
                     .sized(1.0F, 1.0F)
                     .clientTrackingRange(6)
                     .updateInterval(Integer.MAX_VALUE));

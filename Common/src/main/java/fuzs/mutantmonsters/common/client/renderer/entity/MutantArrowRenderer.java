@@ -30,7 +30,7 @@ public class MutantArrowRenderer extends EntityRenderer<MutantArrow, MutantArrow
     }
 
     @Override
-    public boolean shouldRender(MutantArrow mutantArrow, Frustum camera, double camX, double camY, double camZ) {
+    public boolean shouldRender(MutantArrow mutantArrow, Frustum camera, double camX, double camY, double camZ, float partialTick) {
         return true;
     }
 
@@ -56,8 +56,8 @@ public class MutantArrowRenderer extends EntityRenderer<MutantArrow, MutantArrow
             poseStack.translate(0.0F, -2.35F, 0.5F);
             Vec3 deltaMovement = renderState.deltaMovement.scale(-0.1).multiply(i, i, i);
             poseStack.translate(deltaMovement.x, deltaMovement.y, deltaMovement.z);
-            poseStack.mulPose(Axis.YP.rotationDegrees(renderState.yRot));
-            poseStack.mulPose(Axis.XP.rotationDegrees(renderState.xRot));
+            poseStack.rotateDegrees(Axis.YP, renderState.yRot);
+            poseStack.rotateDegrees(Axis.XP, renderState.xRot);
             poseStack.scale(1.2F, 1.2F, 1.2F);
             RenderType renderType = this.model.renderType(TEXTURE_LOCATION);
             int color = ARGB.colorFromFloat(1.0F - i * 0.08F, 1.0F, 1.0F, 1.0F);
@@ -69,8 +69,7 @@ public class MutantArrowRenderer extends EntityRenderer<MutantArrow, MutantArrow
                     OverlayTexture.NO_OVERLAY,
                     color,
                     null,
-                    renderState.outlineColor,
-                    null);
+                    renderState.outlineColor);
             poseStack.popPose();
         }
     }

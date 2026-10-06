@@ -42,16 +42,16 @@ public class ThrowableBlockRenderer extends EntityRenderer<ThrowableBlock, Throw
         poseStack.pushPose();
         poseStack.translate(0.0, 0.5, 0.0);
         if (state.isLarge) {
-            poseStack.mulPose(Axis.YP.rotationDegrees(state.yRot));
+            poseStack.rotateDegrees(Axis.YP, state.yRot);
         } else {
             poseStack.scale(-0.75F, -0.75F, 0.75F);
         }
 
-        poseStack.mulPose(Axis.YP.rotationDegrees(45.0F));
-        poseStack.mulPose(Axis.XP.rotationDegrees(state.ageInTicks * 20.0F));
-        poseStack.mulPose(Axis.ZN.rotationDegrees(state.ageInTicks * 12.0F));
+        poseStack.rotateDegrees(Axis.YP, 45.0F);
+        poseStack.rotateDegrees(Axis.XP, state.ageInTicks * 20.0F);
+        poseStack.rotateDegrees(Axis.ZN, state.ageInTicks * 12.0F);
         poseStack.translate(-0.5F, -0.5F, 0.5F);
-        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+        poseStack.rotateDegrees(Axis.YP, 90.0F);
         state.blockModel.submit(poseStack,
                 submitNodeCollector,
                 state.lightCoords,

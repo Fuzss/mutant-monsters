@@ -46,8 +46,7 @@ public class EndersoulHandSpecialRenderer implements NoDataSpecialModelRenderer 
                 OverlayTexture.NO_OVERLAY,
                 color,
                 null,
-                outlineColor,
-                null);
+                outlineColor);
     }
 
     @Override

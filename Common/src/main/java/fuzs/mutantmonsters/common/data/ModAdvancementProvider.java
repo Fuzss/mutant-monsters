@@ -4,8 +4,8 @@ import fuzs.mutantmonsters.common.MutantMonsters;
 import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModItems;
 import fuzs.mutantmonsters.common.init.ModTags;
-import fuzs.puzzleslib.common.api.data.v2.AbstractAdvancementProvider;
-import fuzs.puzzleslib.common.api.data.v2.core.DataProviderContext;
+import fuzs.puzzleslib.common.api.data.v3.advancements.AbstractAdvancementProvider;
+import fuzs.puzzleslib.common.api.data.v3.advancements.AdvancementToken;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.advancements.AdvancementRequirements;
@@ -17,8 +17,9 @@ import net.minecraft.advancements.predicates.TagPredicate;
 import net.minecraft.advancements.predicates.entity.EntityEquipmentPredicate;
 import net.minecraft.advancements.predicates.entity.EntityPredicate;
 import net.minecraft.advancements.triggers.*;
-import net.minecraft.core.HolderLookup;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.DamageTypeTags;
@@ -30,7 +31,6 @@ import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.item.Items;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 public class ModAdvancementProvider extends AbstractAdvancementProvider {
     public static final AdvancementToken ROOT_ADVANCEMENT = new AdvancementToken(MutantMonsters.id("root"));
@@ -48,20 +48,21 @@ public class ModAdvancementProvider extends AbstractAdvancementProvider {
     public static final AdvancementToken YOU_DA_BOMBY_ADVANCEMENT = new AdvancementToken(MutantMonsters.id(
             "you_da_bomby"));
 
-    public ModAdvancementProvider(DataProviderContext context) {
-        super(context);
+    public ModAdvancementProvider(BootstrapContext<Advancement> output) {
+        super(output);
     }
 
     @Override
-    public void addAdvancements(HolderLookup.Provider registries, Consumer<AdvancementHolder> writer) {
-        HolderLookup.RegistryLookup<Item> itemLookup = registries.lookupOrThrow(Registries.ITEM);
-        HolderLookup.RegistryLookup<EntityType<?>> entityTypeLookup = registries.lookupOrThrow(Registries.ENTITY_TYPE);
-        Advancement.Builder.advancement()
+    public void generate() {
+        HolderGetter<Item> itemLookup = this.output.lookup(Registries.ITEM);
+        HolderGetter<EntityType<?>> entityTypeLookup = this.output.lookup(Registries.ENTITY_TYPE);
+        AdvancementHolder root = Advancement.Builder.advancement()
                 .display(display(new ItemStackTemplate(ModItems.ENDERSOUL_HAND_ITEM.value()),
-                        ROOT_ADVANCEMENT.id(),
-                        Identifier.withDefaultNamespace("gui/advancements/backgrounds/stone"),
-                        AdvancementType.TASK,
-                        false))
+                        ROOT_ADVANCEMENT.id())
+                        .setBackground(Identifier.withDefaultNamespace("gui/advancements/backgrounds/stone"))
+                        .setType(AdvancementType.TASK)
+                        .setHidden(false)
+                        .build())
                 .addCriterion("killed_something",
                         KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity()
                                 .of(entityTypeLookup, ModTags.MUTANTS_ENTITY_TYPE_TAG)))
@@ -69,35 +70,36 @@ public class ModAdvancementProvider extends AbstractAdvancementProvider {
                         KilledTrigger.TriggerInstance.entityKilledPlayer(EntityPredicate.Builder.entity()
                                 .of(entityTypeLookup, ModTags.MUTANTS_ENTITY_TYPE_TAG)))
                 .requirements(AdvancementRequirements.Strategy.OR)
-                .save(writer, ROOT_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
-                .display(display(new ItemStackTemplate(Items.FLINT_AND_STEEL), BURN_ZOMBIE_BURN_ADVANCEMENT.id()))
-                .parent(ROOT_ADVANCEMENT.asParent())
+                .save(this.output, ROOT_ADVANCEMENT.name());
+        AdvancementHolder burnZombieBurn = Advancement.Builder.advancement()
+                .display(display(new ItemStackTemplate(Items.FLINT_AND_STEEL),
+                        BURN_ZOMBIE_BURN_ADVANCEMENT.id()).build())
+                .parent(root)
                 .addCriterion("used_flint_and_steel",
                         PlayerInteractTrigger.TriggerInstance.itemUsedOnEntity(ItemPredicate.Builder.item()
                                         .of(itemLookup, Items.FLINT_AND_STEEL, Items.FIRE_CHARGE),
                                 Optional.of(EntityPredicate.wrap(EntityPredicate.Builder.entity()
                                         .of(entityTypeLookup, ModEntityTypes.MUTANT_ZOMBIE_ENTITY_TYPE.value())))))
-                .save(writer, BURN_ZOMBIE_BURN_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
-                .display(display(new ItemStackTemplate(Items.GUNPOWDER), GUNPOWDER_SPICE_ADVANCEMENT.id()))
-                .parent(ROOT_ADVANCEMENT.asParent())
+                .save(this.output, BURN_ZOMBIE_BURN_ADVANCEMENT.name());
+        AdvancementHolder gunpowderSpice = Advancement.Builder.advancement()
+                .display(display(new ItemStackTemplate(Items.GUNPOWDER), GUNPOWDER_SPICE_ADVANCEMENT.id()).build())
+                .parent(root)
                 .addCriterion("obtained_chemical_x",
                         InventoryChangeTrigger.TriggerInstance.hasItems(ItemPredicate.Builder.item()
                                 .of(itemLookup, ModItems.CHEMICAL_X_ITEM.value())))
-                .save(writer, GUNPOWDER_SPICE_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
-                .display(display(new ItemStackTemplate(Items.JACK_O_LANTERN), FROSTY_THE_SNOW_GOLEM_ADVANCEMENT.id()))
-                .parent(GUNPOWDER_SPICE_ADVANCEMENT.asParent())
+                .save(this.output, GUNPOWDER_SPICE_ADVANCEMENT.name());
+        AdvancementHolder frostyTheSnowGolem = Advancement.Builder.advancement()
+                .display(display(new ItemStackTemplate(Items.JACK_O_LANTERN),
+                        FROSTY_THE_SNOW_GOLEM_ADVANCEMENT.id()).build())
+                .parent(gunpowderSpice)
                 .addCriterion("created_mutant_snow_golem",
                         SummonedEntityTrigger.TriggerInstance.summonedEntity(EntityPredicate.Builder.entity()
                                 .of(entityTypeLookup, ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value())))
-                .save(writer, FROSTY_THE_SNOW_GOLEM_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
+                .save(this.output, FROSTY_THE_SNOW_GOLEM_ADVANCEMENT.name());
+        AdvancementHolder hulkSmash = Advancement.Builder.advancement()
                 .display(display(new ItemStackTemplate(ModItems.HULK_HAMMER_ITEM.value()),
-                        HULK_SMASH_ADVANCEMENT.id(),
-                        AdvancementType.GOAL))
-                .parent(BURN_ZOMBIE_BURN_ADVANCEMENT.asParent())
+                        HULK_SMASH_ADVANCEMENT.id()).setType(AdvancementType.GOAL).build())
+                .parent(burnZombieBurn)
                 .addCriterion("killed_mutant_zombie",
                         KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity()
                                         .of(entityTypeLookup, ModEntityTypes.MUTANT_ZOMBIE_ENTITY_TYPE.value()),
@@ -106,17 +108,16 @@ public class ModAdvancementProvider extends AbstractAdvancementProvider {
                                                 .equipment(EntityEquipmentPredicate.Builder.equipment()
                                                         .mainhand(ItemPredicate.Builder.item()
                                                                 .of(itemLookup, ModItems.HULK_HAMMER_ITEM.value()))))))
-                .save(writer, HULK_SMASH_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
+                .save(this.output, HULK_SMASH_ADVANCEMENT.name());
+        AdvancementHolder noBonesAboutIt = Advancement.Builder.advancement()
                 .display(display(new ItemStackTemplate(ModItems.MUTANT_SKELETON_SKULL_ITEM.value()),
-                        NO_BONES_ABOUT_IT_ADVANCEMENT.id(),
-                        AdvancementType.GOAL))
-                .parent(ROOT_ADVANCEMENT.asParent())
+                        NO_BONES_ABOUT_IT_ADVANCEMENT.id()).setType(AdvancementType.GOAL).build())
+                .parent(root)
                 .addCriterion("killed_mutant_skeleton",
                         KilledTrigger.TriggerInstance.playerKilledEntity(EntityPredicate.Builder.entity()
                                         .of(entityTypeLookup, ModEntityTypes.MUTANT_SKELETON_ENTITY_TYPE.value()),
                                 DamageSourcePredicate.Builder.damageType()
-                                        .tag(TagPredicate.is(DamageTypeTags.IS_PROJECTILE))
+                                        .tag(TagPredicate.is(this.damageTypes, DamageTypeTags.IS_PROJECTILE))
                                         .direct(EntityPredicate.Builder.entity()
                                                 .of(entityTypeLookup, EntityTypeTags.ARROWS)
                                                 .nbt(new NbtPredicate(Util.make(new CompoundTag(),
@@ -135,20 +136,20 @@ public class ModAdvancementProvider extends AbstractAdvancementProvider {
                                                         .feet(ItemPredicate.Builder.item()
                                                                 .of(itemLookup,
                                                                         ModItems.MUTANT_SKELETON_BOOTS_ITEM.value()))))))
-                .save(writer, NO_BONES_ABOUT_IT_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
-                .display(display(new ItemStackTemplate(Items.COBWEB), SPIDER_PIG_SPIDER_PIG_ADVANCEMENT.id()))
-                .parent(GUNPOWDER_SPICE_ADVANCEMENT.asParent())
+                .save(this.output, NO_BONES_ABOUT_IT_ADVANCEMENT.name());
+        AdvancementHolder spiderPigSpiderPig = Advancement.Builder.advancement()
+                .display(display(new ItemStackTemplate(Items.COBWEB), SPIDER_PIG_SPIDER_PIG_ADVANCEMENT.id()).build())
+                .parent(gunpowderSpice)
                 .addCriterion("created_spider_pig",
                         SummonedEntityTrigger.TriggerInstance.summonedEntity(EntityPredicate.Builder.entity()
                                 .of(entityTypeLookup, ModEntityTypes.SPIDER_PIG_ENTITY_TYPE.value())))
-                .save(writer, SPIDER_PIG_SPIDER_PIG_ADVANCEMENT.name());
-        Advancement.Builder.advancement()
-                .display(display(new ItemStackTemplate(Items.CREEPER_HEAD), YOU_DA_BOMBY_ADVANCEMENT.id()))
-                .parent(ROOT_ADVANCEMENT.asParent())
+                .save(this.output, SPIDER_PIG_SPIDER_PIG_ADVANCEMENT.name());
+        AdvancementHolder youDaBomby = Advancement.Builder.advancement()
+                .display(display(new ItemStackTemplate(Items.CREEPER_HEAD), YOU_DA_BOMBY_ADVANCEMENT.id()).build())
+                .parent(root)
                 .addCriterion("tamed_creeper_minion",
                         TameAnimalTrigger.TriggerInstance.tamedAnimal(EntityPredicate.Builder.entity()
                                 .of(entityTypeLookup, ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value())))
-                .save(writer, YOU_DA_BOMBY_ADVANCEMENT.name());
+                .save(this.output, YOU_DA_BOMBY_ADVANCEMENT.name());
     }
 }
