@@ -93,7 +93,7 @@ public abstract class MutantMonster extends Monster {
 
     @Override
     protected void blockedByItem(LivingEntity defender, DamageSource source, float damage, boolean fullyBlocked) {
-        defender.needsSync = true;
+        defender.syncVelocity = true;
     }
 
     protected void knockbackBlockedAttacker(LivingEntity defender, DamageSource source, float damage, boolean fullyBlocked) {
