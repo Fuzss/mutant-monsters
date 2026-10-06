@@ -435,7 +435,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
     protected void tickDeath() {
         if (this.getRemainingLives() > 0) {
             if (++this.deathTime >= REVIVE_AFTER_DEATH_TIME) {
-                this.deathTime = 0;
+                this.deathTime = this.oldDeathTime = 0;
                 this.killedByDamageSource = null;
                 this.setHealth(this.getMaxHealth() / 4.0F);
                 this.setRemainingLives(this.getRemainingLives() - 1);
@@ -588,7 +588,7 @@ public class MutantZombie extends MutantMonster implements AnimatedEntity {
     @Override
     public void readAdditionalAddEntityData(CompoundTag compoundTag) {
         AnimatedEntity.super.readAdditionalAddEntityData(compoundTag);
-        this.deathTime = compoundTag.getIntOr("death_time", 0);
+        this.deathTime = this.oldDeathTime = compoundTag.getIntOr("death_time", 0);
         this.vanishTime = compoundTag.getIntOr("vanish_time", 0);
         this.throwHitTick = compoundTag.getIntOr("throw_hit_tick", 0);
         this.throwFinishTick = compoundTag.getIntOr("throw_finish_tick", 0);
