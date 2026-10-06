@@ -3,15 +3,13 @@
   "criteria": {
     "tamed_creeper_minion": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "mutantmonsters:creeper_minion"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:creeper_minion"
           }
-        ]
+        }
       },
       "trigger": "minecraft:tame_animal"
     }

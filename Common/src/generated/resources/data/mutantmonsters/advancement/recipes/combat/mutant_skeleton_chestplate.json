@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "mutantmonsters:mutant_skeleton_chestplate"
+        "recipes": "mutantmonsters:mutant_skeleton_chestplate"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

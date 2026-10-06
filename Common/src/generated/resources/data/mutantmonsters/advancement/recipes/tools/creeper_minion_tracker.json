@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "mutantmonsters:creeper_minion_tracker"
+        "recipes": "mutantmonsters:creeper_minion_tracker"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

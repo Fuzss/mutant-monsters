@@ -43,7 +43,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "mutantmonsters:chemical_x"
+        "recipes": "mutantmonsters:chemical_x"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

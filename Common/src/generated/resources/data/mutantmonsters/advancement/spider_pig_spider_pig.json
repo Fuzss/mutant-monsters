@@ -3,15 +3,13 @@
   "criteria": {
     "created_spider_pig": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "mutantmonsters:spider_pig"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:spider_pig"
           }
-        ]
+        }
       },
       "trigger": "minecraft:summoned_entity"
     }

@@ -2,29 +2,25 @@
   "criteria": {
     "killed_by_something": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "#mutantmonsters:mutants"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "#mutantmonsters:mutants"
           }
-        ]
+        }
       },
       "trigger": "minecraft:entity_killed_player"
     },
     "killed_something": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "#mutantmonsters:mutants"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "#mutantmonsters:mutants"
           }
-        ]
+        }
       },
       "trigger": "minecraft:player_killed_entity"
     }

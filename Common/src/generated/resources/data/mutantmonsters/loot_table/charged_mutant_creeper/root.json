@@ -8,7 +8,7 @@
           "value": "minecraft:charged_creeper/root"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "mutantmonsters:charged_mutant_creeper/root"

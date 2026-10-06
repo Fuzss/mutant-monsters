@@ -3,15 +3,13 @@
   "criteria": {
     "killed_mutant_zombie": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "mutantmonsters:mutant_zombie"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:mutant_zombie"
           }
-        ],
+        },
         "killing_blow": {
           "direct_entity": {
             "minecraft:equipment": {

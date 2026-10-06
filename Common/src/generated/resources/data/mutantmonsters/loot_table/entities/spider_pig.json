@@ -12,7 +12,7 @@
           "value": "minecraft:entities/spider"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "mutantmonsters:entities/spider_pig"

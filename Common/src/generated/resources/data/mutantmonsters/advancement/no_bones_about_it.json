@@ -3,15 +3,13 @@
   "criteria": {
     "killed_mutant_skeleton": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "mutantmonsters:mutant_skeleton"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:mutant_skeleton"
           }
-        ],
+        },
         "killing_blow": {
           "direct_entity": {
             "minecraft:entity_type": "#minecraft:arrows",
@@ -36,7 +34,7 @@
           "tags": [
             {
               "expected": true,
-              "id": "minecraft:is_projectile"
+              "id": "#minecraft:is_projectile"
             }
           ]
         }

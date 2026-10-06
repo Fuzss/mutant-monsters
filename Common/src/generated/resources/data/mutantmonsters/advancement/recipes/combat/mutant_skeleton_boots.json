@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "mutantmonsters:mutant_skeleton_boots"
+        "recipes": "mutantmonsters:mutant_skeleton_boots"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

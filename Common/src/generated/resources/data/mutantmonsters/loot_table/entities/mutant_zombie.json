@@ -8,7 +8,7 @@
           "name": "mutantmonsters:hulk_hammer"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "mutantmonsters:entities/mutant_zombie"

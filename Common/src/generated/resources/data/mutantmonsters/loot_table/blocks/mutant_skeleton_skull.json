@@ -2,30 +2,26 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "conditions": [
-        {
-          "condition": "minecraft:survives_explosion"
-        }
-      ],
+      "condition": {
+        "type": "minecraft:survives_explosion"
+      },
       "entries": [
         {
           "type": "minecraft:item",
-          "functions": [
-            {
-              "function": "minecraft:copy_components",
-              "include": [
-                "minecraft:custom_name",
-                "minecraft:damage",
-                "minecraft:enchantments",
-                "minecraft:repair_cost"
-              ],
-              "source": "block_entity"
-            }
-          ],
+          "modifier": {
+            "type": "minecraft:copy_components",
+            "include": [
+              "minecraft:custom_name",
+              "minecraft:damage",
+              "minecraft:enchantments",
+              "minecraft:repair_cost"
+            ],
+            "source": "block_entity"
+          },
           "name": "mutantmonsters:mutant_skeleton_skull"
         }
       ],
-      "rolls": 1.0
+      "rolls": 1
     }
   ],
   "random_sequence": "mutantmonsters:blocks/mutant_skeleton_skull"

@@ -3,15 +3,13 @@
   "criteria": {
     "used_flint_and_steel": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "mutantmonsters:mutant_zombie"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:mutant_zombie"
           }
-        ],
+        },
         "item": {
           "items": [
             "minecraft:flint_and_steel",

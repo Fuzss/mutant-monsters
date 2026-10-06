@@ -23,7 +23,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "mutantmonsters:mutant_skeleton_leggings"
+        "recipes": "mutantmonsters:mutant_skeleton_leggings"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -3,15 +3,13 @@
   "criteria": {
     "created_mutant_snow_golem": {
       "conditions": {
-        "entity": [
-          {
-            "condition": "minecraft:entity_properties",
-            "entity": "this",
-            "predicate": {
-              "minecraft:entity_type": "mutantmonsters:mutant_snow_golem"
-            }
+        "entity": {
+          "type": "minecraft:entity_properties",
+          "entity": "this",
+          "predicate": {
+            "minecraft:entity_type": "mutantmonsters:mutant_snow_golem"
           }
-        ]
+        }
       },
       "trigger": "minecraft:summoned_entity"
     }
