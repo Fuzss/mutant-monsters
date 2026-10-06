@@ -78,11 +78,6 @@ public class ModRegistry {
             "body_part",
             () -> EntityDataSerializer.forValueType(MutantSkeletonBodyPart.BodyPart.STREAM_CODEC));
 
-    public static final DataAttachmentType<Entity, List<SeismicWave>> SEISMIC_WAVE_ATTACHMENT_TYPE = DataAttachmentRegistry.<List<SeismicWave>>entityBuilder()
-            .defaultValue(BuiltInRegistries.ENTITY_TYPE.getResourceKey(EntityTypes.PLAYER).orElseThrow(),
-                    Collections.emptyList())
-            .build(MutantMonsters.id("seismic_waves"));
-
     public static final ResourceKey<DamageType> PLAYER_SEISMIC_WAVE_DAMAGE_TYPE = REGISTRIES.registerDamageType(
             "player_seismic_wave");
     public static final ResourceKey<DamageType> MUTANT_SKELETON_SHATTER_DAMAGE_TYPE = REGISTRIES.registerDamageType(
@@ -115,6 +110,10 @@ public class ModRegistry {
             "body_part",
             () -> new ContextKeySet.Builder().required(LootContextParams.THIS_ENTITY).build());
 
+    public static final DataAttachmentType<Entity, List<SeismicWave>> SEISMIC_WAVE_ATTACHMENT_TYPE = DataAttachmentRegistry.<List<SeismicWave>>entityBuilder()
+            .defaultValue(BuiltInRegistries.ENTITY_TYPE.getResourceKey(EntityTypes.PLAYER).orElseThrow(),
+                    Collections.emptyList())
+            .build(MutantMonsters.id("seismic_waves"));
     public static final DataAttachmentType<Entity, Optional<Boolean>> LEFT_SHOULDER_CREEPER_MINION_ATTACHMENT_TYPE = DataAttachmentRegistry.<Optional<Boolean>>entityBuilder()
             .defaultValue(BuiltInRegistries.ENTITY_TYPE.getResourceKey(EntityTypes.PLAYER).orElseThrow(),
                     Optional.empty())

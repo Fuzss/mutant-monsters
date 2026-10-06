@@ -144,7 +144,7 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
 
     @Override
     public boolean canBeAffected(MobEffectInstance mobEffect) {
-        return mobEffect.getEffect() != MobEffects.POISON && super.canBeAffected(mobEffect);
+        return !mobEffect.is(MobEffects.POISON) && super.canBeAffected(mobEffect);
     }
 
     @Override
@@ -186,7 +186,7 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
         if (!onlyCheckSize) {
             for (int i = 0; i < this.webs.size(); ++i) {
                 WebPos coord = this.webs.get(i);
-                if (this.level().getBlockState(coord) != Blocks.COBWEB.defaultBlockState()) {
+                if (!this.level().getBlockState(coord).is(Blocks.COBWEB)) {
                     this.webs.remove(i);
                     --i;
                 } else {
@@ -284,9 +284,9 @@ public class SpiderPig extends TamableAnimal implements PlayerRideableJumping, N
         }
 
         float damageAmount = (float) this.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        if (target.getType() != this.getType() && !target.is(ModTags.SPIDER_PIG_FRIENDS_ENTITY_TYPE_TAG)) {
+        if (!target.is(this.getType()) && !target.is(ModTags.SPIDER_PIG_FRIENDS_ENTITY_TYPE_TAG)) {
             if (serverLevel.getBlockStates(target.getBoundingBox())
-                    .anyMatch(Blocks.COBWEB.defaultBlockState()::equals)) {
+                    .anyMatch((BlockState state) -> state.is(Blocks.COBWEB))) {
                 damageAmount += 4.0F;
             }
         }

@@ -147,7 +147,7 @@ public class MutantSnowGolem extends AbstractGolem implements RangedAttackMob, S
         if (level.environmentAttributes().getValue(EnvironmentAttributes.SNOW_GOLEM_MELTS, this.position())) {
             return -10.0F;
         } else {
-            return level.getBlockState(pos).getBlock() == Blocks.SNOW ? 10.0F : 0.0F;
+            return level.getBlockState(pos).is(Blocks.SNOW) ? 10.0F : 0.0F;
         }
     }
 
@@ -394,7 +394,7 @@ public class MutantSnowGolem extends AbstractGolem implements RangedAttackMob, S
         InteractionResult interactionResult = itemInHand.interactLivingEntity(player, this, interactionHand);
         if (interactionResult.consumesAction()) {
             return interactionResult;
-        } else if (itemInHand.getItem() == Items.SNOWBALL) {
+        } else if (itemInHand.is(Items.SNOWBALL)) {
             return InteractionResult.PASS;
         } else if (itemInHand.isEmpty() && this.getOwnerReference() == null) {
             if (this.level() instanceof ServerLevel serverLevel) {

@@ -5,6 +5,7 @@ import fuzs.puzzleslib.common.api.data.v3.core.DataProviderContext;
 import fuzs.puzzleslib.common.api.data.v3.tags.AbstractTagsProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.references.BlockItemIds;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 
@@ -18,5 +19,9 @@ public class ModBlockTagsProvider extends AbstractTagsProvider<Block> {
     public void addTags(HolderLookup.Provider provider) {
         this.tag(ModTags.ENDERSOUL_HAND_HOLDABLE_IMMUNE_BLOCK_TAG).addTag(BlockTags.WITHER_IMMUNE);
         this.tag(ModTags.MUTANT_ENDERMAN_HOLDABLE_IMMUNE_BLOCK_TAG).addTag(BlockTags.WITHER_IMMUNE);
+        this.tag(ModTags.TURNS_INTO_DIRT_BLOCK_TAG)
+                .addTag(BlockTags.GRASS_BLOCKS)
+                .add(BlockItemIds.DIRT_PATH.block())
+                .add(BlockItemIds.FARMLAND.block());
     }
 }

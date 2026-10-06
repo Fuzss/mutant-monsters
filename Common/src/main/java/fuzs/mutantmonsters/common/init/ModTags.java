@@ -32,6 +32,7 @@ public class ModTags {
             "endersoul_hand_holdable_immune");
     public static final TagKey<Block> MUTANT_ENDERMAN_HOLDABLE_IMMUNE_BLOCK_TAG = TAGS.registerBlockTag(
             "mutant_enderman_holdable_immune");
+    public static final TagKey<Block> TURNS_INTO_DIRT_BLOCK_TAG = TAGS.registerBlockTag("turns_into_dirt");
     public static final TagKey<DamageType> MUTANT_ENDERMAN_DODGE_DAMAGE_TYPE_TAG = TAGS.registerDamageTypeTag(
             "mutant_enderman_dodge");
 

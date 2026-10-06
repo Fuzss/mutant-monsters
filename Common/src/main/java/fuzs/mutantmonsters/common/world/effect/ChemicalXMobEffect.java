@@ -18,8 +18,8 @@ public class ChemicalXMobEffect extends InstantaneousMobEffect {
     public static final TargetingConditions.Selector IS_APPLICABLE = (LivingEntity livingEntity, ServerLevel serverLevel) -> {
         return !livingEntity.is(ModTags.BOSSES_ENTITY_TYPE_TAG)
                 && !MutantMonsters.CONFIG.get(ServerConfig.class).mutantXConversions.containsValue(livingEntity.getType())
-                && livingEntity.getType() != ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value()
-                && livingEntity.getType() != ModEntityTypes.ENDERSOUL_CLONE_ENTITY_TYPE.value();
+                && !livingEntity.is(ModEntityTypes.CREEPER_MINION_ENTITY_TYPE.value())
+                && !livingEntity.is(ModEntityTypes.ENDERSOUL_CLONE_ENTITY_TYPE.value());
     };
     public static final TargetingConditions TARGET_PREDICATE = TargetingConditions.forNonCombat()
             .selector(IS_APPLICABLE);

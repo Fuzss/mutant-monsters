@@ -30,7 +30,7 @@ public class SpawningPreventionHandler {
             if (spawnLimit != -1) {
                 long entitiesOfType = StreamSupport.stream(serverLevel.getAllEntities().spliterator(), false)
                         .filter((Entity currentEntity) -> {
-                            return currentEntity.getType() == entity.getType();
+                            return currentEntity.is(entity.getType());
                         })
                         .count();
                 if (entitiesOfType >= spawnLimit) {

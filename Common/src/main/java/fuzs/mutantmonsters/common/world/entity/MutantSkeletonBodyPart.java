@@ -181,7 +181,7 @@ public class MutantSkeletonBodyPart extends Entity implements TraceableEntity {
     }
 
     private boolean canHarm(Entity entity) {
-        return entity.isPickable() && entity.getType() != ModEntityTypes.MUTANT_SKELETON_ENTITY_TYPE.value();
+        return entity.isPickable() && !entity.is(ModEntityTypes.MUTANT_SKELETON_ENTITY_TYPE.value());
     }
 
     @Override

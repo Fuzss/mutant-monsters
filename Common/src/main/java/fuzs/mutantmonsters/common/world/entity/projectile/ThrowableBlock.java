@@ -134,8 +134,7 @@ public class ThrowableBlock extends ThrowableProjectile {
     }
 
     public boolean isThrownBySnowGolem() {
-        return this.getOwner() != null
-                && this.getOwner().getType() == ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value();
+        return this.getOwner() != null && this.getOwner().is(ModEntityTypes.MUTANT_SNOW_GOLEM_ENTITY_TYPE.value());
     }
 
     @Override
@@ -251,7 +250,7 @@ public class ThrowableBlock extends ThrowableProjectile {
         ItemStack itemStack = player.getItemInHand(interactionHand);
         if (player.isSecondaryUseActive()) {
             return InteractionResult.PASS;
-        } else if (itemStack.getItem() != ModItems.ENDERSOUL_HAND_ITEM.value()) {
+        } else if (!itemStack.is(ModItems.ENDERSOUL_HAND_ITEM)) {
             return InteractionResult.PASS;
         } else if (this.isHeld()) {
             if (this.getOwner() == player) {

@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import fuzs.mutantmonsters.common.init.ModRegistry;
+import fuzs.mutantmonsters.common.init.ModTags;
 import fuzs.mutantmonsters.common.network.ClientboundSeismicWaveFluidParticlesMessage;
 import fuzs.mutantmonsters.common.services.CommonAbstractions;
 import fuzs.puzzleslib.common.api.network.v4.MessageSender;
@@ -130,9 +131,7 @@ public class SeismicWave extends BlockPos {
             Player playerEntity = entity instanceof Player ? (Player) entity : null;
             if (playerEntity != null && playerEntity.mayBuild() || serverLevel.getGameRules()
                     .get(GameRules.MOB_GRIEFING)) {
-                if (blockstate.is(Blocks.GRASS_BLOCK) || blockstate.is(Blocks.DIRT_PATH)
-                        || blockstate.is(Blocks.FARMLAND) || blockstate.is(Blocks.PODZOL)
-                        || blockstate.is(Blocks.MYCELIUM)) {
+                if (blockstate.is(ModTags.TURNS_INTO_DIRT_BLOCK_TAG)) {
                     serverLevel.setBlockAndUpdate(this, Blocks.DIRT.defaultBlockState());
                 }
 

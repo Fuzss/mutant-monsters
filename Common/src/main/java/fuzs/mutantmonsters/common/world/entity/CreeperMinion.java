@@ -301,7 +301,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
     public InteractionResult mobInteract(Player player, InteractionHand interactionHand) {
         ItemStack itemInHand = player.getItemInHand(interactionHand);
         if (this.isTame()) {
-            if (itemInHand.is(ModItems.CREEPER_MINION_TRACKER_ITEM.value())) {
+            if (itemInHand.is(ModItems.CREEPER_MINION_TRACKER_ITEM)) {
                 if (this.level().isClientSide()) {
                     Proxy.INSTANCE.displayCreeperMinionTrackerGUI(this);
                 }
@@ -378,7 +378,7 @@ public class CreeperMinion extends ShoulderRidingEntity {
             }
 
             return InteractionResult.SUCCESS;
-        } else if (player.isCreative() && itemInHand.is(ModItems.CREEPER_MINION_TRACKER_ITEM.value())
+        } else if (player.isCreative() && itemInHand.is(ModItems.CREEPER_MINION_TRACKER_ITEM)
                 && this.getOwner() == null) {
             if (!this.level().isClientSide() && player instanceof ServerPlayer serverPlayer) {
                 this.setTame(true, true);
