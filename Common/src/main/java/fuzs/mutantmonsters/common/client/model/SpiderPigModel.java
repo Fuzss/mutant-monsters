@@ -136,7 +136,7 @@ public class SpiderPigModel extends EntityModel<SpiderPigRenderState> {
                 CubeListBuilder.create()
                         .texOffs(16, 37)
                         .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-0.1F)),
-                PartPose.offsetAndRotation(-2.5F, 2.0F, 7.0F, -0.3654898F, 0.1469752F, 0.3654898F));
+                PartPose.offsetAndRotation(-2.5F, 2.0F, 7.0F, -Mth.PI / 8.0F, 0.0F, Mth.PI / 8.0F));
 
         rightHindLeg.addOrReplaceChild(RIGHT_HIND_LEG_LOWER,
                 CubeListBuilder.create()
@@ -149,7 +149,7 @@ public class SpiderPigModel extends EntityModel<SpiderPigRenderState> {
                         .texOffs(32, 37)
                         .mirror()
                         .addBox(-2.0F, 0.0F, -2.0F, 4.0F, 4.0F, 4.0F, new CubeDeformation(-0.1F)),
-                PartPose.offsetAndRotation(2.5F, 2.0F, 7.0F, -0.3654898F, -0.1469752F, -0.3654898F));
+                PartPose.offsetAndRotation(2.5F, 2.0F, 7.0F, -Mth.PI / 8.0F, 0.0F, -Mth.PI / 8.0F));
 
         leftHindLeg.addOrReplaceChild(LEFT_HIND_LEG_LOWER,
                 CubeListBuilder.create()

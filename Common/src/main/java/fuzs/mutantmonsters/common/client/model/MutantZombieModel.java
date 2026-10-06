@@ -316,9 +316,9 @@ public class MutantZombieModel extends EntityModel<MutantZombieRenderState> {
             this.leftArm.zRot += throwAmount * Mth.PI / 8.0F;
         } else if (state.animationTime < 5.0F) {
             this.chest.xRot -= 0.4F;
-            --this.rightArm.xRot;
+            this.rightArm.xRot -= 1.8F;
             this.rightArm.zRot = 0.0F;
-            --this.leftArm.xRot;
+            this.leftArm.xRot -= 1.8F;
             this.leftArm.zRot = 0.0F;
         } else {
             if (state.animationTime < 8.0F) {
@@ -418,10 +418,10 @@ public class MutantZombieModel extends EntityModel<MutantZombieRenderState> {
             this.head.yRot += Mth.PI / 5.0F;
             this.chest.xRot -= Mth.PI / 12.0F;
             this.waist.xRot -= Mth.PI / 10.0F;
-            --this.rightArm.xRot;
-            ++this.rightArm.yRot;
-            --this.leftArm.xRot;
-            --this.leftArm.yRot;
+            this.rightArm.xRot -= Mth.PI / 2.0F;
+            this.rightArm.yRot += 1.1219975F;
+            this.leftArm.xRot -= Mth.PI / 2.0F;
+            this.leftArm.yRot -= 1.1219975F;
             this.rightLeg.xRot += Mth.PI / 6.0F;
             this.rightLeg.zRot += Mth.PI / 12.0F;
             this.leftLeg.xRot += Mth.PI / 6.0F;

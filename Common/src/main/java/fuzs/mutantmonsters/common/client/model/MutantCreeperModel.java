@@ -74,7 +74,7 @@ public class MutantCreeperModel extends EntityModel<MutantCreeperRenderState> {
 
         PartDefinition rightHindLeg = pelvis.addOrReplaceChild(PartNames.RIGHT_HIND_LEG,
                 CubeListBuilder.create().texOffs(0, 44).mirror().addBox(-2.0F, -4.0F, 0.0F, 4.0F, 4.0F, 14.0F, g),
-                PartPose.offsetAndRotation(-2.0F, -2.0F, 4.0F, 0.9F, -Mth.PI / 5.0F, 0.0F));
+                PartPose.offsetAndRotation(-2.0F, -2.0F, 4.0F, Mth.PI / 3.0F, -Mth.PI / 5.0F, 0.0F));
 
         rightHindLeg.addOrReplaceChild(RIGHT_HIND_LEG_LOWER,
                 CubeListBuilder.create().texOffs(80, 28).mirror().addBox(-3.0F, 0.0F, -3.0F, 6.0F, 18.0F, 6.0F, g),
@@ -82,7 +82,7 @@ public class MutantCreeperModel extends EntityModel<MutantCreeperRenderState> {
 
         PartDefinition leftHindLeg = pelvis.addOrReplaceChild(PartNames.LEFT_HIND_LEG,
                 CubeListBuilder.create().texOffs(0, 44).addBox(-2.0F, -4.0F, 0.0F, 4.0F, 4.0F, 14.0F, g),
-                PartPose.offsetAndRotation(2.0F, -2.0F, 4.0F, 0.9F, Mth.PI / 5.0F, 0.0F));
+                PartPose.offsetAndRotation(2.0F, -2.0F, 4.0F, Mth.PI / 3.0F, Mth.PI / 5.0F, 0.0F));
 
         leftHindLeg.addOrReplaceChild(LEFT_HIND_LEG_LOWER,
                 CubeListBuilder.create().texOffs(80, 28).addBox(-3.0F, 0.0F, -3.0F, 6.0F, 18.0F, 6.0F, g),

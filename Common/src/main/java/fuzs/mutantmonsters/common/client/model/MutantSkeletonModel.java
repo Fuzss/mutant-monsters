@@ -347,7 +347,7 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
 
             innerDrawingArm.xRot += -Mth.PI / 3.0F;
             drawingArm.yRot += -Mth.PI / 5.0F * (float) offset;
-            drawingArm.zRot += (float) offset;
+            drawingArm.zRot += Mth.PI / 3.0F * (float) offset;
             drawingForearm.xRot += Mth.PI / 7.0F;
             innerHoldingArm.xRot += -5.0F * Mth.PI / 6.0F;
             holdingArm.yRot += Mth.PI / 5.0F * (float) offset;
@@ -478,7 +478,7 @@ public class MutantSkeletonModel extends EntityModel<MutantSkeletonRenderState> 
 
                 innerDrawingArm.xRot += -Mth.PI / 3.0F;
                 drawingArm.yRot += -Mth.PI / 5.0F * (float) offset;
-                drawingArm.zRot += (float) offset;
+                drawingArm.zRot += Mth.PI / 3.0F * (float) offset;
                 drawingForearm.xRot += Mth.PI / 7.0F;
                 innerHoldingArm.xRot += -5.0F * Mth.PI / 6.0F;
                 holdingArm.yRot += Mth.PI / 5.0F * (float) offset;

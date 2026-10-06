@@ -643,7 +643,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.rightArm.arm.xRot += -liftAmount * 0.8F;
             this.rightArm.arm.yRot += 0.2F;
             this.rightArm.arm.zRot += 0.8F;
-            ++this.rightArm.hand.yRot;
+            this.rightArm.hand.yRot += 1.7F;
             this.leftArm.arm.xRot += -liftAmount * 0.8F;
             this.leftArm.arm.yRot += -0.2F;
             this.leftArm.arm.zRot += -0.8F;
@@ -651,7 +651,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.lowerRightArm.arm.xRot += -liftAmount * 0.9F;
             this.lowerRightArm.arm.yRot += 0.2F;
             this.lowerRightArm.arm.zRot += 0.6F;
-            ++this.lowerRightArm.hand.yRot;
+            this.lowerRightArm.hand.yRot += 1.7F;
             this.lowerLeftArm.arm.xRot += -liftAmount * 0.9F;
             this.lowerLeftArm.arm.yRot += -0.2F;
             this.lowerLeftArm.arm.zRot += -0.6F;
@@ -660,7 +660,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.rightArm.arm.xRot += -0.8F;
             this.rightArm.arm.yRot += 0.2F;
             this.rightArm.arm.zRot += 0.8F;
-            ++this.rightArm.hand.yRot;
+            this.rightArm.hand.yRot += 1.7F;
             this.leftArm.arm.xRot += -0.8F;
             this.leftArm.arm.yRot += -0.2F;
             this.leftArm.arm.zRot += -0.8F;
@@ -668,7 +668,7 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.lowerRightArm.arm.xRot += -0.9F;
             this.lowerRightArm.arm.yRot += 0.2F;
             this.lowerRightArm.arm.zRot += 0.6F;
-            ++this.lowerRightArm.hand.yRot;
+            this.lowerRightArm.hand.yRot += 1.7F;
             this.lowerLeftArm.arm.xRot += -0.9F;
             this.lowerLeftArm.arm.yRot += -0.2F;
             this.lowerLeftArm.arm.zRot += -0.6F;
@@ -764,10 +764,10 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             this.chest.xRot += -0.8F;
             this.abdomen.xRot += -0.2F;
             this.pelvis.y += -12.0F;
-            ++this.rightArm.arm.yRot;
+            this.rightArm.arm.yRot += 1.8F;
             this.leftArm.arm.yRot += -1.8F;
             this.lowerRightArm.arm.xRot += 0.1F;
-            ++this.lowerRightArm.arm.yRot;
+            this.lowerRightArm.arm.yRot += 1.5F;
             this.lowerLeftArm.arm.xRot += 0.1F;
             this.lowerLeftArm.arm.yRot += -1.5F;
             this.rightLeg.xRot += 0.8F;
@@ -815,9 +815,9 @@ public class MutantEndermanModel extends EntityModel<MutantEndermanRenderState> 
             PartDefinition arm = root.addOrReplaceChild(prefix + "arm",
                     CubeListBuilder.create()
                             .texOffs(92, 0)
-                            .addBox(-1.5F, lower ? 6.0F : 0.0F, -1.5F, 3.0F, 22.0F, 3.0F, new CubeDeformation(0.1F))
+                            .addBox(-1.5F, 0.0F, -1.5F, 3.0F, 22.0F, 3.0F, new CubeDeformation(0.1F))
                             .mirror(!right),
-                    PartPose.offsetAndRotation(right ? -4.0F : 4.0F, -14.0F, 0.0F, rootXRot, 0.0F, rootZRot));
+                    PartPose.offsetAndRotation(right ? -4.0F : 4.0F, lower ? -8.0F : -14.0F, 0.0F, rootXRot, 0.0F, rootZRot));
             PartDefinition foreArm = arm.addOrReplaceChild("fore_arm",
                     CubeListBuilder.create()
                             .texOffs(104, 0)
