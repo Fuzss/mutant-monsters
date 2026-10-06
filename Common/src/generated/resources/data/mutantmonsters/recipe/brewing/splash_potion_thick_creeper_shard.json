@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:brewing",
+  "input": {
+    "item": "minecraft:splash_potion",
+    "potion_contents": {
+      "potions": "minecraft:thick"
+    }
+  },
+  "output": {
+    "components": {
+      "minecraft:potion_contents": {
+        "custom_effects": [
+          {
+            "duration": 1,
+            "id": "mutantmonsters:chemical_x",
+            "show_icon": true
+          }
+        ]
+      }
+    },
+    "id": "mutantmonsters:chemical_x"
+  },
+  "reagent": {
+    "item": "mutantmonsters:creeper_shard"
+  }
+}
