@@ -1,4 +1,4 @@
-package fuzs.mutantmonsters.common.data;
+package fuzs.mutantmonsters.common.data.advancements;
 
 import fuzs.mutantmonsters.common.MutantMonsters;
 import fuzs.mutantmonsters.common.init.ModEntityTypes;

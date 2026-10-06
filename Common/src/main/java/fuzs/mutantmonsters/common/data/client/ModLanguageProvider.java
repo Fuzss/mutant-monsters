@@ -2,7 +2,7 @@ package fuzs.mutantmonsters.common.data.client;
 
 import fuzs.mutantmonsters.common.MutantMonsters;
 import fuzs.mutantmonsters.common.client.gui.screens.CreeperMinionTrackerScreen;
-import fuzs.mutantmonsters.common.data.ModAdvancementProvider;
+import fuzs.mutantmonsters.common.data.advancements.ModAdvancementProvider;
 import fuzs.mutantmonsters.common.init.ModEntityTypes;
 import fuzs.mutantmonsters.common.init.ModItems;
 import fuzs.mutantmonsters.common.init.ModRegistry;

@@ -19,6 +19,7 @@ public class ModItemTagsProvider extends AbstractTagsProvider<Item> {
 
     @Override
     public void addTags(HolderLookup.Provider provider) {
+        this.tag(ItemTags.BREWING_POTION_INPUTS).add(ModItems.CHEMICAL_X_ITEM);
         this.tag(ItemTags.HEAD_ARMOR).add(ModItems.MUTANT_SKELETON_SKULL_ITEM);
         this.tag(ItemTags.CHEST_ARMOR).add(ModItems.MUTANT_SKELETON_CHESTPLATE_ITEM);
         this.tag(ItemTags.LEG_ARMOR).add(ModItems.MUTANT_SKELETON_LEGGINGS_ITEM);

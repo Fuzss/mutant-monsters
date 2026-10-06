@@ -108,7 +108,7 @@ public class ModItems {
             ChemicalXItem::new,
             () -> new Item.Properties().stacksTo(16)
                     .useCooldown(0.5F)
-                    .component(DataComponents.POTION_CONTENTS, ChemicalXItem.createComponent())
+                    .component(DataComponents.POTION_CONTENTS, ChemicalXItem.getPotionContents())
                     .component(DataComponents.ENCHANTMENT_GLINT_OVERRIDE, true)
                     .component(DataComponents.TOOLTIP_DISPLAY,
                             TooltipDisplay.DEFAULT.withHidden(DataComponents.POTION_CONTENTS, true)));

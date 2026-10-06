@@ -1,4 +1,4 @@
-package fuzs.mutantmonsters.common.data;
+package fuzs.mutantmonsters.common.data.recipes;
 
 import fuzs.mutantmonsters.common.init.ModItems;
 import fuzs.puzzleslib.common.api.data.v3.recipes.AbstractRecipeProvider;
@@ -6,7 +6,6 @@ import net.minecraft.advancements.Advancement;
 import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.data.worldgen.BootstrapContext;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 
 public class ModRecipeProvider extends AbstractRecipeProvider {
@@ -70,24 +69,6 @@ public class ModRecipeProvider extends AbstractRecipeProvider {
                 .pattern("R R")
                 .unlockedBy(getHasName(ModItems.MUTANT_SKELETON_RIB_ITEM.value()),
                         this.has(ModItems.MUTANT_SKELETON_RIB_ITEM.value()))
-                .save(this.output);
-        this.shaped(RecipeCategory.BREWING, ModItems.CHEMICAL_X_ITEM.value())
-                .define('#', Ingredient.of(Items.OBSIDIAN, Items.CRYING_OBSIDIAN))
-                .define('@',
-                        Ingredient.of(ModItems.ENDERSOUL_HAND_ITEM.value(),
-                                ModItems.HULK_HAMMER_ITEM.value(),
-                                ModItems.CREEPER_SHARD_ITEM.value(),
-                                ModItems.MUTANT_SKELETON_SKULL_ITEM.value()))
-                .pattern(" # ")
-                .pattern("#@#")
-                .pattern(" # ")
-                .unlockedBy(getHasName(ModItems.ENDERSOUL_HAND_ITEM.value()),
-                        this.has(ModItems.ENDERSOUL_HAND_ITEM.value()))
-                .unlockedBy(getHasName(ModItems.HULK_HAMMER_ITEM.value()), this.has(ModItems.HULK_HAMMER_ITEM.value()))
-                .unlockedBy(getHasName(ModItems.CREEPER_SHARD_ITEM.value()),
-                        this.has(ModItems.CREEPER_SHARD_ITEM.value()))
-                .unlockedBy(getHasName(ModItems.MUTANT_SKELETON_SKULL_ITEM.value()),
-                        this.has(ModItems.MUTANT_SKELETON_SKULL_ITEM.value()))
                 .save(this.output);
     }
 }

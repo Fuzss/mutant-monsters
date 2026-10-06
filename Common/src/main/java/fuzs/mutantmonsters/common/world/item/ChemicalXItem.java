@@ -1,6 +1,5 @@
 package fuzs.mutantmonsters.common.world.item;
 
-import fuzs.mutantmonsters.common.init.ModItems;
 import fuzs.mutantmonsters.common.init.ModRegistry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.CommonComponents;
@@ -16,13 +15,7 @@ public class ChemicalXItem extends SplashPotionItem {
         super(properties);
     }
 
-    public static ItemStack createItemStack() {
-        ItemStack itemStack = new ItemStack(ModItems.CHEMICAL_X_ITEM);
-        itemStack.set(DataComponents.POTION_CONTENTS, createComponent());
-        return itemStack;
-    }
-
-    public static PotionContents createComponent() {
+    public static PotionContents getPotionContents() {
         return PotionContents.EMPTY.withEffectAdded(new MobEffectInstance(ModRegistry.CHEMICAL_X_MOB_EFFECT, 1));
     }
 

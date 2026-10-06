@@ -1,8 +1,9 @@
 package fuzs.mutantmonsters.neoforge;
 
 import fuzs.mutantmonsters.common.MutantMonsters;
-import fuzs.mutantmonsters.common.data.ModAdvancementProvider;
-import fuzs.mutantmonsters.common.data.ModRecipeProvider;
+import fuzs.mutantmonsters.common.data.advancements.ModAdvancementProvider;
+import fuzs.mutantmonsters.common.data.recipes.ModBrewingProvider;
+import fuzs.mutantmonsters.common.data.recipes.ModRecipeProvider;
 import fuzs.mutantmonsters.common.data.loot.ModBlockLootProvider;
 import fuzs.mutantmonsters.common.data.loot.ModBodyPartLootProvider;
 import fuzs.mutantmonsters.common.data.loot.ModEntityLootProvider;
@@ -42,6 +43,7 @@ public class MutantMonstersNeoForge {
                         ModEntityTypeTagsProvider::new,
                         ModItemTagsProvider::new)
                 .addRecipeProvider(ModRecipeProvider::new)
+                .addRecipeProvider(ModBrewingProvider::new)
                 .addAdvancementProvider(ModAdvancementProvider::new);
     }
 
