@@ -1,12 +1,13 @@
 package fuzs.mutantmonsters.common.world.level.block.entity;
 
 import fuzs.mutantmonsters.common.init.ModRegistry;
+import fuzs.puzzleslib.common.api.block.v1.entity.BlockEntityHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
-import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.SkullBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.storage.ValueInput;
@@ -23,12 +24,8 @@ public class SkullWithItemComponentsBlockEntity extends SkullBlockEntity {
     private int repairCost;
 
     public SkullWithItemComponentsBlockEntity(BlockPos blockPos, BlockState blockState) {
-        super(blockPos, blockState);
-    }
-
-    @Override
-    public BlockEntityType<?> getType() {
-        return ModRegistry.SKULL_BLOCK_ENTITY_TYPE.value();
+        super(blockPos, Blocks.PLAYER_HEAD.defaultBlockState());
+        BlockEntityHelper.init(this, ModRegistry.SKULL_BLOCK_ENTITY_TYPE.value(), blockState);
     }
 
     @Override
